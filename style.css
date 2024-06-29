@@ -347,6 +347,21 @@ body{
     filter: grayscale(100%) brightness(0);
 }
 
+/*replace text with "Unexplored" in .skill.unexplored .skill-name*/
+.skill.unexplored .skill-name {
+    display: none;
+}
+
+.skill.unexplored .skill-name-unexplored:after {
+    content: "???";
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: black;
+    text-align: center;
+    display: block;
+}
+
+
 .skill-amount {
     font-family: 'Madimi One', cursive;
     font-size: 20px;

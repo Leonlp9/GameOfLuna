@@ -188,6 +188,10 @@ function createShopItemElement(shopItem) {
     nameElement.innerText = shopItem.name;
     element.appendChild(nameElement);
 
+    const nameElement2 = document.createElement('div');
+    nameElement2.classList.add('skill-name-unexplored');
+    element.appendChild(nameElement2);
+
     const iconElement = document.createElement('div');
     iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
     iconElement.classList.add('skill-icon');
