@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Jua&family=Madimi+One&family=Poetsen+One&display=swap');
 
+:root {
+    --clicker-size: 200px;
+    --clicker-color: #f75218;
+    --background: url("img/bg1.png");
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 body{
@@ -22,7 +29,7 @@ body{
 
     width: 200px;
     height: 70px;
-    border: 5px solid #f75218;
+    border: 5px solid var(--clicker-color);
     border-radius: 10px;
     background: white;
 
@@ -31,33 +38,145 @@ body{
     justify-content: center;
     align-items: center;
 
-    color: #f75218;
+    color: var(--clicker-color);
     font-family: 'Madimi One', cursive;
     font-size: 20px;
     font-weight: bold;
+
+    box-shadow: 2px 2px 0 #404040;
 }
 
-#ui #reset{
+#settings-icon {
     position: fixed;
-    top: 5px;
-    right: 5px;
-
-    width: 70px;
-    height: 70px;
-    border: 5px solid #f75218;
-    border-radius: 50%;
-    background: white;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: #f75218;
-    font-family: 'Madimi One', cursive;
-    font-size: 20px;
-    font-weight: bold;
-
+    top: 10px;
+    right: 10px;
     cursor: pointer;
+    font-size: 30px;
+    color: var(--clicker-color);
+    text-shadow: 2px 2px 0 #404040;
+}
+
+#settings-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: #333;
+    color: white;
+    font-size: 20px;
+    z-index: 100;
+    font-family: 'Madimi One', cursive;
+    overflow-y: scroll;
+    box-shadow: 0 0 2px 2px #404040;
+}
+
+#settings-menu::-webkit-scrollbar {
+    width: 10px;
+}
+
+#settings-menu::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+}
+
+#settings-content > div {
+    padding: 20px;
+    border-bottom: 1px solid #555;
+}
+
+#settings-content > div:last-child {
+    border-bottom: none;
+}
+
+#settings-content #reset {
+    color: red;
+    cursor: pointer;
+    transition: background 0.1s;
+    text-shadow: 2px 2px 0 #970f0f;
+}
+
+#settings-content #reset:hover {
+    text-decoration: underline;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+#settings-content #reset-settings {
+    color: red;
+    cursor: pointer;
+    transition: background 0.1s;
+    text-shadow: 2px 2px 0 #970f0f;
+}
+
+#settings-content #reset-settings:hover {
+    text-decoration: underline;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.settingsVisible #settings-menu {
+    display: block;
+}
+
+#settings-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 30px;
+    text-shadow: 2px 2px 0 #a3a3a3;
+}
+
+#settings-title {
+    text-align: center;
+    font-size: 30px;
+    margin-top: 20px;
+    font-family: 'Madimi One', cursive;
+    text-shadow: 2px 2px 0 #a3a3a3;
+}
+
+#color-theme-container {
+    display: flex;
+    align-items: center;
+}
+
+/*color input*/
+#color-theme-container > input {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    margin: 0 10px;
+    cursor: pointer;
+    background: none;
+}
+
+#backgrounds{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#selectBackgroundOption input[type="radio"] {
+    display: none;
+}
+
+#selectBackgroundOption input[type="radio"] + label img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    image-rendering: pixelated;
+    border: 1px solid transparent;
+}
+
+#selectBackgroundOption input[type="radio"]:checked + label img {
+    border: 2px solid #f75218;
+}
+
+/*checkbox input*/
+#always-show-timer > input {
+    margin: 0 10px;
+    width: 20px;
+    height: 20px;
 }
 
 #game {
@@ -68,13 +187,23 @@ body{
 
 #scene {
     flex-grow: 1;
-    background: #e6e7ea;
+    background-image: var(--background);
+    background-size: 80px;
+    background-repeat: repeat;
+    background-position: center;
+    image-rendering: pixelated;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     overflow: hidden;
+
+    transition: margin-bottom 0.5s;
+}
+
+#scene.tabOpen {
+    margin-bottom: 200px;
 }
 
 #clicker {
@@ -89,6 +218,8 @@ body{
     animation: clickerIdle 6s infinite;
     transition: transform 0.1s;
     user-select: none;
+
+    filter: drop-shadow(2px 2px 4px #404040);
 }
 
 @keyframes clickerIdle {
@@ -128,11 +259,12 @@ body{
 
 
 .tab {
-    height: 220px; /* Set a fixed height for this element */
+    height: 245px; /* Set a fixed height for this element */
     position: fixed;
-    bottom: -220px;
+    bottom: -245px;
     background: white;
     transition: bottom 0.5s;
+    filter: drop-shadow(2px 2px 0 #404040);
 }
 
 .tab.tabVisible {
@@ -146,9 +278,9 @@ body{
     left: 0;
     height: 40px;
     width: 120px;
-    border-top: 6px solid #f75218;
-    border-right: 6px solid #f75218;
-    border-left: 6px solid #f75218;
+    border-top: 6px solid var(--clicker-color);
+    border-right: 6px solid var(--clicker-color);
+    border-left: 6px solid var(--clicker-color);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     font-size: 20px;
@@ -157,7 +289,7 @@ body{
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    color: #f75218;
+    color: var(--clicker-color);
     text-transform: uppercase;
     font-family: 'Poetsen One', cursive;
     cursor: pointer;
@@ -172,14 +304,14 @@ body{
     height: 100%;
     width: 100vw;
     overflow-x: scroll;
-    border-top: 6px solid #f75218;
+    border-top: 6px solid var(--clicker-color);
     overflow-y: hidden;
     scrollbar-width: none;
 }
 
 #skills .skill {
     flex: 0 0 200px; /* Set a fixed width for each skill */
-    border: 5px solid #f75218;
+    border: 5px solid var(--clicker-color);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     padding: 5px;
@@ -197,7 +329,7 @@ body{
 .skill .skill-name {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
-    color: #f75218;
+    color: var(--clicker-color);
     text-align: center;
 }
 
@@ -208,6 +340,97 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    filter: drop-shadow(2px 2px 0 #404040);
+}
+
+.skill.unexplored .skill-icon {
+    filter: grayscale(100%) brightness(0);
+}
+
+.skill-amount {
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 26px;
+    transform: translate(-25%, -25%);
+}
+
+.skill-amount:empty {
+    display: none;
+}
+
+.skill-price {
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    font-weight: bold;
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    position: relative;
+}
+
+.skill-timer {
+    font-family: 'Madimi One', cursive;
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%) translateY(-100%);
+    font-size: 20px;
+    display: none;
+
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    width: 100px;
+
+    word-break: break-all;
+
+}
+
+.skill-price:hover .skill-timer:not(:empty){
+    display: block;
+    animation: wiggle 1s infinite linear;
+}
+
+.alwaysShowTimer .skill .skill-timer:not(:empty) {
+    display: block;
+}
+
+@keyframes wiggle {
+    0% { transform: translateX(50%) translateY(-100%); }
+    25% { transform: translateX(50%) translateY(-90%); }
+    50% { transform: translateX(50%) translateY(-100%); }
+    75% { transform: translateX(50%) translateY(-110%); }
+    100% { transform: translateX(50%) translateY(-100%); }
+}
+
+.skill-generate-money-per-second {
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    font-weight: bold;
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
 }
 
 @keyframes featherFall {

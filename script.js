@@ -10,236 +10,98 @@ const shopItems = [
         name: 'Auto',
         startPrice: 250,
         priceIncrease: 1.1,
-        generateMoneyPerSecond: 15,
+        generateMoneyPerSecond: 12.5,
     },
     {
-        name: 'Haus',
+        name: 'Autolift',
         startPrice: 1500,
-        priceIncrease: 1.2,
+        priceIncrease: 1.1,
         generateMoneyPerSecond: 150,
     },
     {
-        name: 'Yacht',
+        name: 'Garage',
         startPrice: 10000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 1000,
     },
     {
-        name: 'Flugzeug',
+        name: 'Werkstatt',
         startPrice: 50000,
-        priceIncrease: 1.3,
+        priceIncrease: 1.2,
         generateMoneyPerSecond: 5000,
     },
     {
         name: 'Raumschiff',
         startPrice: 1000000,
-        priceIncrease: 1.3,
+        priceIncrease: 1.2,
         generateMoneyPerSecond: 50000,
     },
     {
         name: 'Mond',
         startPrice: 100000000,
-        priceIncrease: 1.4,
-        generateMoneyPerSecond: 200000,
+        priceIncrease: 1.3,
+        generateMoneyPerSecond: 5000000,
     },
     {
         name: 'Sonne',
         startPrice: 1000000000,
-        priceIncrease: 1.4,
-        generateMoneyPerSecond: 1050000,
+        priceIncrease: 1.3,
+        generateMoneyPerSecond: 25500000,
     },
     {
         name: 'Galaxie',
         startPrice: 10000000000,
-        priceIncrease: 1.5,
-        generateMoneyPerSecond: 5000000,
+        priceIncrease: 1.3,
+        generateMoneyPerSecond: 75000000,
     },
     {
         name: 'Universum',
         startPrice: 100000000000,
-        priceIncrease: 1.5,
-        generateMoneyPerSecond: 25000000,
+        priceIncrease: 1.4,
+        generateMoneyPerSecond: 250000000,
     },
     {
         name: 'Gott',
-        startPrice: 1000000000000,
-        priceIncrease: 1.6,
-        generateMoneyPerSecond: 100000000,
+        startPrice: 750000000000,
+        priceIncrease: 1.4,
+        generateMoneyPerSecond: 2500000000,
     },
     {
         name: 'Alles',
         startPrice: 10000000000000,
-        priceIncrease: 1.6,
-        generateMoneyPerSecond: 500000000,
+        priceIncrease: 1.4,
+        generateMoneyPerSecond: 10000000000,
     },
     {
         name: 'Nichts',
         startPrice: 100000000000000,
-        priceIncrease: 1.7,
-        generateMoneyPerSecond: 1000000000,
+        priceIncrease: 1.5,
+        generateMoneyPerSecond: 50000000000,
     },
     {
         name: 'Chaos',
         startPrice: 1000000000000000,
-        priceIncrease: 1.7,
-        generateMoneyPerSecond: 5000000000,
+        priceIncrease: 1.5,
+        generateMoneyPerSecond: 250000000000,
     },
     {
         name: 'Ordnung',
         startPrice: 10000000000000000,
-        priceIncrease: 2.5,
-        generateMoneyPerSecond: 10000000000,
+        priceIncrease: 1.5,
+        generateMoneyPerSecond: 15000000000000,
     },
     {
         name: 'Zeit',
         startPrice: 100000000000000000,
-        priceIncrease: 2.6,
-        generateMoneyPerSecond: 25000000000,
+        priceIncrease: 1.6,
+        generateMoneyPerSecond: 250000000000000,
     },
     {
         name: 'Raum',
         startPrice: 1000000000000000000,
-        priceIncrease: 2.7,
-        generateMoneyPerSecond: 50000000000,
-    },
-    {
-        name: 'Materie',
-        startPrice: 10000000000000000000,
-        priceIncrease: 2.8,
-        generateMoneyPerSecond: 100000000000,
-    },
-    {
-        name: 'Energie',
-        startPrice: 100000000000000000000,
-        priceIncrease: 2.9,
-        generateMoneyPerSecond: 250000000000,
-    },
-    {
-        name: 'Bewusstsein',
-        startPrice: 1000000000000000000000,
-        priceIncrease: 3,
-        generateMoneyPerSecond: 500000000000,
-    },
-    {
-        name: 'Liebe',
-        startPrice: 10000000000000000000000,
-        priceIncrease: 3.1,
-        generateMoneyPerSecond: 1000000000000,
-    },
-    {
-        name: 'Glück',
-        startPrice: 100000000000000000000000,
-        priceIncrease: 3.2,
-        generateMoneyPerSecond: 2500000000000,
-    },
-    {
-        name: 'Frieden',
-        startPrice: 1000000000000000000000000,
-        priceIncrease: 3.3,
-        generateMoneyPerSecond: 5000000000000,
-    },
-    {
-        name: 'Freiheit',
-        startPrice: 10000000000000000000000000,
-        priceIncrease: 3.4,
-        generateMoneyPerSecond: 10000000000000,
-    },
-    {
-        name: 'Gerechtigkeit',
-        startPrice: 100000000000000000000000000,
-        priceIncrease: 3.5,
-        generateMoneyPerSecond: 25000000000000,
-    },
-    {
-        name: 'Wahrheit',
-        startPrice: 1000000000000000000000000000,
-        priceIncrease: 3.6,
-        generateMoneyPerSecond: 75000000000000,
-    },
-    {
-        name: 'Weisheit',
-        startPrice: 10000000000000000000000000000,
-        priceIncrease: 3.7,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Erkenntnis',
-        startPrice: 100000000000000000000000000000,
-        priceIncrease: 3.8,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Erfahrung',
-        startPrice: 1000000000000000000000000000000,
-        priceIncrease: 3.9,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Erinnerung',
-        startPrice: 10000000000000000000000000000000,
-        priceIncrease: 4,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Vergangenheit',
-        startPrice: 100000000000000000000000000000000,
-        priceIncrease: 4.1,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Gegenwart',
-        startPrice: 1000000000000000000000000000000000,
-        priceIncrease: 4.2,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Zukunft',
-        startPrice: 10000000000000000000000000000000000,
-        priceIncrease: 4.3,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Unendlichkeit',
-        startPrice: 100000000000000000000000000000000000,
-        priceIncrease: 4.4,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Ewigkeit',
-        startPrice: 1000000000000000000000000000000000000,
-        priceIncrease: 4.5,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Nirvana',
-        startPrice: 10000000000000000000000000000000000000,
-        priceIncrease: 4.6,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Paradies',
-        startPrice: 100000000000000000000000000000000000000,
-        priceIncrease: 4.7,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Himmel',
-        startPrice: 1000000000000000000000000000000000000000,
-        priceIncrease: 4.8,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Göttlichkeit',
-        startPrice: 10000000000000000000000000000000000000000,
-        priceIncrease: 4.9,
-        generateMoneyPerSecond: 80000000000000,
-    },
-    {
-        name: 'Ginger',
-        startPrice: 100000000000000000000000000000000000000000,
-        priceIncrease: 5,
-        generateMoneyPerSecond: 80000000000000,
-    },
+        priceIncrease: 1.6,
+        generateMoneyPerSecond: 1000000000000000,
+    }
 ];
 let shopItemsBought = {};
 let lastClicks = [];
@@ -254,6 +116,57 @@ function loadGame() {
     shopItemsBought = JSON.parse(localStorage.getItem('shopItemsBought')) || shopItemsBought;
     updateShop();
     updateIncomePerSecondElement();
+
+    const colorTheme = localStorage.getItem('color-theme');
+    if (colorTheme) {
+        const r = document.querySelector(':root');
+        r.style.setProperty('--clicker-color', colorTheme);
+        document.getElementById('color-theme').value = colorTheme;
+    }
+
+    const alwaysShowTimer = localStorage.getItem('always-show-timer');
+    if (alwaysShowTimer) {
+        document.getElementById('always-show-timer-checkbox').checked = alwaysShowTimer === 'true';
+        document.getElementById('skills').classList.toggle('alwaysShowTimer', alwaysShowTimer === 'true');
+    }
+
+    const background = localStorage.getItem('background');
+    if (background) {
+        const r = document.querySelector(':root');
+        r.style.setProperty('--background', 'url(' + background + ')');
+    }
+
+    const moneyEffect = localStorage.getItem('moneyEffect');
+    if (moneyEffect) {
+        document.getElementById('moneyEffect').checked = moneyEffect === 'true';
+    }
+
+    buildBackgrounds();
+}
+
+function buildBackgrounds() {
+    const backgrounds = document.getElementById('backgrounds');
+    const r = document.querySelector(':root');
+    for (let i = 1; i <= 9; i++) {
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.id = 'background' + i;
+        input.name = 'background';
+        input.value = 'background' + i;
+        if (r.style.getPropertyValue('--background').includes('bg' + i + '.png')) {
+            input.checked = true;
+        }
+        backgrounds.appendChild(input);
+
+        const label = document.createElement('label');
+        label.htmlFor = 'background' + i;
+        label.style.height = '50px';
+        const img = document.createElement('img');
+        img.src = 'img/bg' + i + '.png';
+        img.alt = 'background' + i;
+        label.appendChild(img);
+        backgrounds.appendChild(label);
+    }
 }
 
 function resetGame() {
@@ -268,6 +181,7 @@ function createShopItemElement(shopItem) {
     const element = document.createElement('div');
     element.id = shopItem.name;
     element.classList.add('skill');
+    element.style.position = 'relative';
 
     const nameElement = document.createElement('div');
     nameElement.classList.add('skill-name');
@@ -296,13 +210,18 @@ function createShopItemElement(shopItem) {
 
     const priceElement = document.createElement('div');
     priceElement.classList.add('skill-price');
-    priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
-    element.appendChild(priceElement);
 
-    //timer that shows how long it takes to buy the next item
+    const priceElementText = document.createElement('p');
+    priceElementText.classList.add('skill-price-text');
+    priceElementText.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
+    priceElement.appendChild(priceElementText);
+
+    //tooltip mit der Zeit bis zum Kauf
     const timerElement = document.createElement('div');
     timerElement.classList.add('skill-timer');
-    element.appendChild(timerElement);
+    priceElement.appendChild(timerElement);
+
+    element.appendChild(priceElement);
 
     const generateMoneyPerSecondElement = document.createElement('div');
     generateMoneyPerSecondElement.classList.add('skill-generate-money-per-second');
@@ -312,6 +231,7 @@ function createShopItemElement(shopItem) {
     const amountElement = document.createElement('div');
     amountElement.classList.add('skill-amount');
     amountElement.innerText = shopItemsBought[shopItem.name];
+
     element.appendChild(amountElement);
 
     return element;
@@ -319,13 +239,18 @@ function createShopItemElement(shopItem) {
 
 function updateShopItemElement(shopItem) {
     const element = document.getElementById(shopItem.name);
-    const priceElement = element.querySelector('.skill-price');
+    const priceElement = element.querySelector('.skill-price-text');
     const amountElement = element.querySelector('.skill-amount');
     const timerElement = element.querySelector('.skill-timer');
     priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
-    priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'black' : 'red';
-    amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '0';
+    priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
+    amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '';
     timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0))));
+    if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0) {
+        element.classList.add('unexplored');
+    }else {
+        element.classList.remove('unexplored');
+    }
 }
 
 function updateShop() {
@@ -509,6 +434,10 @@ function removeMoney(amount) {
 
 function summonFallingMoneyEffectAtCursor(amount) {
 
+    if (localStorage.getItem('moneyEffect') === 'false') {
+        return;
+    }
+
     //count the amount of objects that are currently falling
     let fallingMoney = document.getElementsByClassName('falling-money').length;
 
@@ -535,6 +464,7 @@ function summonFallingMoneyEffectAtCursor(amount) {
     cursor.style.zIndex = '99';
     cursor.style.wordBreak = 'keep-all';
     cursor.style.whiteSpace = 'nowrap';
+    cursor.style.textShadow = '3px 3px 2px #303030FF';
     document.body.appendChild(cursor);
 
     let verticalSpeed = - Math.random() * 4 - 4;
@@ -596,16 +526,69 @@ function spawnFallingSuperLuna(){
 }
 
 document.getElementById('clicker').addEventListener('mousedown', () => {
-    addMoney(1);
-    summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 4 + 1);
-    lastClicks.push(getMoneyPerSecond() / 4 + 1);
+    addMoney(getMoneyPerSecond() / 5 + 1);
+    summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
+    lastClicks.push(getMoneyPerSecond() / 5 + 1);
     setTimeout(() => {
         lastClicks.shift();
     }, 1000);
 });
 
 document.getElementById('reset').addEventListener('click', () => {
-    resetGame();
+    //ask for confirmation
+    if (confirm('Möchtest du wirklich dein Spiel zurücksetzen?')) {
+        localStorage.clear();
+        resetGame();
+    }
+});
+
+document.getElementById('reset-settings').addEventListener('click', () => {
+    //ask for confirmation
+    if (confirm('Möchtest du wirklich deine Einstellungen zurücksetzen?')) {
+        localStorage.clear();
+        saveGame();
+        window.location.reload();
+    }
+});
+
+document.getElementById('settings-icon').addEventListener('click', () => {
+    document.getElementById('settings').classList.toggle('settingsVisible');
+});
+
+//wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
+document.addEventListener('click', (e) => {
+    if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
+        document.getElementById('settings').classList.remove('settingsVisible');
+    }
+});
+
+document.getElementById('settings-close').addEventListener('click', () => {
+    document.getElementById('settings').classList.remove('settingsVisible');
+});
+
+document.getElementById('color-theme').addEventListener('input', () => {
+    const r = document.querySelector(':root');
+    r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
+    localStorage.setItem('color-theme', document.getElementById('color-theme').value);
+});
+
+document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
+    const checked = document.getElementById('always-show-timer-checkbox').checked;
+    document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
+    localStorage.setItem('always-show-timer', checked);
+});
+
+document.getElementById('backgrounds').addEventListener('click', function (e) {
+    if (e.target.tagName === 'IMG') {
+        const r = document.querySelector(':root');
+        r.style.setProperty('--background', 'url(' + e.target.src + ')');
+        localStorage.setItem('background', e.target.src);
+    }
+});
+
+document.getElementById('moneyEffect').addEventListener('click', () => {
+    const checked = document.getElementById('moneyEffect').checked;
+    localStorage.setItem('moneyEffect', checked);
 });
 
 let skills = document.getElementById('skills');
@@ -650,9 +633,6 @@ animate();
 const skillsetTab = document.getElementById('skillset');
 const skillsetTabTitle = skillsetTab.querySelector('.title');
 skillsetTabTitle.addEventListener('click', () => {
-   if (skillsetTab.classList.contains('tabVisible')) {
-       skillsetTab.classList.remove('tabVisible');
-   }else {
-       skillsetTab.classList.add('tabVisible');
-   }
+    skillsetTab.classList.toggle('tabVisible');
+    document.getElementById('scene').classList.toggle('tabOpen');
 });
