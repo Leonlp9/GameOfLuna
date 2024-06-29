@@ -193,7 +193,17 @@ function createShopItemElement(shopItem) {
     element.appendChild(nameElement2);
 
     const iconElement = document.createElement('div');
-    iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
+
+    //check if the image exists
+    const img = new Image();
+    img.src = `img/${shopItem.name.toLowerCase()}.png`;
+    img.onload = () => {
+        iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
+    };
+    img.onerror = () => {
+        iconElement.style.backgroundImage = 'url("img/loading.png")';
+    }
+
     iconElement.classList.add('skill-icon');
     element.appendChild(iconElement);
 
