@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Jua&family=Madimi+One&family=Poetsen+One&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+}
+
+#ui {
+    z-index: 9999;
+}
+
+#ui #income{
+    position: fixed;
+    top: 5px;
+    /*center*/
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 200px;
+    height: 70px;
+    border: 5px solid #f75218;
+    border-radius: 10px;
+    background: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #f75218;
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#ui #reset{
+    position: fixed;
+    top: 5px;
+    right: 5px;
+
+    width: 70px;
+    height: 70px;
+    border: 5px solid #f75218;
+    border-radius: 50%;
+    background: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #f75218;
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Set the height to the full viewport height */
+}
+
+#scene {
+    flex-grow: 1;
+    background: #e6e7ea;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+#clicker {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Baloo Tamma 2', cursive;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    animation: clickerIdle 6s infinite;
+    transition: transform 0.1s;
+    user-select: none;
+}
+
+@keyframes clickerIdle {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    50% {
+        transform: scale(1) rotate(0deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+#clicker:active {
+    animation: clickerKlicked 0.1s infinite;
+    transform: scale(0.9);
+}
+
+@keyframes clickerKlicked {
+    0% {
+        transform: rotate(-0.25deg) scale(0.9);
+    }
+    50% {
+        transform: rotate(0.25deg) scale(0.9);
+    }
+    100% {
+        transform: rotate(-0.25deg) scale(0.9);
+    }
+}
+
+
+.tab {
+    height: 220px; /* Set a fixed height for this element */
+    position: fixed;
+    bottom: -220px;
+    background: white;
+    transition: bottom 0.5s;
+}
+
+.tab.tabVisible {
+    bottom: 0;
+    z-index: 999;
+}
+
+.tab .title {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    height: 40px;
+    width: 120px;
+    border-top: 6px solid #f75218;
+    border-right: 6px solid #f75218;
+    border-left: 6px solid #f75218;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    font-size: 20px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #f75218;
+    text-transform: uppercase;
+    font-family: 'Poetsen One', cursive;
+    cursor: pointer;
+}
+
+#upgradestab .title {
+    left: 125px;
+}
+
+.tab-content {
+    display: flex;
+    height: 100%;
+    width: 100vw;
+    overflow-x: scroll;
+    border-top: 6px solid #f75218;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+#skills .skill {
+    flex: 0 0 200px; /* Set a fixed width for each skill */
+    border: 5px solid #f75218;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 5px;
+    border-bottom: 0;
+    margin: 5px 5px 0;
+
+    transition: transform 0.1s;
+}
+
+#skills .skill:hover {
+    transform: scale(1.025);
+    background: #fafafa;
+}
+
+.skill .skill-name {
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: #f75218;
+    text-align: center;
+}
+
+.skill .skill-icon {
+    height: 100px;
+    width: 100%;
+    margin: 0 auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@keyframes featherFall {
+    0% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(20px) rotate(15deg); }
+    50% { transform: translateX(0) rotate(0deg); }
+    75% { transform: translateX(-20px) rotate(-15deg); }
+    100% { transform: translateX(0) rotate(0deg); }
+}

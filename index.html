@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luna Clicker</title>
+    <link rel="stylesheet" href="style.css">
+
+<!--    mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0">
+
+<!--    icons-->
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/site.webmanifest">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+    <div id="game">
+        <div id="ui">
+            <div id="income">
+                <p id="balance">0 €</p>
+                <p id="income-per-second">0 €/s</p>
+            </div>
+            <div id="reset">
+                Reset
+            </div>
+        </div>
+        <div id="scene">
+            <div id="clicker" style="background: url('img/clicker.png') no-repeat center center; background-size: contain; height: 500px; width: 500px;">
+                <div id="clicker-overlay"></div>
+            </div>
+        </div>
+        <div id="skillset" class="tab">
+            <div class="title">Skillset</div>
+            <div id="skills" class="tab-content">
+
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
