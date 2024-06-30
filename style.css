@@ -629,6 +629,25 @@ body{
     background: #fafafa;
 }
 
+.rebirth {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poetsen One', cursive;
+    color: var(--clicker-color);
+    font-weight: bold;
+}
+
+.rebirth-name {
+    font-size: 30px;
+}
+
+.rebirth-description {
+    font-size: 18px;
+    text-align: center;
+}
+
 .skin-icon {
     height: 190px;
     width: 100%;

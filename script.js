@@ -515,7 +515,6 @@ function createUpgrades() {
     const rebirthElement = document.createElement('div');
     rebirthElement.classList.add('upgrade');
     rebirthElement.classList.add('rebirth');
-    rebirthElement.innerText = 'Rebirth';
     rebirthElement.addEventListener('click', () => {
         customConfirm('Rebirth', 'Möchtest du wirklich rebirthen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
             currentBalance = 0;
@@ -524,6 +523,23 @@ function createUpgrades() {
             window.location.reload();
         });
     });
+
+    const rebirthTitleElement = document.createElement('div');
+    rebirthTitleElement.classList.add('rebirth-name');
+    rebirthTitleElement.innerText = 'Rebirth';
+    rebirthElement.appendChild(rebirthTitleElement);
+
+    const rebirthIconElement = document.createElement('i');
+    rebirthIconElement.classList.add('fas');
+    rebirthIconElement.classList.add('fa-fw');
+    rebirthIconElement.classList.add('fa-redo-alt');
+    rebirthTitleElement.appendChild(rebirthIconElement);
+
+    const rebirthGetRebirthPointsElement = document.createElement('div');
+    rebirthGetRebirthPointsElement.classList.add('rebirth-description');
+    rebirthGetRebirthPointsElement.innerText = 'Erhalte Rebirth-Punkte (Soon)';
+    rebirthElement.appendChild(rebirthGetRebirthPointsElement);
+
     upgradesElement.appendChild(rebirthElement);
 
     upgrades.forEach(upgrade => {
@@ -554,16 +570,16 @@ function createSkinElement(skin) {
     img.src = skin.url;
     img.onload = () => {
         iconElement.style.backgroundImage = `url('${skin.url}')`;
+
+        element.addEventListener('click', () => {
+            setSkin(skin.name);
+        });
     }
     img.onerror = () => {
         iconElement.style.backgroundImage = 'url("img/loading.png")';
     }
 
     element.appendChild(iconElement);
-
-    element.addEventListener('click', () => {
-        setSkin(skin.name);
-    });
 
     return element;
 }
