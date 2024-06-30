@@ -147,6 +147,24 @@ const upgrades = [
         increase: 1.1,
     }
 ];
+const skins = [
+    {
+        name: 'Standard',
+        url: 'img/skins/clicker.png',
+    },
+    {
+        name: 'Kobold-Luna',
+        url: 'img/skins/kobold.png',
+    },
+    {
+        name: 'Business-Luna',
+        url: 'img/skins/business.png',
+    },
+    {
+        name: 'Ulna Reykenbrek',
+        url: 'img/skins/ulna.png',
+    }
+];
 let shopItemsBought = {};
 let lastClicks = [];
 let soundTracks = [
@@ -170,6 +188,8 @@ function loadGame() {
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
     registerTab('skinsTabTitle', 'skins', 'Skins');
     createShop();
+    createUpgrades();
+    createSkins();
 
     currentBalance = parseFloat(localStorage.getItem('currentBalance')) || 0;
     shopItemsBought = JSON.parse(localStorage.getItem('shopItemsBought')) || shopItemsBought;
@@ -235,8 +255,6 @@ function loadGame() {
     }, 100);
 
     settingEvents();
-
-    scrollManager("skills");
 }
 
 function buildBackgrounds() {
@@ -411,6 +429,70 @@ function createShop() {
     infoElement.classList.add('skill');
     infoElement.innerText = 'Kaufe Skills, um weitere zu entdecken.';
     shopElement.appendChild(infoElement);
+}
+
+function createUpgradeElement(upgrade) {
+    const element = document.createElement('div');
+    element.classList.add('upgrade');
+
+    const nameElement = document.createElement('div');
+    nameElement.classList.add('upgrade-name');
+    nameElement.innerText = upgrade.name;
+    element.appendChild(nameElement);
+
+    const iconElement = document.createElement('div');
+    iconElement.classList.add('upgrade-icon');
+
+    //check if the image exists
+    const img = new Image();
+    img.src = `img/${upgrade.name.toLowerCase()}.png`;
+    img.onload = () => {
+        iconElement.style.backgroundImage = `url('img/${upgrade.name.toLowerCase()}.png')`;
+    };
+    img.onerror = () => {
+        iconElement.style.backgroundImage = 'url("img/loading.png")';
+    }
+    element.appendChild(iconElement);
+
+    return element;
+}
+
+function createUpgrades() {
+    const upgradesElement = document.getElementById('upgrades');
+
+    upgradesElement.innerHTML = '';
+
+    upgrades.forEach(upgrade => {
+        upgradesElement.appendChild(createUpgradeElement(upgrade));
+    });
+
+}
+
+function createSkinElement(skin) {
+    const element = document.createElement('div');
+    element.classList.add('skin');
+
+    const nameElement = document.createElement('div');
+    nameElement.classList.add('skin-name');
+    nameElement.innerText = skin.name;
+    element.appendChild(nameElement);
+
+    const iconElement = document.createElement('div');
+    iconElement.classList.add('skin-icon');
+    iconElement.style.backgroundImage = `url('${skin.url}')`;
+    element.appendChild(iconElement);
+
+    return element;
+}
+
+function createSkins() {
+    const skinsElement = document.getElementById('skins');
+
+    skinsElement.innerHTML = '';
+
+    skins.forEach(skin => {
+        skinsElement.appendChild(createSkinElement(skin));
+    });
 }
 
 function getMoneyPerSecondOfShopItem(shopItem) {
@@ -837,6 +919,8 @@ function registerTab(tabTitleId, tabContentId, titleText) {
         }
 
     });
+
+    scrollManager(tabContentId);
 }
 
 loadGame();

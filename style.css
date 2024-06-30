@@ -414,6 +414,8 @@ body{
     display: flex;
 }
 
+.skin,
+.upgrade,
 #skills .skill {
     flex: 0 0 200px; /* Set a fixed width for each skill */
     border: 5px solid var(--clicker-color);
@@ -436,6 +438,8 @@ body{
     display: none;
 }
 
+.skin .skin-name,
+.upgrade .upgrade-name,
 .skill .skill-name {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
@@ -443,6 +447,7 @@ body{
     text-align: center;
 }
 
+.upgrade .upgrade-icon,
 .skill .skill-icon {
     height: 100px;
     width: 100%;
@@ -471,7 +476,7 @@ body{
     display: block;
 }
 
-
+.upgrade .upgrade-amount,
 .skill-amount {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
@@ -597,6 +602,21 @@ body{
         transform: scale(1);
         filter: grayscale(0) brightness(1);
     }
+}
+
+.upgrade:hover {
+    transform: scale(1.025);
+    background: #fafafa;
+}
+
+.skin-icon {
+    height: 200px;
+    width: 100%;
+    margin: 0 auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(2px 2px 0 #404040);
 }
 
 #rebirth-button {
