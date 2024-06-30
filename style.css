@@ -261,7 +261,7 @@ body{
 }
 
 #scene.tabOpen {
-    margin-bottom: 200px;
+    margin-bottom: 240px;
 }
 
 #clicker {
@@ -278,6 +278,7 @@ body{
     transition: transform 0.1s;
     user-select: none;
     filter: drop-shadow(2px 2px 4px #404040);
+    image-rendering: initial;
 }
 
 @keyframes clickerIdle {
@@ -333,6 +334,7 @@ body{
     display: flex;
     justify-content: center;
     gap: 5px;
+
 }
 
 #tabContents{

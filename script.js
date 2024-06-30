@@ -304,8 +304,9 @@ function updateShopItemElement(shopItem) {
         element.classList.remove('unexplored');
         element.classList.add('exploredAnimation');
 
-        //play sounds/new.mp3
-        //playSoundEffekt("sounds/new.wav");
+        setTimeout(() => {
+            element.classList.remove('exploredAnimation');
+        }, 600);
     }
 
     //get previous element
@@ -469,7 +470,6 @@ function initiateMusicOnInteraction() {
     window.removeEventListener('keypress', initiateMusicOnInteraction);
     startMusic();
 }
-
 window.addEventListener('click', initiateMusicOnInteraction);
 window.addEventListener('keypress', initiateMusicOnInteraction);
 
@@ -632,6 +632,9 @@ document.getElementById('clicker').addEventListener('mousedown', () => {
         lastClicks.shift();
     }, 1000);
 });
+document.getElementById('clicker').addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+});
 
 document.getElementById('reset').addEventListener('click', () => {
     //ask for confirmation
@@ -711,23 +714,19 @@ document.getElementById('sound').addEventListener('input', () => {
     localStorage.setItem('sound', value);
 });
 
+
 let skills = document.getElementById('skills');
 let scrollTarget = skills.scrollLeft;
 let startTouchX = 0;
-
-// Event-Listener für das Mausrad
 skills.addEventListener('wheel', function(e) {
     if (e.deltaY != 0) {
         e.preventDefault();
         scrollTarget += e.deltaY;
     }
 });
-
-// Event-Listener für Touch-Events
 skills.addEventListener('touchstart', function(e) {
     startTouchX = e.touches[0].clientX;
 });
-
 skills.addEventListener('touchmove', function(e) {
     let touchX = e.touches[0].clientX;
     let deltaX = startTouchX - touchX;
@@ -735,11 +734,9 @@ skills.addEventListener('touchmove', function(e) {
     scrollTarget += deltaX * 2.5;
     e.preventDefault();
 });
-
 function lerp(start, end, t) {
     return start * (1 - t) + end * t;
 }
-
 function animate() {
     let maxScroll = skills.scrollWidth - skills.clientWidth;
     if (scrollTarget < 0) scrollTarget = 0;
@@ -747,16 +744,12 @@ function animate() {
     skills.scrollLeft = lerp(skills.scrollLeft, scrollTarget, 0.1);
     requestAnimationFrame(animate);
 }
-
 animate();
 
 
-
 const tabs = document.getElementById('tabs');
-
 registerTab('skillSetTabTitle', 'skills');
 registerTab('upgradesTabTitle', 'upgrades');
-
 function registerTab(tabTitleId, tabContentId) {
     const tabTitle = document.getElementById(tabTitleId);
     const tabContent = document.getElementById(tabContentId);
