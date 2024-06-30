@@ -37,55 +37,55 @@ const shopItems = [
         generateMoneyPerSecond: 100000,
     },
     {
-        name: 'Laptopkühler',
+        name: 'Lenkrad',
         startPrice: 75000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 5000000,
     },
     {
-        name: 'Führerschein',
+        name: 'Pedale',
         startPrice: 1000000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 25500000,
     },
     {
-        name: 'Auto',
+        name: 'Schalthebel',
         startPrice: 10000000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 100000000,
     },
     {
-        name: 'Autolift',
+        name: 'Laptopkühler',
         startPrice: 100000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 500000000,
     },
     {
-        name: 'Garage',
+        name: 'Führerschein',
         startPrice: 750000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 2500000000,
     },
     {
-        name: 'Werkstatt',
+        name: 'Auto',
         startPrice: 10000000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 10000000000,
     },
     {
-        name: 'Nichts',
+        name: 'Autolift',
         startPrice: 100000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 50000000000,
     },
     {
-        name: 'Chaos',
+        name: 'Garage',
         startPrice: 1000000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 250000000000,
     },
     {
-        name: 'Ordnung',
+        name: 'Werkstatt',
         startPrice: 10000000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 15000000000000,
@@ -112,6 +112,7 @@ let soundTracks = [
     "sounds/musik/SoundTrack4.mp3",
     "sounds/musik/SoundTrack5.mp3",
     "sounds/musik/SoundTrack6.mp3",
+    "sounds/musik/SoundTrack7.mp3",
 ];
 
 function saveGame() {
@@ -749,9 +750,33 @@ function animate() {
 
 animate();
 
-const skillsetTab = document.getElementById('skillset');
-const skillsetTabTitle = skillsetTab.querySelector('.title');
-skillsetTabTitle.addEventListener('click', () => {
-    skillsetTab.classList.toggle('tabVisible');
-    document.getElementById('scene').classList.toggle('tabOpen');
-});
+
+
+const tabs = document.getElementById('tabs');
+
+registerTab('skillSetTabTitle', 'skills');
+registerTab('upgradesTabTitle', 'upgrades');
+
+function registerTab(tabTitleId, tabContentId) {
+    const tabTitle = document.getElementById(tabTitleId);
+    const tabContent = document.getElementById(tabContentId);
+
+    tabTitle.addEventListener('click', () => {
+        if (tabContent.classList.contains('tabVisible')) {
+            tabs.classList.toggle('tabVisible');
+            document.getElementById('scene').classList.toggle('tabOpen');
+        }
+
+        //alle Tabs schließen
+        tabs.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('tabVisible');
+        });
+        tabs.querySelectorAll('.title').forEach(tab => {
+            tab.classList.remove('tabActive');
+        });
+
+        //ausgewählten Tab öffnen
+        tabContent.classList.toggle('tabVisible');
+        tabTitle.classList.toggle('tabActive');
+    });
+}

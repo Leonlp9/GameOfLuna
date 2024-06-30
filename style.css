@@ -317,10 +317,9 @@ body{
 
 
 .tab {
-    height: 245px; /* Set a fixed height for this element */
+    height: 285px; /* Set a fixed height for this element */
     position: fixed;
     bottom: -245px;
-    background: white;
     transition: bottom 0.5s;
     filter: drop-shadow(2px 2px 0 #404040);
 }
@@ -330,10 +329,17 @@ body{
     z-index: 999;
 }
 
+#tabsTitles{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+#tabContents{
+    background: white;
+}
+
 .tab .title {
-    position: absolute;
-    top: -40px;
-    left: 0;
     height: 40px;
     width: 120px;
     border-top: 6px solid var(--clicker-color);
@@ -354,18 +360,27 @@ body{
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
-#upgradestab .title {
-    left: 125px;
+.tab .title.tabActive {
+    height: 50px;
+    margin: -10px 0 0;
+}
+
+.tab .title:not(.tabActive) {
+    filter: brightness(0.9);
 }
 
 .tab-content {
-    display: flex;
     height: 100%;
     width: 100vw;
     overflow-x: scroll;
     border-top: 6px solid var(--clicker-color);
     overflow-y: hidden;
     scrollbar-width: none;
+    display: none;
+}
+
+.tabVisible.tab-content {
+    display: flex;
 }
 
 #skills .skill {
