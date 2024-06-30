@@ -349,7 +349,12 @@ body{
     display: flex;
     justify-content: center;
     gap: 5px;
+    width: 100vw;
+}
 
+/*disable scrollbar*/
+#tabsTitles::-webkit-scrollbar {
+    display: none;
 }
 
 #tabContents{
@@ -358,7 +363,7 @@ body{
 
 .tab .title {
     height: 40px;
-    width: 120px;
+    padding: 5px 10px;
     border-top: 6px solid var(--clicker-color);
     border-right: 6px solid var(--clicker-color);
     border-left: 6px solid var(--clicker-color);
@@ -375,15 +380,24 @@ body{
     font-family: 'Poetsen One', cursive;
     cursor: pointer;
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+    transition: height 0.25s, margin 0.25s;
 }
 
 .tab .title.tabActive {
     height: 50px;
+    padding: -10px 0 0;
     margin: -10px 0 0;
 }
 
 .tab .title:not(.tabActive) {
     filter: brightness(0.9);
+}
+
+.tab .title:hover:not(.tabActive) {
+    filter: brightness(0.95);
+    height: 42px;
+    padding: -2px 0 0;
+    margin: -2px 0 0;
 }
 
 .tab-content {
@@ -468,12 +482,13 @@ body{
     font-weight: bold;
     background: white;
     border: 2px solid var(--clicker-color);
-    border-radius: 50%;
-    width: 30px;
+    border-radius: 20%;
+    width: 40px;
     height: 30px;
     text-align: center;
     line-height: 26px;
     transform: translate(-25%, -25%);
+    box-shadow: 2px 2px 1px 0 var(--clicker-color);
 }
 
 .skill-amount:empty {

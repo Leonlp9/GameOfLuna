@@ -5,103 +5,136 @@ const shopItems = [
         startPrice: 10,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 0.25,
+        generateMoneyIncrease: 1.05,
     },
     {
         name: 'Rollerblades',
         startPrice: 250,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 12.5,
+        generateMoneyIncrease: 1.05,
     },
     {
         name: 'Laptop',
         startPrice: 1500,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 150,
+        generateMoneyIncrease: 1.05,
     },
     {
         name: 'Informatik',
         startPrice: 10000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 1000,
+        generateMoneyIncrease: 1.1,
     },
     {
         name: 'RAM',
         startPrice: 50000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 5000,
+        generateMoneyIncrease: 1.1,
     },
     {
         name: 'Speicherkarte',
         startPrice: 1000000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 100000,
+        generateMoneyIncrease: 1.1,
     },
     {
         name: 'Lenkrad',
         startPrice: 75000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 5000000,
+        generateMoneyIncrease: 1.15,
     },
     {
         name: 'Pedale',
         startPrice: 1000000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 25500000,
+        generateMoneyIncrease: 1.15,
     },
     {
         name: 'Schalthebel',
         startPrice: 10000000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 100000000,
+        generateMoneyIncrease: 1.15,
     },
     {
         name: 'Laptopkühler',
         startPrice: 100000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 500000000,
+        generateMoneyIncrease: 1.2,
     },
     {
-        name: 'Führerschein',
+        name: 'Grafikkarte',
         startPrice: 750000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 2500000000,
+        generateMoneyIncrease: 1.2,
     },
     {
-        name: 'Auto',
+        name: 'Führerschein',
         startPrice: 10000000000000,
         priceIncrease: 1.4,
         generateMoneyPerSecond: 10000000000,
+        generateMoneyIncrease: 1.2,
     },
     {
-        name: 'Autolift',
+        name: 'Auto',
         startPrice: 100000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 50000000000,
+        generateMoneyIncrease: 1.25,
     },
     {
-        name: 'Garage',
+        name: 'Autolift',
         startPrice: 1000000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 250000000000,
+        generateMoneyIncrease: 1.25,
     },
     {
-        name: 'Werkstatt',
+        name: 'Garage',
         startPrice: 10000000000000000,
         priceIncrease: 1.5,
         generateMoneyPerSecond: 15000000000000,
+        generateMoneyIncrease: 1.25,
     },
     {
-        name: 'Zeit',
+        name: 'Werkstatt',
         startPrice: 100000000000000000,
         priceIncrease: 1.6,
         generateMoneyPerSecond: 250000000000000,
+        generateMoneyIncrease: 1.3,
     },
     {
-        name: 'Raum',
+        name: 'Autohaus',
         startPrice: 1000000000000000000,
         priceIncrease: 1.6,
-        generateMoneyPerSecond: 1000000000000000,
+        generateMoneyPerSecond: 5000000000000000,
+        generateMoneyIncrease: 1.3,
+    },
+    {
+        name: 'Automarke',
+        startPrice: 10000000000000000000,
+        priceIncrease: 1.6,
+        generateMoneyPerSecond: 100000000000000000,
+        generateMoneyIncrease: 1.3,
     }
+];
+const upgrades = [
+    {
+        name: 'Finger',
+        description: 'Erhöht die Menge an Geld, die du pro Klick erhältst.',
+        price: 1,
+        increase: 1.1,
+    },
+
 ];
 let shopItemsBought = {};
 let lastClicks = [];
@@ -124,6 +157,7 @@ function saveGame() {
 function loadGame() {
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
+    registerTab('skinsTabTitle', 'skins', 'Skins');
     createShop();
 
     currentBalance = parseFloat(localStorage.getItem('currentBalance')) || 0;
@@ -191,7 +225,7 @@ function loadGame() {
 
     settingEvents();
 
-    scrollManager();
+    scrollManager("skills");
 }
 
 function buildBackgrounds() {
@@ -717,8 +751,8 @@ function settingEvents() {
     });
 }
 
-function scrollManager() {
-    let skills = document.getElementById('skills');
+function scrollManager(id) {
+    let skills = document.getElementById(id);
     let scrollTarget = skills.scrollLeft;
     let startTouchX = 0;
     skills.addEventListener('wheel', function(e) {
