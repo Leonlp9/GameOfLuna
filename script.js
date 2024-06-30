@@ -132,9 +132,20 @@ const upgrades = [
         name: 'Finger',
         description: 'Erhöht die Menge an Geld, die du pro Klick erhältst.',
         price: 1,
+        increase: 4,
+    },
+    {
+        name: 'Kaffeemaschine',
+        description: 'Dein Kaffeerausch hält länger an.',
+        price: 2,
         increase: 1.1,
     },
-
+    {
+        name: 'IDE',
+        description: 'Erhöht enorm die Menge an Geld, die du pro Sekunde durch Laptop und Informatik erhältst.',
+        price: 1,
+        increase: 1.1,
+    }
 ];
 let shopItemsBought = {};
 let lastClicks = [];

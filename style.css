@@ -317,9 +317,9 @@ body{
 }
 
 .falling-object{
-    color: green;
+    color: #1ab61a;
     font-weight: bold;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Jua', sans-serif;
     position: fixed;
     transform: translate(-50%, -50%);
     z-index: 99;
