@@ -91,7 +91,7 @@ body{
 }
 
 #settings-content #reset {
-    color: red;
+    color: #dd4c4c;
     cursor: pointer;
     transition: background 0.1s;
     text-shadow: 2px 2px 0 #970f0f;
@@ -103,7 +103,7 @@ body{
 }
 
 #settings-content #reset-settings {
-    color: red;
+    color: #dd4c4c;
     cursor: pointer;
     transition: background 0.1s;
     text-shadow: 2px 2px 0 #970f0f;
@@ -265,7 +265,6 @@ body{
 }
 
 #clicker {
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -408,6 +407,7 @@ body{
     overflow-y: hidden;
     scrollbar-width: none;
     display: none;
+    padding-right: 9px;
 }
 
 .tabVisible.tab-content {
@@ -501,6 +501,7 @@ body{
     display: none;
 }
 
+.upgrade .upgrade-price,
 .skill-price {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
@@ -513,6 +514,24 @@ body{
     padding: 5px;
     margin: 5px;
     position: relative;
+}
+
+.upgrade-description{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+
+    width: 200px;
 }
 
 .skill-timer {
@@ -611,16 +630,23 @@ body{
 }
 
 .skin-icon {
-    height: 200px;
+    height: 190px;
     width: 100%;
-    margin: 0 auto;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     filter: drop-shadow(2px 2px 0 #404040);
+    margin: 0 auto 10px;
+    padding: 5px;
 }
 
-#rebirth-button {
+.skin.selected {
+    border: 10px solid var(--clicker-color);
+    border-radius: 15px;
+    padding: 0;
+}
+
+.confirm-button {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -635,17 +661,16 @@ body{
     font-family: 'Madimi One', cursive;
 }
 
-#rebirth-overlay {
-    display: none;
+.confirm-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 100;
+    z-index: 99999;
 }
-#rebirth-overlay-content {
+.confirm-overlay-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -654,28 +679,34 @@ body{
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 5px 5px 0 3px #404040;
 }
-#rebirth-overlay-title {
+.confirm-overlay-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
     font-family: 'Poetsen One', cursive;
 }
-#rebirth-overlay-text {
+.confirm-overlay-text {
     font-size: 18px;
     margin-bottom: 20px;
     font-family: 'Madimi One', cursive;
 }
-#rebirth-overlay-buttons {
+.confirm-overlay-buttons {
     display: flex;
     justify-content: center;
     font-family: 'Madimi One', cursive;
 }
-#rebirth-overlay-yes, #rebirth-overlay-no {
+.confirm-overlay-yes, .confirm-overlay-no {
     padding: 10px 20px;
     background: var(--clicker-color);
     color: white;
     border-radius: 5px;
     cursor: pointer;
     margin: 0 10px;
+    box-shadow: 3px 3px 0 1px #404040;
+}
+
+.confirm-overlay-yes:hover, .confirm-overlay-no:hover {
+    filter: brightness(0.9);
 }

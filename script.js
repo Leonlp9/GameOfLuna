@@ -141,10 +141,22 @@ const upgrades = [
         increase: 1.1,
     },
     {
+        name: "Superluna",
+        description: "Die Monde welche vom Himmel fallen, geben dir mehr Geld.",
+        price: 3,
+        increase: 1.1,
+    },
+    {
         name: 'IDE',
         description: 'Erhöht enorm die Menge an Geld, die du pro Sekunde durch Laptop und Informatik erhältst.',
         price: 1,
         increase: 1.1,
+    },
+    {
+        name: 'Ginger',
+        description: 'Erhöht die Menge an Geld, die du pro Sekunde erhältst.',
+        price: 2,
+        increase: 6,
     }
 ];
 const skins = [
@@ -177,6 +189,7 @@ const skins = [
         url: 'img/skins/ulna.png',
     }
 ];
+let selectedSkin = 'Standard';
 let shopItemsBought = {};
 let lastClicks = [];
 let soundTracks = [
@@ -240,6 +253,8 @@ function loadGame() {
     }
     document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
+    setSkin(localStorage.getItem('skin') || 'Standard');
+
     window.addEventListener('click', initiateMusicOnInteraction);
     window.addEventListener('keypress', initiateMusicOnInteraction);
 
@@ -267,6 +282,19 @@ function loadGame() {
     }, 100);
 
     settingEvents();
+}
+
+function setSkin(skin) {
+    selectedSkin = skin;
+
+    skins.forEach(skin => {
+        document.getElementById("skin-" + skin.name).classList.remove('selected');
+    });
+    document.getElementById("skin-" + skin).classList.add('selected');
+
+    document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
+
+    localStorage.setItem('skin', skin);
 }
 
 function buildBackgrounds() {
@@ -466,6 +494,16 @@ function createUpgradeElement(upgrade) {
     }
     element.appendChild(iconElement);
 
+    const priceElement = document.createElement('div');
+    priceElement.classList.add('upgrade-price');
+    priceElement.innerText = upgrade.price + ' R.';
+    element.appendChild(priceElement);
+
+    const descriptionElement = document.createElement('div');
+    descriptionElement.classList.add('upgrade-description');
+    descriptionElement.innerText = upgrade.description;
+    element.appendChild(descriptionElement);
+
     return element;
 }
 
@@ -473,6 +511,20 @@ function createUpgrades() {
     const upgradesElement = document.getElementById('upgrades');
 
     upgradesElement.innerHTML = '';
+
+    const rebirthElement = document.createElement('div');
+    rebirthElement.classList.add('upgrade');
+    rebirthElement.classList.add('rebirth');
+    rebirthElement.innerText = 'Rebirth';
+    rebirthElement.addEventListener('click', () => {
+        customConfirm('Rebirth', 'Möchtest du wirklich rebirthen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
+            currentBalance = 0;
+            shopItemsBought = {};
+            saveGame();
+            window.location.reload();
+        });
+    });
+    upgradesElement.appendChild(rebirthElement);
 
     upgrades.forEach(upgrade => {
         upgradesElement.appendChild(createUpgradeElement(upgrade));
@@ -483,6 +535,11 @@ function createUpgrades() {
 function createSkinElement(skin) {
     const element = document.createElement('div');
     element.classList.add('skin');
+    element.id = 'skin-' + skin.name;
+
+    if (skin.name === selectedSkin) {
+        element.classList.add('selected');
+    }
 
     const nameElement = document.createElement('div');
     nameElement.classList.add('skin-name');
@@ -491,8 +548,22 @@ function createSkinElement(skin) {
 
     const iconElement = document.createElement('div');
     iconElement.classList.add('skin-icon');
-    iconElement.style.backgroundImage = `url('${skin.url}')`;
+
+    //check if the image exists
+    const img = new Image();
+    img.src = skin.url;
+    img.onload = () => {
+        iconElement.style.backgroundImage = `url('${skin.url}')`;
+    }
+    img.onerror = () => {
+        iconElement.style.backgroundImage = 'url("img/loading.png")';
+    }
+
     element.appendChild(iconElement);
+
+    element.addEventListener('click', () => {
+        setSkin(skin.name);
+    });
 
     return element;
 }
@@ -762,6 +833,50 @@ function spawnFallingSuperLuna(){
     animate();
 }
 
+function customConfirm(title, message, confirmText, cancelText, confirmCallback) {
+
+    const overlay = document.createElement('div');
+    overlay.classList.add('confirm-overlay');
+
+    const content = document.createElement('div');
+    content.classList.add('confirm-overlay-content');
+
+    const titleElement = document.createElement('div');
+    titleElement.classList.add('confirm-overlay-title');
+    titleElement.innerText = title;
+    content.appendChild(titleElement);
+
+    const textElement = document.createElement('div');
+    textElement.classList.add('confirm-overlay-text');
+    textElement.innerText = message;
+    content.appendChild(textElement);
+
+    const buttonsElement = document.createElement('div');
+    buttonsElement.classList.add('confirm-overlay-buttons');
+
+    const yesElement = document.createElement('div');
+    yesElement.classList.add('confirm-overlay-yes');
+    yesElement.innerText = confirmText;
+    yesElement.addEventListener('click', () => {
+        overlay.remove();
+        confirmCallback();
+    });
+    buttonsElement.appendChild(yesElement);
+
+    const noElement = document.createElement('div');
+    noElement.classList.add('confirm-overlay-no');
+    noElement.innerText = cancelText;
+    noElement.addEventListener('click', () => {
+        overlay.remove();
+    });
+    buttonsElement.appendChild(noElement);
+
+    content.appendChild(buttonsElement);
+    overlay.appendChild(content);
+
+    document.body.appendChild(overlay);
+}
+
 function settingEvents() {
     document.getElementById('clicker').addEventListener('mousedown', () => {
         addMoney(getMoneyPerSecond() / 5 + 1);
@@ -776,20 +891,23 @@ function settingEvents() {
     });
 
     document.getElementById('reset').addEventListener('click', () => {
-        //ask for confirmation
-        if (confirm('Möchtest du wirklich dein Spiel zurücksetzen?')) {
+        customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
             localStorage.clear();
             resetGame();
-        }
+        });
     });
 
     document.getElementById('reset-settings').addEventListener('click', () => {
-        //ask for confirmation
-        if (confirm('Möchtest du wirklich deine Einstellungen zurücksetzen?')) {
-            localStorage.clear();
+        customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
+            localStorage.removeItem('color-theme');
+            localStorage.removeItem('always-show-timer');
+            localStorage.removeItem('background');
+            localStorage.removeItem('moneyEffect');
+            localStorage.removeItem('musik');
+            localStorage.removeItem('sound');
             saveGame();
             window.location.reload();
-        }
+        });
     });
 
     document.getElementById('settings-icon').addEventListener('click', () => {
@@ -799,6 +917,12 @@ function settingEvents() {
 //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
     document.addEventListener('click', (e) => {
         if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
+
+            //außer es das geklickte Element hat die Klasse confirm-overlay oder ist ein Kind davon
+            if (e.target.classList.contains('confirm-overlay') || e.target.closest('.confirm-overlay')) {
+                return;
+            }
+
             document.getElementById('settings').classList.remove('settingsVisible');
         }
     });
