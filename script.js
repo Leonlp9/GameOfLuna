@@ -556,19 +556,13 @@ function summonFallingMoneyEffectAtCursor(amount) {
     const cursor = document.createElement('div');
     cursor.innerText = '💸+' + formatMoney(amount);
     cursor.classList.add('falling-money');
-    cursor.style.color = 'green';
-    cursor.style.fontWeight = 'bold';
-    cursor.style.fontFamily = 'Arial, sans-serif';
-    cursor.style.position = 'fixed';
+    cursor.classList.add('falling-object');
+
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
-    cursor.style.transform = 'translate(-50%, -50%)';
-    cursor.style.fontSize = '3em';
+
     cursor.style.pointerEvents = 'none';
-    cursor.style.zIndex = '99';
-    cursor.style.wordBreak = 'keep-all';
-    cursor.style.whiteSpace = 'nowrap';
-    cursor.style.textShadow = '3px 3px 2px #303030FF';
+
     document.body.appendChild(cursor);
 
     let verticalSpeed = - Math.random() * 4 - 4;
@@ -596,17 +590,15 @@ function spawnFallingSuperLuna(){
 
     const cursor = document.createElement('div');
     cursor.style.backgroundImage = 'url("img/superluna.png")';
-    cursor.style.backgroundSize = 'cover';
-    cursor.style.backgroundPosition = 'center';
     cursor.classList.add('falling-collectible');
-    cursor.style.position = 'fixed';
+    cursor.classList.add('falling-object');
+
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
-    cursor.style.transform = 'translate(-50%, -50%)';
+
     cursor.style.width = '100px';
     cursor.style.height = '100px';
     cursor.style.pointerEvents = 'click';
-    cursor.style.zIndex = '99';
     cursor.style.animation = 'featherFall 2s infinite linear';
     cursor.addEventListener('click', () => {
         cursor.remove();

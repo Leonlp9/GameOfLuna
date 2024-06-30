@@ -316,6 +316,21 @@ body{
     }
 }
 
+.falling-object{
+    color: green;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    font-size: 3em;
+    word-break: keep-all;
+    white-space: nowrap;
+    background-position: center;
+    background-size: cover;
+    text-shadow: 3px 3px 2px #303030FF;
+}
+
 
 .tab {
     height: 285px; /* Set a fixed height for this element */
