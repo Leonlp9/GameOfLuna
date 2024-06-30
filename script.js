@@ -114,6 +114,7 @@ let soundTracks = [
     "sounds/musik/SoundTrack6.mp3",
     "sounds/musik/SoundTrack7.mp3",
 ];
+let audio;
 
 function saveGame() {
     localStorage.setItem('currentBalance', currentBalance);
@@ -121,6 +122,10 @@ function saveGame() {
 }
 
 function loadGame() {
+    registerTab('skillSetTabTitle', 'skills', 'Skillset');
+    registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
+    createShop();
+
     currentBalance = parseFloat(localStorage.getItem('currentBalance')) || 0;
     shopItemsBought = JSON.parse(localStorage.getItem('shopItemsBought')) || shopItemsBought;
     updateShop();
@@ -158,6 +163,9 @@ function loadGame() {
     }
     document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
+    window.addEventListener('click', initiateMusicOnInteraction);
+    window.addEventListener('keypress', initiateMusicOnInteraction);
+
     let sound = localStorage.getItem('sound');
     if (sound) {
         document.getElementById('sound').value = sound;
@@ -167,6 +175,23 @@ function loadGame() {
     document.getElementById('soundValue').textContent = Math.round(sound * 100) + '%';
 
     buildBackgrounds();
+
+    setInterval(() => {
+        addMoney(getMoneyPerSecond() / 10);
+        updateIncomePerSecondElement();
+        saveGame();
+
+        //zu einer sehr kleinen Wahrscheinlichkeit fällt ein Superluna vom Himmel
+        if (Math.random() < 0.00025) {
+            spawnFallingSuperLuna();
+        }
+
+        updateShop()
+    }, 100);
+
+    settingEvents();
+
+    scrollManager();
 }
 
 function buildBackgrounds() {
@@ -343,9 +368,6 @@ function createShop() {
     shopElement.appendChild(infoElement);
 }
 
-createShop();
-loadGame();
-
 function getMoneyPerSecondOfShopItem(shopItem) {
     return shopItem.generateMoneyPerSecond * (shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0);
 }
@@ -434,21 +456,6 @@ function getCalculatedTimeStampWhenReachableBalance(neededBalance) {
     }
 }
 
-setInterval(() => {
-    addMoney(getMoneyPerSecond() / 10);
-    updateIncomePerSecondElement();
-    saveGame();
-
-    //zu einer sehr kleinen Wahrscheinlichkeit fällt ein Superluna vom Himmel
-    if (Math.random() < 0.00025) {
-        spawnFallingSuperLuna();
-    }
-
-    updateShop()
-}, 100);
-
-
-let audio;
 function startMusic() {
     if (localStorage.getItem('musik') && localStorage.getItem('musik') === 'false') {
         return;
@@ -470,8 +477,6 @@ function initiateMusicOnInteraction() {
     window.removeEventListener('keypress', initiateMusicOnInteraction);
     startMusic();
 }
-window.addEventListener('click', initiateMusicOnInteraction);
-window.addEventListener('keypress', initiateMusicOnInteraction);
 
 function formatMoney(amount) {
     const suffixes = [
@@ -531,6 +536,7 @@ function removeMoney(amount) {
 }
 
 function summonFallingMoneyEffectAtCursor(amount) {
+//TODO class
 
     if (localStorage.getItem('moneyEffect') === 'false') {
         return;
@@ -584,6 +590,7 @@ function summonFallingMoneyEffectAtCursor(amount) {
 }
 
 function spawnFallingSuperLuna(){
+    //TODO class
     let cursorX = Math.random() * window.innerWidth;
     let cursorY = 0;
 
@@ -624,136 +631,150 @@ function spawnFallingSuperLuna(){
     animate();
 }
 
-document.getElementById('clicker').addEventListener('mousedown', () => {
-    addMoney(getMoneyPerSecond() / 5 + 1);
-    summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
-    lastClicks.push(getMoneyPerSecond() / 5 + 1);
-    setTimeout(() => {
-        lastClicks.shift();
-    }, 1000);
-});
-document.getElementById('clicker').addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-});
+function settingEvents() {
+    document.getElementById('clicker').addEventListener('mousedown', () => {
+        addMoney(getMoneyPerSecond() / 5 + 1);
+        summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
+        lastClicks.push(getMoneyPerSecond() / 5 + 1);
+        setTimeout(() => {
+            lastClicks.shift();
+        }, 1000);
+    });
+    document.getElementById('clicker').addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
 
-document.getElementById('reset').addEventListener('click', () => {
-    //ask for confirmation
-    if (confirm('Möchtest du wirklich dein Spiel zurücksetzen?')) {
-        localStorage.clear();
-        resetGame();
-    }
-});
+    document.getElementById('reset').addEventListener('click', () => {
+        //ask for confirmation
+        if (confirm('Möchtest du wirklich dein Spiel zurücksetzen?')) {
+            localStorage.clear();
+            resetGame();
+        }
+    });
 
-document.getElementById('reset-settings').addEventListener('click', () => {
-    //ask for confirmation
-    if (confirm('Möchtest du wirklich deine Einstellungen zurücksetzen?')) {
-        localStorage.clear();
-        saveGame();
-        window.location.reload();
-    }
-});
+    document.getElementById('reset-settings').addEventListener('click', () => {
+        //ask for confirmation
+        if (confirm('Möchtest du wirklich deine Einstellungen zurücksetzen?')) {
+            localStorage.clear();
+            saveGame();
+            window.location.reload();
+        }
+    });
 
-document.getElementById('settings-icon').addEventListener('click', () => {
-    document.getElementById('settings').classList.toggle('settingsVisible');
-});
+    document.getElementById('settings-icon').addEventListener('click', () => {
+        document.getElementById('settings').classList.toggle('settingsVisible');
+    });
 
 //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
-document.addEventListener('click', (e) => {
-    if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
+    document.addEventListener('click', (e) => {
+        if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
+            document.getElementById('settings').classList.remove('settingsVisible');
+        }
+    });
+
+    document.getElementById('settings-close').addEventListener('click', () => {
         document.getElementById('settings').classList.remove('settingsVisible');
-    }
-});
+    });
 
-document.getElementById('settings-close').addEventListener('click', () => {
-    document.getElementById('settings').classList.remove('settingsVisible');
-});
-
-document.getElementById('color-theme').addEventListener('input', () => {
-    const r = document.querySelector(':root');
-    r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
-    localStorage.setItem('color-theme', document.getElementById('color-theme').value);
-});
-
-document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
-    const checked = document.getElementById('always-show-timer-checkbox').checked;
-    document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
-    localStorage.setItem('always-show-timer', checked);
-});
-
-document.getElementById('backgrounds').addEventListener('click', function (e) {
-    if (e.target.tagName === 'IMG') {
+    document.getElementById('color-theme').addEventListener('input', () => {
         const r = document.querySelector(':root');
-        r.style.setProperty('--background', 'url(' + e.target.src + ')');
-        localStorage.setItem('background', e.target.src);
-    }
-});
+        r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
+        localStorage.setItem('color-theme', document.getElementById('color-theme').value);
+    });
 
-document.getElementById('moneyEffect').addEventListener('click', () => {
-    const checked = document.getElementById('moneyEffect').checked;
-    localStorage.setItem('moneyEffect', checked);
-});
+    document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
+        const checked = document.getElementById('always-show-timer-checkbox').checked;
+        document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
+        localStorage.setItem('always-show-timer', checked);
+    });
+
+    document.getElementById('backgrounds').addEventListener('click', function (e) {
+        if (e.target.tagName === 'IMG') {
+            const r = document.querySelector(':root');
+            r.style.setProperty('--background', 'url(' + e.target.src + ')');
+            localStorage.setItem('background', e.target.src);
+        }
+    });
+
+    document.getElementById('moneyEffect').addEventListener('click', () => {
+        const checked = document.getElementById('moneyEffect').checked;
+        localStorage.setItem('moneyEffect', checked);
+    });
 
 //slider
-document.getElementById('musik').addEventListener('input', () => {
-    const value = document.getElementById('musik').value;
-    document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
-    localStorage.setItem('musik', value);
-    audio.volume = value;
-    if (value > 0 && audio.paused) {
-        startMusic();
-    }else if (value === '0' && !audio.paused) {
-        audio.pause();
-    }
-});
+    document.getElementById('musik').addEventListener('input', () => {
+        const value = document.getElementById('musik').value;
+        document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
+        localStorage.setItem('musik', value);
+        audio.volume = value;
+        if (value > 0 && audio.paused) {
+            startMusic();
+        } else if (value === '0' && !audio.paused) {
+            audio.pause();
+        }
+    });
 
 //slider
-document.getElementById('sound').addEventListener('change', () => {playSoundEffekt("sounds/new.wav");});
-document.getElementById('sound').addEventListener('input', () => {
-    const value = document.getElementById('sound').value;
-    document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
-    localStorage.setItem('sound', value);
-});
+    document.getElementById('sound').addEventListener('change', () => {
+        playSoundEffekt("sounds/new.wav");
+    });
+    document.getElementById('sound').addEventListener('input', () => {
+        const value = document.getElementById('sound').value;
+        document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
+        localStorage.setItem('sound', value);
+    });
+}
 
-
-let skills = document.getElementById('skills');
-let scrollTarget = skills.scrollLeft;
-let startTouchX = 0;
-skills.addEventListener('wheel', function(e) {
-    if (e.deltaY != 0) {
+function scrollManager() {
+    let skills = document.getElementById('skills');
+    let scrollTarget = skills.scrollLeft;
+    let startTouchX = 0;
+    skills.addEventListener('wheel', function(e) {
+        if (e.deltaY !== 0) {
+            e.preventDefault();
+            scrollTarget += e.deltaY;
+        }
+    });
+    skills.addEventListener('touchstart', function(e) {
+        startTouchX = e.touches[0].clientX;
+    });
+    skills.addEventListener('touchmove', function(e) {
+        let touchX = e.touches[0].clientX;
+        let deltaX = startTouchX - touchX;
+        startTouchX = touchX;
+        scrollTarget += deltaX * 2.5;
         e.preventDefault();
-        scrollTarget += e.deltaY;
+    });
+    function lerp(start, end, t) {
+        return start * (1 - t) + end * t;
     }
-});
-skills.addEventListener('touchstart', function(e) {
-    startTouchX = e.touches[0].clientX;
-});
-skills.addEventListener('touchmove', function(e) {
-    let touchX = e.touches[0].clientX;
-    let deltaX = startTouchX - touchX;
-    startTouchX = touchX;
-    scrollTarget += deltaX * 2.5;
-    e.preventDefault();
-});
-function lerp(start, end, t) {
-    return start * (1 - t) + end * t;
+    function animate() {
+        let maxScroll = skills.scrollWidth - skills.clientWidth;
+        if (scrollTarget < 0) scrollTarget = 0;
+        if (scrollTarget > maxScroll) scrollTarget = maxScroll;
+        skills.scrollLeft = lerp(skills.scrollLeft, scrollTarget, 0.1);
+        requestAnimationFrame(animate);
+    }
+    animate();
 }
-function animate() {
-    let maxScroll = skills.scrollWidth - skills.clientWidth;
-    if (scrollTarget < 0) scrollTarget = 0;
-    if (scrollTarget > maxScroll) scrollTarget = maxScroll;
-    skills.scrollLeft = lerp(skills.scrollLeft, scrollTarget, 0.1);
-    requestAnimationFrame(animate);
-}
-animate();
 
+function registerTab(tabTitleId, tabContentId, titleText) {
+    const tabs = document.getElementById('tabs');
+    const tabTitle = document.createElement('div');
+    tabTitle.id = tabTitleId;
+    tabTitle.classList.add('title');
+    tabTitle.innerText = titleText;
+    document.getElementById("tabsTitles").appendChild(tabTitle);
 
-const tabs = document.getElementById('tabs');
-registerTab('skillSetTabTitle', 'skills');
-registerTab('upgradesTabTitle', 'upgrades');
+    const tabContent = document.createElement('div');
+    tabContent.id = tabContentId;
+    tabContent.classList.add('tab-content');
+    document.getElementById("tabContents").appendChild(tabContent);
 
-function registerTab(tabTitleId, tabContentId) {
-    const tabTitle = document.getElementById(tabTitleId);
-    const tabContent = document.getElementById(tabContentId);
+    //wenn tabContents nur einen Tab hat, wird dieser automatisch geöffnet
+    if (document.getElementById("tabContents").children.length === 1) {
+        tabContent.classList.add('tabVisible');
+    }
 
     tabTitle.addEventListener('click', () => {
 
@@ -780,3 +801,5 @@ function registerTab(tabTitleId, tabContentId) {
 
     });
 }
+
+loadGame();
