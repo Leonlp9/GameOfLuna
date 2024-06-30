@@ -750,26 +750,33 @@ animate();
 const tabs = document.getElementById('tabs');
 registerTab('skillSetTabTitle', 'skills');
 registerTab('upgradesTabTitle', 'upgrades');
+
 function registerTab(tabTitleId, tabContentId) {
     const tabTitle = document.getElementById(tabTitleId);
     const tabContent = document.getElementById(tabContentId);
 
     tabTitle.addEventListener('click', () => {
-        if (tabContent.classList.contains('tabVisible')) {
-            tabs.classList.toggle('tabVisible');
-            document.getElementById('scene').classList.toggle('tabOpen');
+
+        if (!tabTitle.classList.contains('tabActive')) {
+            //alle Tabs schließen
+            tabs.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('tabVisible');
+            });
+            tabs.querySelectorAll('.title').forEach(tab => {
+                tab.classList.remove('tabActive');
+            });
+
+            //ausgewählten Tab öffnen
+            tabContent.classList.toggle('tabVisible');
+            tabTitle.classList.toggle('tabActive');
+            tabs.classList.add('tabVisible');
+            document.getElementById('scene').classList.add('tabOpen');
+        }else {
+            //tab schließen
+            tabTitle.classList.remove('tabActive');
+            tabs.classList.remove('tabVisible');
+            document.getElementById('scene').classList.remove('tabOpen');
         }
 
-        //alle Tabs schließen
-        tabs.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('tabVisible');
-        });
-        tabs.querySelectorAll('.title').forEach(tab => {
-            tab.classList.remove('tabActive');
-        });
-
-        //ausgewählten Tab öffnen
-        tabContent.classList.toggle('tabVisible');
-        tabTitle.classList.toggle('tabActive');
     });
 }
