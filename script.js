@@ -1,64 +1,64 @@
 let currentBalance = 0;
 const shopItems = [
     {
-        name: 'Intelligenz',
+        name: 'Rollerblades',
         startPrice: 10,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 0.25,
     },
     {
-        name: 'Auto',
+        name: 'Laptop',
         startPrice: 250,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 12.5,
     },
     {
-        name: 'Autolift',
+        name: 'Informatik',
         startPrice: 1500,
         priceIncrease: 1.1,
         generateMoneyPerSecond: 150,
     },
     {
-        name: 'Garage',
+        name: 'RAM',
         startPrice: 10000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 1000,
     },
     {
-        name: 'Werkstatt',
+        name: 'Führerschein',
         startPrice: 50000,
         priceIncrease: 1.2,
         generateMoneyPerSecond: 5000,
     },
     {
-        name: 'Raumschiff',
+        name: 'Auto',
         startPrice: 1000000,
         priceIncrease: 1.2,
-        generateMoneyPerSecond: 50000,
+        generateMoneyPerSecond: 100000,
     },
     {
-        name: 'Mond',
-        startPrice: 100000000,
+        name: 'Autolift',
+        startPrice: 75000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 5000000,
     },
     {
-        name: 'Sonne',
+        name: 'Garage',
         startPrice: 1000000000,
         priceIncrease: 1.3,
         generateMoneyPerSecond: 25500000,
     },
     {
-        name: 'Galaxie',
+        name: 'Werkstatt',
         startPrice: 10000000000,
         priceIncrease: 1.3,
-        generateMoneyPerSecond: 75000000,
+        generateMoneyPerSecond: 100000000,
     },
     {
         name: 'Universum',
         startPrice: 100000000000,
         priceIncrease: 1.4,
-        generateMoneyPerSecond: 250000000,
+        generateMoneyPerSecond: 500000000,
     },
     {
         name: 'Gott',
@@ -105,6 +105,14 @@ const shopItems = [
 ];
 let shopItemsBought = {};
 let lastClicks = [];
+let soundTracks = [
+    "sounds/musik/SoundTrack1.mp3",
+    "sounds/musik/SoundTrack2.mp3",
+    "sounds/musik/SoundTrack3.mp3",
+    "sounds/musik/SoundTrack4.mp3",
+    "sounds/musik/SoundTrack5.mp3",
+    "sounds/musik/SoundTrack6.mp3",
+];
 
 function saveGame() {
     localStorage.setItem('currentBalance', currentBalance);
@@ -140,6 +148,22 @@ function loadGame() {
     if (moneyEffect) {
         document.getElementById('moneyEffect').checked = moneyEffect === 'true';
     }
+
+    let musik = localStorage.getItem('musik');
+    if (musik) {
+        document.getElementById('musik').value = musik;
+    }else {
+        musik = document.getElementById('musik').value;
+    }
+    document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
+
+    let sound = localStorage.getItem('sound');
+    if (sound) {
+        document.getElementById('sound').value = sound;
+    }else {
+        sound = document.getElementById('sound').value;
+    }
+    document.getElementById('soundValue').textContent = Math.round(sound * 100) + '%';
 
     buildBackgrounds();
 }
@@ -219,6 +243,9 @@ function createShopItemElement(shopItem) {
             removeMoney(price);
             updateShopItemElement(shopItem);
             saveGame();
+            playSoundEffekt("sounds/buy.mp3");
+        }else {
+            playSoundEffekt("sounds/error.mp3")
         }
     });
 
@@ -251,6 +278,16 @@ function createShopItemElement(shopItem) {
     return element;
 }
 
+function playSoundEffekt(sound) {
+    if (localStorage.getItem('sound') && localStorage.getItem('sound') === 'false') {
+        return;
+    }
+
+    let audio = new Audio(sound);
+    audio.volume = document.getElementById('sound').value;
+    audio.play().then(r => {});
+}
+
 function updateShopItemElement(shopItem) {
     const element = document.getElementById(shopItem.name);
     const priceElement = element.querySelector('.skill-price-text');
@@ -264,8 +301,10 @@ function updateShopItemElement(shopItem) {
         element.classList.add('unexplored');
     }else if (shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
         element.classList.remove('unexplored');
-
         element.classList.add('exploredAnimation');
+
+        //play sounds/new.mp3
+        //playSoundEffekt("sounds/new.wav");
     }
 
     //get previous element
@@ -406,6 +445,33 @@ setInterval(() => {
     updateShop()
 }, 100);
 
+
+let audio;
+function startMusic() {
+    if (localStorage.getItem('musik') && localStorage.getItem('musik') === 'false') {
+        return;
+    }
+
+    audio = new Audio(soundTracks[Math.floor(Math.random() * soundTracks.length)]);
+    audio.volume = document.getElementById('musik').value;
+    audio.play().catch(error => {
+        console.error('Error playing audio:', error);
+    });
+
+    audio.addEventListener('ended', function() {
+        startMusic();
+    });
+}
+
+function initiateMusicOnInteraction() {
+    window.removeEventListener('click', initiateMusicOnInteraction);
+    window.removeEventListener('keypress', initiateMusicOnInteraction);
+    startMusic();
+}
+
+window.addEventListener('click', initiateMusicOnInteraction);
+window.addEventListener('keypress', initiateMusicOnInteraction);
+
 function formatMoney(amount) {
     const suffixes = [
         { value: 1e93, suffix: 'ba' },
@@ -538,6 +604,7 @@ function spawnFallingSuperLuna(){
         cursor.remove();
         addMoney(getMoneyPerSecond() * 60);
         summonFallingMoneyEffectAtCursor(getMoneyPerSecond() * 60);
+        playSoundEffekt("sounds/clickSuperLuna.wav");
     });
     document.body.appendChild(cursor);
 
@@ -622,6 +689,27 @@ document.getElementById('moneyEffect').addEventListener('click', () => {
     localStorage.setItem('moneyEffect', checked);
 });
 
+//slider
+document.getElementById('musik').addEventListener('input', () => {
+    const value = document.getElementById('musik').value;
+    document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
+    localStorage.setItem('musik', value);
+    audio.volume = value;
+    if (value > 0 && audio.paused) {
+        startMusic();
+    }else if (value === '0' && !audio.paused) {
+        audio.pause();
+    }
+});
+
+//slider
+document.getElementById('sound').addEventListener('change', () => {playSoundEffekt("sounds/new.wav");});
+document.getElementById('sound').addEventListener('input', () => {
+    const value = document.getElementById('sound').value;
+    document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
+    localStorage.setItem('sound', value);
+});
+
 let skills = document.getElementById('skills');
 let scrollTarget = skills.scrollLeft;
 let startTouchX = 0;
@@ -643,7 +731,7 @@ skills.addEventListener('touchmove', function(e) {
     let touchX = e.touches[0].clientX;
     let deltaX = startTouchX - touchX;
     startTouchX = touchX;
-    scrollTarget += deltaX * 2;
+    scrollTarget += deltaX * 2.5;
     e.preventDefault();
 });
 
