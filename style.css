@@ -273,10 +273,10 @@ body{
     font-size: 40px;
     color: white;
     cursor: pointer;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
     animation: clickerIdle 6s infinite;
     transition: transform 0.1s;
     user-select: none;
-
     filter: drop-shadow(2px 2px 4px #404040);
 }
 
@@ -351,6 +351,7 @@ body{
     text-transform: uppercase;
     font-family: 'Poetsen One', cursive;
     cursor: pointer;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
 #upgradestab .title {
@@ -375,8 +376,9 @@ body{
     padding: 5px;
     border-bottom: 0;
     margin: 5px 5px 0;
-
     transition: transform 0.1s;
+    cursor: pointer;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
 #skills .skill:hover {
