@@ -153,12 +153,24 @@ const skins = [
         url: 'img/skins/clicker.png',
     },
     {
+        name: 'Allergie-Luna',
+        url: 'img/skins/allergie.png',
+    },
+    {
+        name: 'Minecraft-Luna',
+        url: 'img/skins/minecraft.png',
+    },
+    {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.png',
     },
     {
         name: 'Business-Luna',
         url: 'img/skins/business.png',
+    },
+    {
+        name: 'Biker-Luna',
+        url: 'img/skins/biker.png',
     },
     {
         name: 'Ulna Reykenbrek',
