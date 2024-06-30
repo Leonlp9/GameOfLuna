@@ -326,6 +326,10 @@ body{
     background: #fafafa;
 }
 
+#skills .skill.hidden {
+    display: none;
+}
+
 .skill .skill-name {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
@@ -454,4 +458,36 @@ body{
     50% { transform: translateX(0) rotate(0deg); }
     75% { transform: translateX(-20px) rotate(-15deg); }
     100% { transform: translateX(0) rotate(0deg); }
+}
+
+.skill.info {
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.exploredAnimation .skill-icon {
+    /*animaton einmal abspielen*/
+    animation: explore 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes explore {
+    0% {
+        transform: scale(0);
+        filter: grayscale(100%) brightness(0);
+    }
+    75% {
+        transform: scale(1.1);
+        filter: grayscale(10%) brightness(0.9);
+    }
+    100% {
+        transform: scale(1);
+        filter: grayscale(0) brightness(1);
+    }
 }

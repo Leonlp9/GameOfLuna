@@ -260,10 +260,20 @@ function updateShopItemElement(shopItem) {
     priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
     amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '';
     timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0))));
-    if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0) {
+    if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0 && !element.classList.contains('unexplored')) {
         element.classList.add('unexplored');
-    }else {
+    }else if (shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
         element.classList.remove('unexplored');
+
+        element.classList.add('exploredAnimation');
+    }
+
+    //get previous element
+    let previousElement = element.previousElementSibling;
+    if (previousElement && previousElement.classList.contains('unexplored')) {
+        element.classList.add('hidden');
+    }else {
+        element.classList.remove('hidden');
     }
 }
 
@@ -283,6 +293,13 @@ function createShop() {
     shopItems.forEach(shopItem => {
         shopElement.appendChild(createShopItemElement(shopItem));
     });
+
+    //add a info element at the end
+    const infoElement = document.createElement('div');
+    infoElement.classList.add('info');
+    infoElement.classList.add('skill');
+    infoElement.innerText = 'Kaufe Skills, um weitere zu entdecken.';
+    shopElement.appendChild(infoElement);
 }
 
 createShop();
