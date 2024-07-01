@@ -465,7 +465,9 @@ function createShop() {
                     shopItemsBought[shopItem.name]++;
                 }
                 removeMoney(price);
-                updateShopItemElement(shopItem);
+
+                updateShop();
+
                 saveGame();
                 playSoundEffekt("sounds/buy.mp3");
             }else {
@@ -674,6 +676,7 @@ function createSkins() {
                 if (skin.requiredPerSecond <= getMoneyPerSecond()) {
                     setSkin(skin.name);
                 }
+                playSoundEffekt("sounds/select.wav")
             });
         }
         img.onerror = () => {
@@ -1061,6 +1064,7 @@ function spawnFallingSuperLuna(){
  * @param confirmCallback
  */
 function customConfirm(title, message, confirmText, cancelText, confirmCallback) {
+    playSoundEffekt("sounds/warning.wav")
 
     const overlay = document.createElement('div');
     overlay.classList.add('confirm-overlay');
@@ -1085,6 +1089,7 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
     yesElement.classList.add('confirm-overlay-yes');
     yesElement.innerText = confirmText;
     yesElement.addEventListener('click', () => {
+        playSoundEffekt("sounds/select.wav")
         overlay.remove();
         confirmCallback();
     });
@@ -1094,6 +1099,7 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
     noElement.classList.add('confirm-overlay-no');
     noElement.innerText = cancelText;
     noElement.addEventListener('click', () => {
+        playSoundEffekt("sounds/select.wav")
         overlay.remove();
     });
     buttonsElement.appendChild(noElement);
@@ -1110,6 +1116,7 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
  * @param message
  */
 function customInfoScreen(title, message) {
+    playSoundEffekt("sounds/select.wav");
 
     const overlay = document.createElement('div');
     overlay.classList.add('confirm-overlay');
@@ -1134,6 +1141,7 @@ function customInfoScreen(title, message) {
     okElement.classList.add('confirm-overlay-yes');
     okElement.innerText = 'OK';
     okElement.addEventListener('click', () => {
+        playSoundEffekt("sounds/select.wav");
         overlay.remove();
     });
     buttonsElement.appendChild(okElement);
@@ -1210,6 +1218,8 @@ function settingEvents() {
             }
 
             document.getElementById('settings').classList.remove('settingsVisible');
+
+            playSoundEffekt("sounds/select.wav")
         }
     });
 
