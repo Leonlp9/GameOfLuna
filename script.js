@@ -1078,9 +1078,9 @@ function scrollManager(id) {
     let scrollTarget = skills.scrollLeft;
     let startTouchX = 0;
     skills.addEventListener('wheel', function(e) {
-        if (e.deltaY !== 0) {
+        if (e.deltaY !== 0 || e.deltaX !== 0) {
             e.preventDefault();
-            scrollTarget += e.deltaY;
+            scrollTarget += e.deltaY !== 0 ? e.deltaY : e.deltaX;
         }
     });
     skills.addEventListener('touchstart', function(e) {
