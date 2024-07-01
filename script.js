@@ -309,7 +309,7 @@ function loadGame() {
 }
 
 /**
- * Lösch das Spiel
+ * Lösche das Spiel
  */
 function resetGame() {
     currentBalance = 0;
@@ -416,7 +416,7 @@ function createShop() {
         shopElement.appendChild(createShopItemElement(shopItem));
     });
 
-    //add a info element at the end
+    //add an info element at the end
     const infoElement = document.createElement('div');
     infoElement.classList.add('info');
     infoElement.classList.add('skill');
@@ -555,7 +555,7 @@ function createUpgrades() {
     rebirthElement.classList.add('upgrade');
     rebirthElement.classList.add('rebirth');
     rebirthElement.addEventListener('click', () => {
-        customConfirm('Rebirth', 'Möchtest du wirklich rebirthen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
+        customConfirm('Rebirth', 'Möchtest du wirklich ein rebirth machen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
             currentBalance = 0;
             shopItemsBought = {};
             saveGame();
@@ -889,7 +889,7 @@ function buildBackgrounds() {
    Money System
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /**
- * Formats a number to a money string
+ * Formats a number to money string
  * @param amount
  * @returns {string}
  */
@@ -959,8 +959,6 @@ function removeMoney(amount) {
  * @param amount
  */
 function summonFallingMoneyEffectAtCursor(amount) {
-//TODO class
-
     if (getSetting('moneyEffect') === false) {
         return;
     }
@@ -1007,10 +1005,9 @@ function summonFallingMoneyEffectAtCursor(amount) {
 }
 
 /**
- * Summons a falling superluna randomly on the top of the screen
+ * Summons a falling superluna randomly at the top of the screen
  */
 function spawnFallingSuperLuna(){
-    //TODO class
     let cursorX = Math.random() * window.innerWidth;
     let cursorY = 0;
 
@@ -1056,16 +1053,11 @@ function spawnFallingSuperLuna(){
     Custom Modals
 *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /**
- * Creates a custom confirm modal
+ * Creates an overlay
  * @param title
  * @param message
- * @param confirmText
- * @param cancelText
- * @param confirmCallback
  */
-function customConfirm(title, message, confirmText, cancelText, confirmCallback) {
-    playSoundEffekt("sounds/warning.wav")
-
+function createOverlay(title, message) {
     const overlay = document.createElement('div');
     overlay.classList.add('confirm-overlay');
 
@@ -1084,6 +1076,26 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
 
     const buttonsElement = document.createElement('div');
     buttonsElement.classList.add('confirm-overlay-buttons');
+
+    content.appendChild(buttonsElement);
+    overlay.appendChild(content);
+
+    return overlay;
+}
+
+/**
+ * Creates a custom confirm modal
+ * @param title
+ * @param message
+ * @param confirmText
+ * @param cancelText
+ * @param confirmCallback
+ */
+function customConfirm(title, message, confirmText, cancelText, confirmCallback) {
+    playSoundEffekt("sounds/warning.wav")
+
+    const overlay = createOverlay(title, message);
+    const buttonsElement = overlay.querySelector('.confirm-overlay-buttons');
 
     const yesElement = document.createElement('div');
     yesElement.classList.add('confirm-overlay-yes');
@@ -1104,9 +1116,6 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
     });
     buttonsElement.appendChild(noElement);
 
-    content.appendChild(buttonsElement);
-    overlay.appendChild(content);
-
     document.body.appendChild(overlay);
 }
 
@@ -1118,24 +1127,8 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
 function customInfoScreen(title, message) {
     playSoundEffekt("sounds/select.wav");
 
-    const overlay = document.createElement('div');
-    overlay.classList.add('confirm-overlay');
-
-    const content = document.createElement('div');
-    content.classList.add('confirm-overlay-content');
-
-    const titleElement = document.createElement('div');
-    titleElement.classList.add('confirm-overlay-title');
-    titleElement.innerText = title;
-    content.appendChild(titleElement);
-
-    const textElement = document.createElement('div');
-    textElement.classList.add('confirm-overlay-text');
-    textElement.innerText = message;
-    content.appendChild(textElement);
-
-    const buttonsElement = document.createElement('div');
-    buttonsElement.classList.add('confirm-overlay-buttons');
+    const overlay = createOverlay(title, message);
+    const buttonsElement = overlay.querySelector('.confirm-overlay-buttons');
 
     const okElement = document.createElement('div');
     okElement.classList.add('confirm-overlay-yes');
@@ -1145,9 +1138,6 @@ function customInfoScreen(title, message) {
         overlay.remove();
     });
     buttonsElement.appendChild(okElement);
-
-    content.appendChild(buttonsElement);
-    overlay.appendChild(content);
 
     document.body.appendChild(overlay);
 }
@@ -1223,7 +1213,7 @@ function settingEvents() {
         playSoundEffekt("sounds/select.wav");
     });
 
-    //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
+    //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen, wenn es geöffnet ist
     document.addEventListener('click', (e) => {
         if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
 
