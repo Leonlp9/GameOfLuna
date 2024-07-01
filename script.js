@@ -181,6 +181,11 @@ const skins = [
         requiredPerSecond: 100000,
     },
     {
+        name: 'Racing-Luna',
+        url: 'img/skins/race.png',
+        requiredPerSecond: 10000000000000000,
+    },
+    {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.png',
         requiredPerSecond: 10000000000000000,
