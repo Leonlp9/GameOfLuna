@@ -670,17 +670,19 @@ function createSkins() {
         img.src = skin.url;
         img.onload = () => {
             iconElement.style.backgroundImage = `url('${skin.url}')`;
-
-            element.addEventListener('click', () => {
-                if (skin.requiredPerSecond <= getMoneyPerSecond()) {
-                    setSkin(skin.name);
-                    playSoundEffekt("sounds/select.wav")
-                }
-            });
         }
         img.onerror = () => {
             iconElement.style.backgroundImage = 'url("img/loading.png")';
         }
+
+        element.addEventListener('click', () => {
+            if (skin.requiredPerSecond <= getMoneyPerSecond()) {
+                setSkin(skin.name);
+                playSoundEffekt("sounds/select.wav")
+            }else {
+                playSoundEffekt("sounds/error.mp3")
+            }
+        });
 
         element.appendChild(iconElement);
 
