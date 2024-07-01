@@ -1172,6 +1172,9 @@ function userKlick() {
  */
 function settingEvents() {
 
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Clicker
+     *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     document.getElementById('clicker').addEventListener('mousedown', () => {
         userKlick();
     });
@@ -1185,7 +1188,13 @@ function settingEvents() {
             userKlick();
         }
     });
+    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Resets
+     *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     document.getElementById('reset').addEventListener('click', () => {
         customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
             localStorage.clear();
@@ -1202,13 +1211,19 @@ function settingEvents() {
             startMusic();
         });
     });
+    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Settings menu
+    *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     document.getElementById('settings-icon').addEventListener('click', () => {
         document.getElementById('settings').classList.toggle('settingsVisible');
         playSoundEffekt("sounds/select.wav");
     });
 
-//wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
+    //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
     document.addEventListener('click', (e) => {
         if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
 
@@ -1228,32 +1243,44 @@ function settingEvents() {
         playSoundEffekt("sounds/select.wav");
     });
 
+
+    //
+    // Settings
+    //
+
+    //color picker
     document.getElementById('color-theme').addEventListener('input', () => {
         const r = document.querySelector(':root');
         r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
         saveToSettings('color-theme', document.getElementById('color-theme').value);
     });
 
+    //checkbox
     document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
         const checked = document.getElementById('always-show-timer-checkbox').checked;
         document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
         saveToSettings('always-show-timer', checked);
+        playSoundEffekt("sounds/select.wav");
     });
 
+    //radio
     document.getElementById('backgrounds').addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
             const r = document.querySelector(':root');
             r.style.setProperty('--background', 'url(' + e.target.src + ')');
             saveToSettings('background', e.target.src);
+            playSoundEffekt("sounds/select.wav");
         }
     });
 
+    //checkbox
     document.getElementById('moneyEffect').addEventListener('click', () => {
         const checked = document.getElementById('moneyEffect').checked;
         saveToSettings('moneyEffect', checked);
+        playSoundEffekt("sounds/select.wav");
     });
 
-//slider
+    //slider
     document.getElementById('musik').addEventListener('input', () => {
         const value = document.getElementById('musik').value;
         document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
@@ -1266,7 +1293,7 @@ function settingEvents() {
         }
     });
 
-//slider
+    //slider
     document.getElementById('sound').addEventListener('change', () => {
         playSoundEffekt("sounds/new.wav");
     });
@@ -1275,6 +1302,8 @@ function settingEvents() {
         document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
         saveToSettings('sound', value);
     });
+    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 }
 
 /**
