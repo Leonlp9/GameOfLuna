@@ -443,7 +443,6 @@ function createShop() {
 
         //check if the image exists
         const img = new Image();
-        img.src = `img/${shopItem.name.toLowerCase()}.png`;
         img.onload = () => {
             iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
         };
@@ -451,7 +450,7 @@ function createShop() {
             iconElement.style.backgroundImage = 'url("img/loading.png")';
             event.preventDefault();
         });
-
+        img.src = `img/${shopItem.name.toLowerCase()}.png`;
         iconElement.classList.add('skill-icon');
         element.appendChild(iconElement);
 
@@ -599,7 +598,6 @@ function createUpgrades() {
 
         //check if the image exists
         const img = new Image();
-        img.src = `img/${upgrade.name.toLowerCase()}.png`;
         img.onload = () => {
             iconElement.style.backgroundImage = `url('img/${upgrade.name.toLowerCase()}.png')`;
         };
@@ -608,6 +606,7 @@ function createUpgrades() {
             //disable console error
             event.preventDefault();
         });
+        img.src = `img/${upgrade.name.toLowerCase()}.png`;
         element.appendChild(iconElement);
 
         const priceElement = document.createElement('div');
@@ -675,8 +674,8 @@ function createSkins() {
             element.addEventListener('click', () => {
                 if (skin.requiredPerSecond <= getMoneyPerSecond()) {
                     setSkin(skin.name);
+                    playSoundEffekt("sounds/select.wav")
                 }
-                playSoundEffekt("sounds/select.wav")
             });
         }
         img.onerror = () => {
