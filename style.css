@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Jua&family=Madimi+One&family=Poetsen+One&display=swap');
 
 :root {
-    --clicker-size: 200px;
     --clicker-color: #f75218;
     --background: url("img/bg1.png");
 }

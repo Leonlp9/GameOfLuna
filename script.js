@@ -1,4 +1,6 @@
-let currentBalance = 0;
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Variables
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 const shopItems = [
     {
         name: 'Kaninchen',
@@ -206,10 +208,7 @@ const skins = [
         requiredPerSecond: 1e301,
     }
 ];
-let selectedSkin = 'Standard';
-let shopItemsBought = {};
-let lastClicks = [];
-let soundTracks = [
+const soundTracks = [
     "sounds/musik/SoundTrack1.mp3",
     "sounds/musik/SoundTrack2.mp3",
     "sounds/musik/SoundTrack3.mp3",
@@ -218,69 +217,73 @@ let soundTracks = [
     "sounds/musik/SoundTrack6.mp3",
     "sounds/musik/SoundTrack7.mp3",
 ];
-let audio;
 
+let currentBalance = 0;
+let settings = {};
+let selectedSkin = 'Standard';
+
+let shopItemsBought = {};
+let lastClicks = [];
+let audio;
+let eventsAdded = false;
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Game
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Speichert das Spiel
+ */
 function saveGame() {
     localStorage.setItem('currentBalance', currentBalance);
     localStorage.setItem('shopItemsBought', JSON.stringify(shopItemsBought));
 }
 
+/**
+ * Lädt das Spiel
+ */
 function loadGame() {
+    const r = document.querySelector(':root');
+
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
     registerTab('skinsTabTitle', 'skins', 'Skins');
     createShop();
     createUpgrades();
     createSkins();
+    loadSettings();
 
     currentBalance = parseFloat(localStorage.getItem('currentBalance')) || 0;
     shopItemsBought = JSON.parse(localStorage.getItem('shopItemsBought')) || shopItemsBought;
-    updateShop();
     updateIncomePerSecondElement();
 
-    const colorTheme = localStorage.getItem('color-theme');
-    if (colorTheme) {
-        const r = document.querySelector(':root');
-        r.style.setProperty('--clicker-color', colorTheme);
-        document.getElementById('color-theme').value = colorTheme;
-    }
+    const colorTheme = getSetting('color-theme') || '#f75218';
+    r.style.setProperty('--clicker-color', colorTheme);
+    document.getElementById('color-theme').value = colorTheme;
 
-    const alwaysShowTimer = localStorage.getItem('always-show-timer');
-    if (alwaysShowTimer) {
-        document.getElementById('always-show-timer-checkbox').checked = alwaysShowTimer === 'true';
-        document.getElementById('skills').classList.toggle('alwaysShowTimer', alwaysShowTimer === 'true');
-    }
+    document.getElementById('always-show-timer-checkbox').checked = getSetting('always-show-timer') === true;
+    document.getElementById('skills').classList.toggle('alwaysShowTimer', getSetting('always-show-timer') === true);
 
-    const background = localStorage.getItem('background');
-    if (background) {
-        const r = document.querySelector(':root');
-        r.style.setProperty('--background', 'url(' + background + ')');
-    }
+    const background = getSetting('background') || 'img/bg1.png';
+    r.style.setProperty('--background', 'url(' + background + ')');
 
-    const moneyEffect = localStorage.getItem('moneyEffect');
-    if (moneyEffect) {
-        document.getElementById('moneyEffect').checked = moneyEffect === 'true';
-    }
+    document.getElementById('moneyEffect').checked = getSetting('moneyEffect') !== undefined ? getSetting('moneyEffect') : true;
 
-    let musik = localStorage.getItem('musik');
-    if (musik) {
-        document.getElementById('musik').value = musik;
-    }else {
-        musik = document.getElementById('musik').value;
-    }
+    let musik = getSetting('musik') || 0.5;
+    document.getElementById('musik').value = musik;
     document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
     setSkin(localStorage.getItem('skin') || 'Standard');
 
-    window.addEventListener('click', initiateMusicOnInteraction);
-    window.addEventListener('keypress', initiateMusicOnInteraction);
-
-    let sound = localStorage.getItem('sound');
-    if (sound) {
-        document.getElementById('sound').value = sound;
-    }else {
-        sound = document.getElementById('sound').value;
+    if (!eventsAdded) {
+        window.addEventListener('click', initiateMusicOnInteraction);
+        window.addEventListener('keypress', initiateMusicOnInteraction);
     }
+
+    let sound = getSetting('sound') || 0.75;
+    document.getElementById('sound').value = sound;
     document.getElementById('soundValue').textContent = Math.round(sound * 100) + '%';
 
     buildBackgrounds();
@@ -299,179 +302,111 @@ function loadGame() {
         updateSkins()
     }, 100);
 
-    settingEvents();
-}
-
-function setSkin(skin) {
-    selectedSkin = skin;
-
-    skins.forEach(skin => {
-        document.getElementById("skin-" + skin.name).classList.remove('selected');
-    });
-    document.getElementById("skin-" + skin).classList.add('selected');
-
-    document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
-
-    localStorage.setItem('skin', skin);
-}
-
-function buildBackgrounds() {
-    const backgrounds = document.getElementById('backgrounds');
-    const r = document.querySelector(':root');
-    for (let i = 1; i <= 9; i++) {
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.id = 'background' + i;
-        input.name = 'background';
-        input.value = 'background' + i;
-        if (r.style.getPropertyValue('--background').includes('bg' + i + '.png')) {
-            input.checked = true;
-        }
-        backgrounds.appendChild(input);
-
-        const label = document.createElement('label');
-        label.htmlFor = 'background' + i;
-        label.style.height = '50px';
-        const img = document.createElement('img');
-        img.src = 'img/bg' + i + '.png';
-        img.alt = 'background' + i;
-        label.appendChild(img);
-        backgrounds.appendChild(label);
+    if (!eventsAdded) {
+        settingEvents();
+        eventsAdded = true;
     }
 }
 
+/**
+ * Lösch das Spiel
+ */
 function resetGame() {
     currentBalance = 0;
     shopItemsBought = {};
     saveGame();
-    window.location.reload();
+    loadGame();
+}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Settings
+ *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Creates a save in the settings
+ * @param key
+ * @param value
+ */
+function saveToSettings(key, value) {
+    settings[key] = value;
+    localStorage.setItem('settings', JSON.stringify(settings));
 }
 
-function createShopItemElement(shopItem) {
-
-    const element = document.createElement('div');
-    element.id = shopItem.name;
-    element.classList.add('skill');
-    element.style.position = 'relative';
-
-    const nameElement = document.createElement('div');
-    nameElement.classList.add('skill-name');
-    nameElement.innerText = shopItem.name;
-    element.appendChild(nameElement);
-
-    const nameElement2 = document.createElement('div');
-    nameElement2.classList.add('skill-name-unexplored');
-    element.appendChild(nameElement2);
-
-    const iconElement = document.createElement('div');
-
-    //check if the image exists
-    const img = new Image();
-    img.src = `img/${shopItem.name.toLowerCase()}.png`;
-    img.onload = () => {
-        iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
-    };
-    img.onerror = () => {
-        iconElement.style.backgroundImage = 'url("img/loading.png")';
-    }
-
-    iconElement.classList.add('skill-icon');
-    element.appendChild(iconElement);
-
-    element.addEventListener('click', () => {
-        const price = Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0));
-        if (currentBalance >= price) {
-
-            if (!shopItemsBought[shopItem.name]) {
-                shopItemsBought[shopItem.name] = 1;
-            }else {
-                shopItemsBought[shopItem.name]++;
-            }
-            removeMoney(price);
-            updateShopItemElement(shopItem);
-            saveGame();
-            playSoundEffekt("sounds/buy.mp3");
-        }else {
-            playSoundEffekt("sounds/error.mp3")
-        }
-    });
-
-    const priceElement = document.createElement('div');
-    priceElement.classList.add('skill-price');
-
-    const priceElementText = document.createElement('p');
-    priceElementText.classList.add('skill-price-text');
-    priceElementText.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
-    priceElement.appendChild(priceElementText);
-
-    //tooltip mit der Zeit bis zum Kauf
-    const timerElement = document.createElement('div');
-    timerElement.classList.add('skill-timer');
-    priceElement.appendChild(timerElement);
-
-    element.appendChild(priceElement);
-
-    const generateMoneyPerSecondElement = document.createElement('div');
-    generateMoneyPerSecondElement.classList.add('skill-generate-money-per-second');
-    generateMoneyPerSecondElement.innerText = "+ " + formatMoney(shopItem.generateMoneyPerSecond) + '/s';
-    element.appendChild(generateMoneyPerSecondElement);
-
-    const amountElement = document.createElement('div');
-    amountElement.classList.add('skill-amount');
-    amountElement.innerText = shopItemsBought[shopItem.name];
-
-    element.appendChild(amountElement);
-
-    return element;
+/**
+ * Loads the settings from the local storage
+ */
+function loadSettings() {
+    settings = JSON.parse(localStorage.getItem('settings')) || {};
 }
 
+/**
+ * Gets a setting from the settings
+ * @param key
+ * @returns {*}
+ */
+function getSetting(key) {
+    return settings[key];
+}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Sounds
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Plays a sound effect
+ * @param sound
+ */
 function playSoundEffekt(sound) {
-    if (localStorage.getItem('sound') && localStorage.getItem('sound') === 'false') {
+    if (getSetting('sound') && getSetting('sound') === false) {
         return;
     }
 
     let audio = new Audio(sound);
     audio.volume = document.getElementById('sound').value;
-    audio.play().then(r => {});
+    audio.play().then();
 }
 
-function updateShopItemElement(shopItem) {
-    const element = document.getElementById(shopItem.name);
-    const priceElement = element.querySelector('.skill-price-text');
-    const amountElement = element.querySelector('.skill-amount');
-    const timerElement = element.querySelector('.skill-timer');
-    priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
-    priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
-    amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '';
-    timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0))));
-    if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0 && !element.classList.contains('unexplored')) {
-        element.classList.add('unexplored');
-    }else if (shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
-        element.classList.remove('unexplored');
-        element.classList.add('exploredAnimation');
-
-        setTimeout(() => {
-            element.classList.remove('exploredAnimation');
-        }, 600);
+/**
+ * Starts the music
+ */
+function startMusic() {
+    if (getSetting('musik') && getSetting('musik') === false) {
+        return;
     }
 
-    //get previous element
-    let previousElement = element.previousElementSibling;
-    if (previousElement && previousElement.classList.contains('unexplored')) {
-        element.classList.add('hidden');
-    }else {
-        element.classList.remove('hidden');
-    }
+    audio = new Audio(soundTracks[Math.floor(Math.random() * soundTracks.length)]);
+    audio.volume = document.getElementById('musik').value;
+    audio.play().catch(error => {
+        console.error('Error playing audio:', error);
+    });
+
+    audio.addEventListener('ended', function() {
+        startMusic();
+    });
 }
 
-function updateShop() {
-    shopItems.forEach(updateShopItemElement);
+/**
+ * Adds the event listener to start the music
+ */
+function initiateMusicOnInteraction() {
+    window.removeEventListener('click', initiateMusicOnInteraction);
+    window.removeEventListener('keypress', initiateMusicOnInteraction);
+    startMusic();
 }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-function updateIncomePerSecondElement() {
-    document.getElementById('income-per-second').innerText = formatMoney(getMoneyPerSecondWithClicks()) + '/s';
-}
 
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Create Elements
+ *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Creates the shop
+ */
 function createShop() {
     const shopElement = document.getElementById('skills');
 
@@ -487,48 +422,128 @@ function createShop() {
     infoElement.classList.add('skill');
     infoElement.innerText = 'Kaufe Skills, um weitere zu entdecken.';
     shopElement.appendChild(infoElement);
-}
 
-function createUpgradeElement(upgrade) {
-    const element = document.createElement('div');
-    element.classList.add('upgrade');
+    function createShopItemElement(shopItem) {
 
-    const nameElement = document.createElement('div');
-    nameElement.classList.add('upgrade-name');
-    nameElement.innerText = upgrade.name;
-    element.appendChild(nameElement);
+        const element = document.createElement('div');
+        element.id = shopItem.name;
+        element.classList.add('skill');
+        element.style.position = 'relative';
 
-    const iconElement = document.createElement('div');
-    iconElement.classList.add('upgrade-icon');
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('skill-name');
+        nameElement.innerText = shopItem.name;
+        element.appendChild(nameElement);
 
-    //check if the image exists
-    const img = new Image();
-    img.src = `img/${upgrade.name.toLowerCase()}.png`;
-    img.onload = () => {
-        iconElement.style.backgroundImage = `url('img/${upgrade.name.toLowerCase()}.png')`;
-    };
-    img.onerror = () => {
-        iconElement.style.backgroundImage = 'url("img/loading.png")';
+        const nameElement2 = document.createElement('div');
+        nameElement2.classList.add('skill-name-unexplored');
+        element.appendChild(nameElement2);
+
+        const iconElement = document.createElement('div');
+
+        //check if the image exists
+        const img = new Image();
+        img.src = `img/${shopItem.name.toLowerCase()}.png`;
+        img.onload = () => {
+            iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
+        };
+        img.onerror = (event => {
+            iconElement.style.backgroundImage = 'url("img/loading.png")';
+            event.preventDefault();
+        });
+
+        iconElement.classList.add('skill-icon');
+        element.appendChild(iconElement);
+
+        element.addEventListener('click', () => {
+            const price = Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0));
+            if (currentBalance >= price) {
+
+                if (!shopItemsBought[shopItem.name]) {
+                    shopItemsBought[shopItem.name] = 1;
+                }else {
+                    shopItemsBought[shopItem.name]++;
+                }
+                removeMoney(price);
+                updateShopItemElement(shopItem);
+                saveGame();
+                playSoundEffekt("sounds/buy.mp3");
+            }else {
+                playSoundEffekt("sounds/error.mp3")
+            }
+        });
+
+        const priceElement = document.createElement('div');
+        priceElement.classList.add('skill-price');
+
+        const priceElementText = document.createElement('p');
+        priceElementText.classList.add('skill-price-text');
+        priceElementText.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
+        priceElement.appendChild(priceElementText);
+
+        //tooltip mit der Zeit bis zum Kauf
+        const timerElement = document.createElement('div');
+        timerElement.classList.add('skill-timer');
+        priceElement.appendChild(timerElement);
+
+        element.appendChild(priceElement);
+
+        const generateMoneyPerSecondElement = document.createElement('div');
+        generateMoneyPerSecondElement.classList.add('skill-generate-money-per-second');
+        generateMoneyPerSecondElement.innerText = "+ " + formatMoney(shopItem.generateMoneyPerSecond) + '/s';
+        element.appendChild(generateMoneyPerSecondElement);
+
+        const amountElement = document.createElement('div');
+        amountElement.classList.add('skill-amount');
+        amountElement.innerText = shopItemsBought[shopItem.name];
+
+        element.appendChild(amountElement);
+
+        return element;
     }
-    element.appendChild(iconElement);
 
-    const priceElement = document.createElement('div');
-    priceElement.classList.add('upgrade-price');
-    priceElement.innerText = upgrade.price + ' R.';
-    element.appendChild(priceElement);
-
-    const descriptionElement = document.createElement('div');
-    descriptionElement.classList.add('upgrade-description');
-    descriptionElement.innerText = upgrade.description;
-    element.appendChild(descriptionElement);
-
-    descriptionElement.addEventListener('click', () => {
-        customInfoScreen(upgrade.name, upgrade.description);
-    });
-
-    return element;
+    updateShop();
 }
 
+/**
+ * Updates the shop
+ */
+function updateShop() {
+    shopItems.forEach(updateShopItemElement);
+
+    function updateShopItemElement(shopItem) {
+        const element = document.getElementById(shopItem.name);
+        const priceElement = element.querySelector('.skill-price-text');
+        const amountElement = element.querySelector('.skill-amount');
+        const timerElement = element.querySelector('.skill-timer');
+        priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
+        priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
+        amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '';
+        timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0))));
+        if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0 && !element.classList.contains('unexplored')) {
+            element.classList.add('unexplored');
+        }else if (shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
+            element.classList.remove('unexplored');
+            element.classList.add('exploredAnimation');
+
+            setTimeout(() => {
+                element.classList.remove('exploredAnimation');
+            }, 600);
+        }
+
+        //get previous element
+        let previousElement = element.previousElementSibling;
+        if (previousElement && previousElement.classList.contains('unexplored')) {
+            element.classList.add('hidden');
+        }else {
+            element.classList.remove('hidden');
+        }
+    }
+}
+
+/**
+ * Creates the upgrades
+ */
 function createUpgrades() {
     const upgradesElement = document.getElementById('upgrades');
 
@@ -568,51 +583,61 @@ function createUpgrades() {
         upgradesElement.appendChild(createUpgradeElement(upgrade));
     });
 
-}
+    function createUpgradeElement(upgrade) {
+        const element = document.createElement('div');
+        element.classList.add('upgrade');
 
-function createSkinElement(skin) {
-    const element = document.createElement('div');
-    element.classList.add('skin');
-    element.id = 'skin-' + skin.name;
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('upgrade-name');
+        nameElement.innerText = upgrade.name;
+        element.appendChild(nameElement);
 
-    if (skin.name === selectedSkin) {
-        element.classList.add('selected');
-    }
+        const iconElement = document.createElement('div');
+        iconElement.classList.add('upgrade-icon');
 
-    const nameElement = document.createElement('div');
-    nameElement.classList.add('skin-name');
-    nameElement.innerText = skin.name;
-    element.appendChild(nameElement);
-
-    const iconElement = document.createElement('div');
-    iconElement.classList.add('skin-icon');
-
-    //check if the image exists
-    const img = new Image();
-    img.src = skin.url;
-    img.onload = () => {
-        iconElement.style.backgroundImage = `url('${skin.url}')`;
-
-        element.addEventListener('click', () => {
-            if (skin.requiredPerSecond <= getMoneyPerSecond()) {
-                setSkin(skin.name);
-            }
+        //check if the image exists
+        const img = new Image();
+        img.src = `img/${upgrade.name.toLowerCase()}.png`;
+        img.onload = () => {
+            iconElement.style.backgroundImage = `url('img/${upgrade.name.toLowerCase()}.png')`;
+        };
+        img.onerror = (event => {
+            iconElement.style.backgroundImage = 'url("img/loading.png")';
+            //disable console error
+            event.preventDefault();
         });
+        element.appendChild(iconElement);
+
+        const priceElement = document.createElement('div');
+        priceElement.classList.add('upgrade-price');
+        priceElement.innerText = upgrade.price + ' R.';
+        element.appendChild(priceElement);
+
+        const descriptionElement = document.createElement('div');
+        descriptionElement.classList.add('upgrade-description');
+        descriptionElement.innerText = upgrade.description;
+        element.appendChild(descriptionElement);
+
+        descriptionElement.addEventListener('click', () => {
+            customInfoScreen(upgrade.name, upgrade.description);
+        });
+
+        return element;
     }
-    img.onerror = () => {
-        iconElement.style.backgroundImage = 'url("img/loading.png")';
-    }
 
-    element.appendChild(iconElement);
-
-    const neededPerSecondElement = document.createElement('div');
-    neededPerSecondElement.classList.add('skin-required-per-second');
-    neededPerSecondElement.innerText = 'Benötigt: ' + formatMoney(skin.requiredPerSecond) + '/s';
-    element.appendChild(neededPerSecondElement);
-
-    return element;
+    updateUpgrades();
 }
 
+/**
+ * Updates the upgrades
+ */
+function updateUpgrades() {
+
+}
+
+/**
+ * Creates the skins
+ */
 function createSkins() {
     const skinsElement = document.getElementById('skins');
 
@@ -621,35 +646,106 @@ function createSkins() {
     skins.forEach(skin => {
         skinsElement.appendChild(createSkinElement(skin));
     });
-}
 
-function updateSkinElement(skin) {
-    const element = document.getElementById('skin-' + skin.name);
-    if (skin.requiredPerSecond <= getMoneyPerSecond() && element.classList.contains('locked')) {
-        element.classList.remove('locked');
-        setSkin(skin.name)
-    }else if (skin.requiredPerSecond > getMoneyPerSecond() && !element.classList.contains('locked')) {
-        element.classList.add('locked');
+    function createSkinElement(skin) {
+        const element = document.createElement('div');
+        element.classList.add('skin');
+        element.id = 'skin-' + skin.name;
+
+        if (skin.name === selectedSkin) {
+            element.classList.add('selected');
+        }
+
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('skin-name');
+        nameElement.innerText = skin.name;
+        element.appendChild(nameElement);
+
+        const iconElement = document.createElement('div');
+        iconElement.classList.add('skin-icon');
+
+        //check if the image exists
+        const img = new Image();
+        img.src = skin.url;
+        img.onload = () => {
+            iconElement.style.backgroundImage = `url('${skin.url}')`;
+
+            element.addEventListener('click', () => {
+                if (skin.requiredPerSecond <= getMoneyPerSecond()) {
+                    setSkin(skin.name);
+                }
+            });
+        }
+        img.onerror = () => {
+            iconElement.style.backgroundImage = 'url("img/loading.png")';
+        }
+
+        element.appendChild(iconElement);
+
+        const neededPerSecondElement = document.createElement('div');
+        neededPerSecondElement.classList.add('skin-required-per-second');
+        neededPerSecondElement.innerText = 'Benötigt: ' + formatMoney(skin.requiredPerSecond) + '/s';
+        element.appendChild(neededPerSecondElement);
+
+        return element;
     }
 }
 
+/**
+ * Updates the skins
+ */
 function updateSkins() {
     skins.forEach(updateSkinElement);
-}
 
+    function updateSkinElement(skin) {
+        const element = document.getElementById('skin-' + skin.name);
+        if (skin.requiredPerSecond <= getMoneyPerSecond() && element.classList.contains('locked')) {
+            element.classList.remove('locked');
+            setSkin(skin.name)
+        }else if (skin.requiredPerSecond > getMoneyPerSecond() && !element.classList.contains('locked')) {
+            element.classList.add('locked');
+        }
+    }
+
+}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Helper Functions
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Gets the money per second of a shop item
+ * @param shopItem
+ * @returns {number}
+ */
 function getMoneyPerSecondOfShopItem(shopItem) {
     return shopItem.generateMoneyPerSecond * (shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0);
 }
 
+/**
+ * Gets the money per second
+ * @returns {number}
+ */
 function getMoneyPerSecond() {
     return shopItems.reduce((sum, shopItem) => sum + getMoneyPerSecondOfShopItem(shopItem), 0);
 }
 
+/**
+ * Gets the money per second with user clicks
+ * @returns {number}
+ */
 function getMoneyPerSecondWithClicks() {
     let lastClicksSum = lastClicks.reduce((sum, click) => sum + click, 0);
     return getMoneyPerSecond() + lastClicksSum / 10;
 }
 
+/**
+ * Gets the formatted time to a future timestamp
+ * @param futureTimestamp
+ * @returns {string}
+ */
 function getFormattedTimeTo(futureTimestamp) {
 
     if (!futureTimestamp) {
@@ -707,6 +803,11 @@ function getFormattedTimeTo(futureTimestamp) {
     return formattedTime;
 }
 
+/**
+ * Gets the calculated timestamp when the balance is reachable
+ * @param neededBalance
+ * @returns {number|boolean}
+ */
 function getCalculatedTimeStampWhenReachableBalance(neededBalance) {
     let currentTimestamp = Date.now();
     let moneyPerSecond = getMoneyPerSecondWithClicks();
@@ -725,28 +826,70 @@ function getCalculatedTimeStampWhenReachableBalance(neededBalance) {
     }
 }
 
-function startMusic() {
-    if (localStorage.getItem('musik') && localStorage.getItem('musik') === 'false') {
-        return;
+/**
+ * Updates the income per second element
+ */
+function updateIncomePerSecondElement() {
+    document.getElementById('income-per-second').innerText = formatMoney(getMoneyPerSecondWithClicks()) + '/s';
+}
+
+/**
+ * Set the Skin
+ * @param skin
+ */
+function setSkin(skin) {
+    selectedSkin = skin;
+
+    skins.forEach(skin => {
+        document.getElementById("skin-" + skin.name).classList.remove('selected');
+    });
+    document.getElementById("skin-" + skin).classList.add('selected');
+
+    document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
+
+    localStorage.setItem('skin', skin);
+}
+
+/**
+ * Build the Backgrounds in the settings
+ */
+function buildBackgrounds() {
+    const backgrounds = document.getElementById('backgrounds');
+    backgrounds.innerHTML = '';
+    const r = document.querySelector(':root');
+    for (let i = 1; i <= 9; i++) {
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.id = 'background' + i;
+        input.name = 'background';
+        input.value = 'background' + i;
+        if (r.style.getPropertyValue('--background').includes('bg' + i + '.png') || getSetting('background') === undefined && i === 1) {
+            input.checked = true;
+        }
+        backgrounds.appendChild(input);
+
+        const label = document.createElement('label');
+        label.htmlFor = 'background' + i;
+        label.style.height = '50px';
+        const img = document.createElement('img');
+        img.src = 'img/bg' + i + '.png';
+        img.alt = 'background' + i;
+        label.appendChild(img);
+        backgrounds.appendChild(label);
     }
-
-    audio = new Audio(soundTracks[Math.floor(Math.random() * soundTracks.length)]);
-    audio.volume = document.getElementById('musik').value;
-    audio.play().catch(error => {
-        console.error('Error playing audio:', error);
-    });
-
-    audio.addEventListener('ended', function() {
-        startMusic();
-    });
 }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-function initiateMusicOnInteraction() {
-    window.removeEventListener('click', initiateMusicOnInteraction);
-    window.removeEventListener('keypress', initiateMusicOnInteraction);
-    startMusic();
-}
 
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   Money System
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Formats a number to a money string
+ * @param amount
+ * @returns {string}
+ */
 function formatMoney(amount) {
     const baseSuffixes = [
         { value: 1e12, suffix: 'T' },
@@ -777,23 +920,45 @@ function formatMoney(amount) {
     return amount.toFixed(2) + ' €';
 }
 
+/**
+ * Sets the money amount
+ * @param amount
+ */
 function setMoney(amount) {
   currentBalance = amount;
   document.getElementById('balance').innerText = formatMoney(Math.round(currentBalance * 100) / 100);
 }
 
+/**
+ * Adds money to the current balance
+ * @param amount
+ */
 function addMoney(amount) {
     setMoney(currentBalance + amount);
 }
 
+/**
+ * Removes money from the current balance
+ * @param amount
+ */
 function removeMoney(amount) {
     setMoney(currentBalance - amount);
 }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Falling Effects
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Summons a falling money effect at the cursor
+ * @param amount
+ */
 function summonFallingMoneyEffectAtCursor(amount) {
 //TODO class
 
-    if (localStorage.getItem('moneyEffect') === 'false') {
+    if (getSetting('moneyEffect') === false) {
         return;
     }
 
@@ -838,6 +1003,9 @@ function summonFallingMoneyEffectAtCursor(amount) {
     animate();
 }
 
+/**
+ * Summons a falling superluna randomly on the top of the screen
+ */
 function spawnFallingSuperLuna(){
     //TODO class
     let cursorX = Math.random() * window.innerWidth;
@@ -877,7 +1045,21 @@ function spawnFallingSuperLuna(){
 
     animate();
 }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Custom Modals
+*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Creates a custom confirm modal
+ * @param title
+ * @param message
+ * @param confirmText
+ * @param cancelText
+ * @param confirmCallback
+ */
 function customConfirm(title, message, confirmText, cancelText, confirmCallback) {
 
     const overlay = document.createElement('div');
@@ -922,6 +1104,11 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
     document.body.appendChild(overlay);
 }
 
+/**
+ * Creates a custom info screen
+ * @param title
+ * @param message
+ */
 function customInfoScreen(title, message) {
 
     const overlay = document.createElement('div');
@@ -956,7 +1143,12 @@ function customInfoScreen(title, message) {
 
     document.body.appendChild(overlay);
 }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+/**
+ * This function is called when the user clicks on the clicker
+ */
 function userKlick() {
     addMoney(getMoneyPerSecond() / 5 + 1);
     summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
@@ -967,10 +1159,15 @@ function userKlick() {
     playSoundEffekt("sounds/click.wav");
 }
 
+/**
+ * This function sets the events
+ */
 function settingEvents() {
+
     document.getElementById('clicker').addEventListener('mousedown', () => {
         userKlick();
     });
+
     document.getElementById('clicker').addEventListener('contextmenu', (e) => {
         e.preventDefault();
     });
@@ -990,14 +1187,11 @@ function settingEvents() {
 
     document.getElementById('reset-settings').addEventListener('click', () => {
         customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
-            localStorage.removeItem('color-theme');
-            localStorage.removeItem('always-show-timer');
-            localStorage.removeItem('background');
-            localStorage.removeItem('moneyEffect');
-            localStorage.removeItem('musik');
-            localStorage.removeItem('sound');
+            localStorage.removeItem('settings');
             saveGame();
-            window.location.reload();
+            loadGame();
+            audio.pause();
+            startMusic();
         });
     });
 
@@ -1027,33 +1221,33 @@ function settingEvents() {
     document.getElementById('color-theme').addEventListener('input', () => {
         const r = document.querySelector(':root');
         r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
-        localStorage.setItem('color-theme', document.getElementById('color-theme').value);
+        saveToSettings('color-theme', document.getElementById('color-theme').value);
     });
 
     document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
         const checked = document.getElementById('always-show-timer-checkbox').checked;
         document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
-        localStorage.setItem('always-show-timer', checked);
+        saveToSettings('always-show-timer', checked);
     });
 
     document.getElementById('backgrounds').addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
             const r = document.querySelector(':root');
             r.style.setProperty('--background', 'url(' + e.target.src + ')');
-            localStorage.setItem('background', e.target.src);
+            saveToSettings('background', e.target.src);
         }
     });
 
     document.getElementById('moneyEffect').addEventListener('click', () => {
         const checked = document.getElementById('moneyEffect').checked;
-        localStorage.setItem('moneyEffect', checked);
+        saveToSettings('moneyEffect', checked);
     });
 
 //slider
     document.getElementById('musik').addEventListener('input', () => {
         const value = document.getElementById('musik').value;
         document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
-        localStorage.setItem('musik', value);
+        saveToSettings('musik', value);
         audio.volume = value;
         if (value > 0 && audio.paused) {
             startMusic();
@@ -1069,10 +1263,14 @@ function settingEvents() {
     document.getElementById('sound').addEventListener('input', () => {
         const value = document.getElementById('sound').value;
         document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
-        localStorage.setItem('sound', value);
+        saveToSettings('sound', value);
     });
 }
 
+/**
+ * This function adds a smooth scrolling effect to the element with the given id
+ * @param id
+ */
 function scrollManager(id) {
     let skills = document.getElementById(id);
     let scrollTarget = skills.scrollLeft;
@@ -1150,8 +1348,19 @@ function scrollManager(id) {
     animate();
 }
 
+/**
+ * Register a new tab with the given title and content
+ * @param tabTitleId
+ * @param tabContentId
+ * @param titleText
+ */
 function registerTab(tabTitleId, tabContentId, titleText) {
     const tabs = document.getElementById('tabs');
+
+    if (document.getElementById(tabTitleId) || document.getElementById(tabContentId)) {
+        return;
+    }
+
     const tabTitle = document.createElement('div');
     tabTitle.id = tabTitleId;
     tabTitle.classList.add('title');
