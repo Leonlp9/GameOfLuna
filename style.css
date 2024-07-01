@@ -759,8 +759,19 @@ body{
     cursor: pointer;
     margin: 0 10px;
     box-shadow: 3px 3px 0 1px #404040;
+    position: relative;
+    overflow: hidden;
 }
 
 .confirm-overlay-yes:hover, .confirm-overlay-no:hover {
     filter: brightness(0.9);
+}
+
+.confirm-overlay-yes:before, .confirm-overlay-no:before {
+    background: rgba(0, 0, 0, 0.045);
+    content: '';
+    width: 150%;
+    height: 100%;
+    transform: rotate(-30deg) translate(-15%, -10%);
+    position: absolute;
 }

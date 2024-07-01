@@ -183,27 +183,27 @@ const skins = [
     {
         name: 'Racing-Luna',
         url: 'img/skins/race.png',
-        requiredPerSecond: 10000000000000000,
+        requiredPerSecond: 1e301,
     },
     {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.png',
-        requiredPerSecond: 10000000000000000,
+        requiredPerSecond: 1e301,
     },
     {
         name: 'Business-Luna',
         url: 'img/skins/business.png',
-        requiredPerSecond: 10000000000000000,
+        requiredPerSecond: 1e301,
     },
     {
         name: 'Biker-Luna',
         url: 'img/skins/biker.png',
-        requiredPerSecond: 10000000000000000,
+        requiredPerSecond: 1e301,
     },
     {
         name: 'Ulna Reykenbrek',
         url: 'img/skins/ulna.png',
-        requiredPerSecond: 10000000000000000,
+        requiredPerSecond: 1e301,
     }
 ];
 let selectedSkin = 'Standard';
@@ -748,90 +748,25 @@ function initiateMusicOnInteraction() {
 }
 
 function formatMoney(amount) {
-    const suffixes = [
-        { value: 1e246, suffix: 'cz' },
-        { value: 1e243, suffix: 'cy' },
-        { value: 1e240, suffix: 'cx' },
-        { value: 1e237, suffix: 'cw' },
-        { value: 1e234, suffix: 'cv' },
-        { value: 1e231, suffix: 'cu' },
-        { value: 1e228, suffix: 'ct' },
-        { value: 1e225, suffix: 'cs' },
-        { value: 1e222, suffix: 'cr' },
-        { value: 1e219, suffix: 'cq' },
-        { value: 1e216, suffix: 'cp' },
-        { value: 1e213, suffix: 'co' },
-        { value: 1e210, suffix: 'cn' },
-        { value: 1e207, suffix: 'cm' },
-        { value: 1e204, suffix: 'cl' },
-        { value: 1e201, suffix: 'ck' },
-        { value: 1e198, suffix: 'cj' },
-        { value: 1e195, suffix: 'ci' },
-        { value: 1e192, suffix: 'ch' },
-        { value: 1e189, suffix: 'cg' },
-        { value: 1e186, suffix: 'cf' },
-        { value: 1e183, suffix: 'ce' },
-        { value: 1e180, suffix: 'cd' },
-        { value: 1e177, suffix: 'cc' },
-        { value: 1e174, suffix: 'cb' },
-        { value: 1e171, suffix: 'ca' },
-        { value: 1e168, suffix: 'bz' },
-        { value: 1e165, suffix: 'by' },
-        { value: 1e162, suffix: 'bx' },
-        { value: 1e159, suffix: 'bw' },
-        { value: 1e156, suffix: 'bv' },
-        { value: 1e153, suffix: 'bu' },
-        { value: 1e150, suffix: 'bt' },
-        { value: 1e147, suffix: 'bs' },
-        { value: 1e144, suffix: 'br' },
-        { value: 1e141, suffix: 'bq' },
-        { value: 1e138, suffix: 'bp' },
-        { value: 1e135, suffix: 'bo' },
-        { value: 1e132, suffix: 'bn' },
-        { value: 1e129, suffix: 'bm' },
-        { value: 1e126, suffix: 'bl' },
-        { value: 1e123, suffix: 'bk' },
-        { value: 1e120, suffix: 'bj' },
-        { value: 1e117, suffix: 'bi' },
-        { value: 1e114, suffix: 'bh' },
-        { value: 1e111, suffix: 'bg' },
-        { value: 1e108, suffix: 'bf' },
-        { value: 1e105, suffix: 'be' },
-        { value: 1e102, suffix: 'bd' },
-        { value: 1e99, suffix: 'bc' },
-        { value: 1e96, suffix: 'bb' },
-        { value: 1e93, suffix: 'ba' },
-        { value: 1e90, suffix: 'az' },
-        { value: 1e87, suffix: 'ay' },
-        { value: 1e84, suffix: 'ax' },
-        { value: 1e81, suffix: 'aw' },
-        { value: 1e78, suffix: 'av' },
-        { value: 1e75, suffix: 'au' },
-        { value: 1e72, suffix: 'at' },
-        { value: 1e69, suffix: 'as' },
-        { value: 1e66, suffix: 'ar' },
-        { value: 1e63, suffix: 'aq' },
-        { value: 1e60, suffix: 'ap' },
-        { value: 1e57, suffix: 'ao' },
-        { value: 1e54, suffix: 'an' },
-        { value: 1e51, suffix: 'am' },
-        { value: 1e48, suffix: 'al' },
-        { value: 1e45, suffix: 'ak' },
-        { value: 1e42, suffix: 'aj' },
-        { value: 1e39, suffix: 'ai' },
-        { value: 1e36, suffix: 'ah' },
-        { value: 1e33, suffix: 'ag' },
-        { value: 1e30, suffix: 'af' },
-        { value: 1e27, suffix: 'ae' },
-        { value: 1e24, suffix: 'ad' },
-        { value: 1e21, suffix: 'ac' },
-        { value: 1e18, suffix: 'ab' },
-        { value: 1e15, suffix: 'aa' },
+    const baseSuffixes = [
         { value: 1e12, suffix: 'T' },
         { value: 1e9, suffix: 'B' },
         { value: 1e6, suffix: 'M' },
         { value: 1e3, suffix: 'K' },
     ];
+
+    const extendedSuffixes = [];
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+    let value = 1e15;
+    for (let i = 0; i < alphabet.length; i++) {
+        for (let j = 0; j < alphabet.length; j++) {
+            extendedSuffixes.push({ value: value, suffix: alphabet[i] + alphabet[j] });
+            value *= 1e3;
+        }
+    }
+
+    const suffixes = [...extendedSuffixes.reverse(), ...baseSuffixes];
 
     for (let i = 0; i < suffixes.length; i++) {
         if (amount >= suffixes[i].value) {
@@ -1029,6 +964,7 @@ function userKlick() {
     setTimeout(() => {
         lastClicks.shift();
     }, 1000);
+    playSoundEffekt("sounds/click.wav");
 }
 
 function settingEvents() {
@@ -1067,6 +1003,7 @@ function settingEvents() {
 
     document.getElementById('settings-icon').addEventListener('click', () => {
         document.getElementById('settings').classList.toggle('settingsVisible');
+        playSoundEffekt("sounds/select.wav");
     });
 
 //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen wenn es geöffnet ist
@@ -1084,6 +1021,7 @@ function settingEvents() {
 
     document.getElementById('settings-close').addEventListener('click', () => {
         document.getElementById('settings').classList.remove('settingsVisible');
+        playSoundEffekt("sounds/select.wav");
     });
 
     document.getElementById('color-theme').addEventListener('input', () => {
@@ -1202,11 +1140,13 @@ function registerTab(tabTitleId, tabContentId, titleText) {
             tabTitle.classList.toggle('tabActive');
             tabs.classList.add('tabVisible');
             document.getElementById('scene').classList.add('tabOpen');
+            playSoundEffekt("sounds/select.wav");
         }else {
             //tab schließen
             tabTitle.classList.remove('tabActive');
             tabs.classList.remove('tabVisible');
             document.getElementById('scene').classList.remove('tabOpen');
+            playSoundEffekt("sounds/select.wav");
         }
 
     });
