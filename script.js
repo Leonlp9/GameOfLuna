@@ -779,7 +779,7 @@ function formatMoney(amount) {
 
 function setMoney(amount) {
   currentBalance = amount;
-  document.getElementById('balance').innerText = formatMoney(Math.round(currentBalance));
+  document.getElementById('balance').innerText = formatMoney(Math.round(currentBalance * 100) / 100);
 }
 
 function addMoney(amount) {
