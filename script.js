@@ -163,34 +163,42 @@ const skins = [
     {
         name: 'Standard',
         url: 'img/skins/clicker.png',
+        requiredPerSecond: 0,
     },
     {
         name: 'Allergie-Luna',
         url: 'img/skins/allergie.png',
-    },
-    {
-        name: 'Minecraft-Luna',
-        url: 'img/skins/minecraft.png',
+        requiredPerSecond: 1000,
     },
     {
         name: 'Gacha-Luna',
         url: 'img/skins/gacha.png',
+        requiredPerSecond: 10000,
+    },
+    {
+        name: 'Minecraft-Luna',
+        url: 'img/skins/minecraft.png',
+        requiredPerSecond: 100000,
     },
     {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.png',
+        requiredPerSecond: 10000000000000000,
     },
     {
         name: 'Business-Luna',
         url: 'img/skins/business.png',
+        requiredPerSecond: 10000000000000000,
     },
     {
         name: 'Biker-Luna',
         url: 'img/skins/biker.png',
+        requiredPerSecond: 10000000000000000,
     },
     {
         name: 'Ulna Reykenbrek',
         url: 'img/skins/ulna.png',
+        requiredPerSecond: 10000000000000000,
     }
 ];
 let selectedSkin = 'Standard';
@@ -283,6 +291,7 @@ function loadGame() {
         }
 
         updateShop()
+        updateSkins()
     }, 100);
 
     settingEvents();
@@ -580,7 +589,9 @@ function createSkinElement(skin) {
         iconElement.style.backgroundImage = `url('${skin.url}')`;
 
         element.addEventListener('click', () => {
-            setSkin(skin.name);
+            if (skin.requiredPerSecond <= getMoneyPerSecond()) {
+                setSkin(skin.name);
+            }
         });
     }
     img.onerror = () => {
@@ -588,6 +599,11 @@ function createSkinElement(skin) {
     }
 
     element.appendChild(iconElement);
+
+    const neededPerSecondElement = document.createElement('div');
+    neededPerSecondElement.classList.add('skin-required-per-second');
+    neededPerSecondElement.innerText = 'Benötigt: ' + formatMoney(skin.requiredPerSecond) + '/s';
+    element.appendChild(neededPerSecondElement);
 
     return element;
 }
@@ -600,6 +616,20 @@ function createSkins() {
     skins.forEach(skin => {
         skinsElement.appendChild(createSkinElement(skin));
     });
+}
+
+function updateSkinElement(skin) {
+    const element = document.getElementById('skin-' + skin.name);
+    if (skin.requiredPerSecond <= getMoneyPerSecond() && element.classList.contains('locked')) {
+        element.classList.remove('locked');
+        setSkin(skin.name)
+    }else if (skin.requiredPerSecond > getMoneyPerSecond() && !element.classList.contains('locked')) {
+        element.classList.add('locked');
+    }
+}
+
+function updateSkins() {
+    skins.forEach(updateSkinElement);
 }
 
 function getMoneyPerSecondOfShopItem(shopItem) {
@@ -784,8 +814,8 @@ function summonFallingMoneyEffectAtCursor(amount) {
     }
 
 
-    let cursorX = event ? event.clientX : window.innerWidth / 2;
-    let cursorY = event ? event.clientY : window.innerHeight / 2;
+    let cursorX = event.clientX ? event.clientX : window.innerWidth / 2;
+    let cursorY = event.clientY ? event.clientY : window.innerHeight / 2;
 
     const cursor = document.createElement('div');
     cursor.innerText = '💸+' + formatMoney(amount);
@@ -936,17 +966,27 @@ function customInfoScreen(title, message) {
     document.body.appendChild(overlay);
 }
 
+function userKlick() {
+    addMoney(getMoneyPerSecond() / 5 + 1);
+    summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
+    lastClicks.push(getMoneyPerSecond() / 5 + 1);
+    setTimeout(() => {
+        lastClicks.shift();
+    }, 1000);
+}
+
 function settingEvents() {
     document.getElementById('clicker').addEventListener('mousedown', () => {
-        addMoney(getMoneyPerSecond() / 5 + 1);
-        summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
-        lastClicks.push(getMoneyPerSecond() / 5 + 1);
-        setTimeout(() => {
-            lastClicks.shift();
-        }, 1000);
+        userKlick();
     });
     document.getElementById('clicker').addEventListener('contextmenu', (e) => {
         e.preventDefault();
+    });
+    //wenn leertaste gedrückt wird, wird ein Klick simuliert
+    document.addEventListener('keyup', (e) => {
+        if (e.key === ' ') {
+            userKlick();
+        }
     });
 
     document.getElementById('reset').addEventListener('click', () => {
