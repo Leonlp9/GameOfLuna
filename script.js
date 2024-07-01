@@ -173,6 +173,10 @@ const skins = [
         url: 'img/skins/minecraft.png',
     },
     {
+        name: 'Gacha-Luna',
+        url: 'img/skins/gacha.png',
+    },
+    {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.png',
     },
@@ -503,6 +507,10 @@ function createUpgradeElement(upgrade) {
     descriptionElement.classList.add('upgrade-description');
     descriptionElement.innerText = upgrade.description;
     element.appendChild(descriptionElement);
+
+    descriptionElement.addEventListener('click', () => {
+        customInfoScreen(upgrade.name, upgrade.description);
+    });
 
     return element;
 }
@@ -886,6 +894,41 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
         overlay.remove();
     });
     buttonsElement.appendChild(noElement);
+
+    content.appendChild(buttonsElement);
+    overlay.appendChild(content);
+
+    document.body.appendChild(overlay);
+}
+
+function customInfoScreen(title, message) {
+
+    const overlay = document.createElement('div');
+    overlay.classList.add('confirm-overlay');
+
+    const content = document.createElement('div');
+    content.classList.add('confirm-overlay-content');
+
+    const titleElement = document.createElement('div');
+    titleElement.classList.add('confirm-overlay-title');
+    titleElement.innerText = title;
+    content.appendChild(titleElement);
+
+    const textElement = document.createElement('div');
+    textElement.classList.add('confirm-overlay-text');
+    textElement.innerText = message;
+    content.appendChild(textElement);
+
+    const buttonsElement = document.createElement('div');
+    buttonsElement.classList.add('confirm-overlay-buttons');
+
+    const okElement = document.createElement('div');
+    okElement.classList.add('confirm-overlay-yes');
+    okElement.innerText = 'OK';
+    okElement.addEventListener('click', () => {
+        overlay.remove();
+    });
+    buttonsElement.appendChild(okElement);
 
     content.appendChild(buttonsElement);
     overlay.appendChild(content);
