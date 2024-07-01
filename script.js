@@ -162,47 +162,47 @@ const upgrades = [
 const skins = [
     {
         name: 'Standard',
-        url: 'img/skins/clicker.png',
+        url: 'img/skins/clicker.webp',
         requiredPerSecond: 0,
     },
     {
         name: 'Allergie-Luna',
-        url: 'img/skins/allergie.png',
+        url: 'img/skins/allergie.webp',
         requiredPerSecond: 1000,
     },
     {
         name: 'Gacha-Luna',
-        url: 'img/skins/gacha.png',
+        url: 'img/skins/gacha.webp',
         requiredPerSecond: 10000,
     },
     {
         name: 'Minecraft-Luna',
-        url: 'img/skins/minecraft.png',
+        url: 'img/skins/minecraft.webp',
         requiredPerSecond: 100000,
     },
     {
         name: 'Racing-Luna',
-        url: 'img/skins/race.png',
+        url: 'img/skins/race.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Kobold-Luna',
-        url: 'img/skins/kobold.png',
+        url: 'img/skins/kobold.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Business-Luna',
-        url: 'img/skins/business.png',
+        url: 'img/skins/business.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Biker-Luna',
-        url: 'img/skins/biker.png',
+        url: 'img/skins/biker.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Ulna Reykenbrek',
-        url: 'img/skins/ulna.png',
+        url: 'img/skins/ulna.webp',
         requiredPerSecond: 1e301,
     }
 ];
