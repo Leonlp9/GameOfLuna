@@ -1077,15 +1077,24 @@ function scrollManager(id) {
     let skills = document.getElementById(id);
     let scrollTarget = skills.scrollLeft;
     let startTouchX = 0;
+    let lastScrollLeft = skills.scrollLeft;
+    let lastTimestamp = Date.now();
+    let speed = 0;
+
+    // Event listener for wheel events
     skills.addEventListener('wheel', function(e) {
         if (e.deltaY !== 0 || e.deltaX !== 0) {
             e.preventDefault();
             scrollTarget += e.deltaY !== 0 ? e.deltaY : e.deltaX;
         }
     });
+
+    // Event listener for touchstart events
     skills.addEventListener('touchstart', function(e) {
         startTouchX = e.touches[0].clientX;
     });
+
+    // Event listener for touchmove events
     skills.addEventListener('touchmove', function(e) {
         let touchX = e.touches[0].clientX;
         let deltaX = startTouchX - touchX;
@@ -1093,16 +1102,51 @@ function scrollManager(id) {
         scrollTarget += deltaX * 2.5;
         e.preventDefault();
     });
+
+    // Linear interpolation function
     function lerp(start, end, t) {
         return start * (1 - t) + end * t;
     }
+
+    // Calculate scroll speed
+    function calculateSpeed() {
+        let currentScrollLeft = skills.scrollLeft;
+        let currentTime = Date.now();
+        let distance = currentScrollLeft - lastScrollLeft;
+        let time = currentTime - lastTimestamp;
+        speed = Math.abs(distance / time);
+
+        lastScrollLeft = currentScrollLeft;
+        lastTimestamp = currentTime;
+    }
+
+    // Adjust vertical position based on speed
+    function adjustVerticalPosition() {
+        let elements = skills.children;
+        let containerRect = skills.getBoundingClientRect();
+        let centerX = containerRect.left + containerRect.width / 2;
+
+        for (let element of elements) {
+            let rect = element.getBoundingClientRect();
+            let distanceFromCenter = Math.abs(rect.left + rect.width / 2 - centerX);
+            let influence = Math.max(1 - distanceFromCenter / (containerRect.width / 2), 0);
+            let offset = Math.min(speed * 20, 200) * (1-influence); // Adjust the factor to control vertical movement
+            element.style.transform = `translateY(${offset}px)`;
+        }
+    }
+
+    // Animation function for smooth scrolling and adjusting vertical position
     function animate() {
         let maxScroll = skills.scrollWidth - skills.clientWidth;
         if (scrollTarget < 0) scrollTarget = 0;
         if (scrollTarget > maxScroll) scrollTarget = maxScroll;
         skills.scrollLeft = lerp(skills.scrollLeft, scrollTarget, 0.1);
+        calculateSpeed();
+        adjustVerticalPosition();
         requestAnimationFrame(animate);
     }
+
+    // Start the animation
     animate();
 }
 
