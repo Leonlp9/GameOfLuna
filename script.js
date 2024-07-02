@@ -218,11 +218,19 @@ const soundTracks = [
     "sounds/musik/SoundTrack7.mp3",
 ];
 
-let currentBalance = 0;
 let settings = {};
-let selectedSkin = 'Standard';
 
-let shopItemsBought = {};
+let game = {
+    keepVariables: {
+        "rebirthsPoints": 0.0,
+    },
+    resetVariables: {
+        "currentBalance": 0.0,
+        "selectedSkin": "Standard",
+        "shopItemsBought": {},
+    }
+}
+
 let lastClicks = [];
 let audio;
 let eventsAdded = false;
@@ -237,8 +245,7 @@ let eventsAdded = false;
  * Speichert das Spiel
  */
 function saveGame() {
-    localStorage.setItem('currentBalance', currentBalance);
-    localStorage.setItem('shopItemsBought', JSON.stringify(shopItemsBought));
+    localStorage.setItem('game', JSON.stringify(game));
 }
 
 /**
@@ -255,8 +262,8 @@ function loadGame() {
     createSkins();
     loadSettings();
 
-    currentBalance = parseFloat(localStorage.getItem('currentBalance')) || 0;
-    shopItemsBought = JSON.parse(localStorage.getItem('shopItemsBought')) || shopItemsBought;
+    game = JSON.parse(localStorage.getItem('game')) || game;
+
     updateIncomePerSecondElement();
 
     const colorTheme = getSetting('color-theme') || '#f75218';
@@ -275,7 +282,7 @@ function loadGame() {
     document.getElementById('musik').value = musik;
     document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
-    setSkin(localStorage.getItem('skin') || 'Standard');
+    setSkin(game.resetVariables.selectedSkin);
 
     if (!eventsAdded) {
         window.addEventListener('click', initiateMusicOnInteraction);
@@ -312,10 +319,37 @@ function loadGame() {
  * Lösche das Spiel
  */
 function resetGame() {
-    currentBalance = 0;
-    shopItemsBought = {};
+    game.resetVariables = {
+        "currentBalance": 0.0,
+        "selectedSkin": "Standard",
+        "shopItemsBought": {},
+    }
     saveGame();
     loadGame();
+}
+
+function downloadGame() {
+    const a = document.createElement('a');
+    a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(game));
+    a.download = 'game.json';
+    a.click();
+}
+
+function uploadGame() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = () => {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            game = JSON.parse(reader.result);
+            saveGame();
+            loadGame();
+        }
+        reader.readAsText(file);
+    }
+    input.click();
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -455,13 +489,13 @@ function createShop() {
         element.appendChild(iconElement);
 
         element.addEventListener('click', () => {
-            const price = Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0));
-            if (currentBalance >= price) {
+            const price = Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0));
+            if (game.resetVariables.currentBalance >= price) {
 
-                if (!shopItemsBought[shopItem.name]) {
-                    shopItemsBought[shopItem.name] = 1;
+                if (!game.resetVariables.shopItemsBought[shopItem.name]) {
+                    game.resetVariables.shopItemsBought[shopItem.name] = 1;
                 }else {
-                    shopItemsBought[shopItem.name]++;
+                    game.resetVariables.shopItemsBought[shopItem.name]++;
                 }
                 removeMoney(price);
 
@@ -479,7 +513,7 @@ function createShop() {
 
         const priceElementText = document.createElement('p');
         priceElementText.classList.add('skill-price-text');
-        priceElementText.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
+        priceElementText.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0)));
         priceElement.appendChild(priceElementText);
 
         //tooltip mit der Zeit bis zum Kauf
@@ -496,7 +530,7 @@ function createShop() {
 
         const amountElement = document.createElement('div');
         amountElement.classList.add('skill-amount');
-        amountElement.innerText = shopItemsBought[shopItem.name];
+        amountElement.innerText = game.resetVariables.shopItemsBought[shopItem.name];
 
         element.appendChild(amountElement);
 
@@ -517,13 +551,13 @@ function updateShop() {
         const priceElement = element.querySelector('.skill-price-text');
         const amountElement = element.querySelector('.skill-amount');
         const timerElement = element.querySelector('.skill-timer');
-        priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)));
-        priceElement.style.color = currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
-        amountElement.innerText = shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : '';
-        timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0))));
-        if (!shopItemsBought[shopItem.name] || shopItemsBought[shopItem.name] === 0 && !element.classList.contains('unexplored')) {
+        priceElement.innerText = formatMoney(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0)));
+        priceElement.style.color = game.resetVariables.currentBalance >= Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0)) ? 'green' : 'red';
+        amountElement.innerText = game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : '';
+        timerElement.innerText = getFormattedTimeTo(getCalculatedTimeStampWhenReachableBalance(Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0))));
+        if (!game.resetVariables.shopItemsBought[shopItem.name] || game.resetVariables.shopItemsBought[shopItem.name] === 0 && !element.classList.contains('unexplored')) {
             element.classList.add('unexplored');
-        }else if (shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
+        }else if (game.resetVariables.shopItemsBought[shopItem.name] > 0 && element.classList.contains('unexplored')) {
             element.classList.remove('unexplored');
             element.classList.add('exploredAnimation');
 
@@ -555,8 +589,8 @@ function createUpgrades() {
     rebirthElement.classList.add('rebirth');
     rebirthElement.addEventListener('click', () => {
         customConfirm('Rebirth', 'Möchtest du wirklich ein rebirth machen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
-            currentBalance = 0;
-            shopItemsBought = {};
+            game.resetVariables.currentBalance = 0;
+            game.resetVariables.shopItemsBought = {};
             saveGame();
             window.location.reload();
         });
@@ -653,7 +687,7 @@ function createSkins() {
         element.classList.add('skin');
         element.id = 'skin-' + skin.name;
 
-        if (skin.name === selectedSkin) {
+        if (skin.name === game.resetVariables.selectedSkin) {
             element.classList.add('selected');
         }
 
@@ -725,7 +759,7 @@ function updateSkins() {
  * @returns {number}
  */
 function getMoneyPerSecondOfShopItem(shopItem) {
-    return shopItem.generateMoneyPerSecond * (shopItemsBought[shopItem.name] ? shopItemsBought[shopItem.name] : 0);
+    return shopItem.generateMoneyPerSecond * (game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0);
 }
 
 /**
@@ -816,11 +850,11 @@ function getCalculatedTimeStampWhenReachableBalance(neededBalance) {
     let currentTimestamp = Date.now();
     let moneyPerSecond = getMoneyPerSecondWithClicks();
 
-    if (moneyPerSecond === 0 || neededBalance <= currentBalance) {
+    if (moneyPerSecond === 0 || neededBalance <= game.resetVariables.currentBalance) {
         return false;
     }
 
-    let timeDifference = (neededBalance - currentBalance) / moneyPerSecond * 1000;
+    let timeDifference = (neededBalance - game.resetVariables.currentBalance) / moneyPerSecond * 1000;
     let futureTimestamp = currentTimestamp + timeDifference + 1000;
 
     if (futureTimestamp < currentTimestamp) {
@@ -842,7 +876,7 @@ function updateIncomePerSecondElement() {
  * @param skin
  */
 function setSkin(skin) {
-    selectedSkin = skin;
+    game.resetVariables.selectedSkin = skin;
 
     skins.forEach(skin => {
         document.getElementById("skin-" + skin.name).classList.remove('selected');
@@ -850,8 +884,6 @@ function setSkin(skin) {
     document.getElementById("skin-" + skin).classList.add('selected');
 
     document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
-
-    localStorage.setItem('skin', skin);
 }
 
 /**
@@ -929,8 +961,8 @@ function formatMoney(amount) {
  * @param amount
  */
 function setMoney(amount) {
-  currentBalance = amount;
-  document.getElementById('balance').innerText = formatMoney(Math.round(currentBalance * 100) / 100);
+  game.resetVariables.currentBalance = amount;
+  document.getElementById('balance').innerText = formatMoney(Math.round(game.resetVariables.currentBalance * 100) / 100);
 }
 
 /**
@@ -938,7 +970,7 @@ function setMoney(amount) {
  * @param amount
  */
 function addMoney(amount) {
-    setMoney(currentBalance + amount);
+    setMoney(game.resetVariables.currentBalance + amount);
 }
 
 /**
@@ -946,7 +978,7 @@ function addMoney(amount) {
  * @param amount
  */
 function removeMoney(amount) {
-    setMoney(currentBalance - amount);
+    setMoney(game.resetVariables.currentBalance - amount);
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
