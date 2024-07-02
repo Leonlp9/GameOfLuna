@@ -677,6 +677,13 @@ function createUpgrades() {
             customInfoScreen(upgrade.name, upgrade.description);
         });
 
+        element.addEventListener('click', () => {
+            //wenn nicht das child element description geklickt wurde
+            if (event.target !== descriptionElement) {
+                playSoundEffekt("sounds/error.mp3")
+            }
+        });
+
         return element;
     }
 
