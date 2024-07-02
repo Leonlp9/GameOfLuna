@@ -346,6 +346,9 @@ function uploadGame() {
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     Interval
  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/**
+ * Startet das Interval
+ */
 function startInterval() {
     intervalId = setInterval(() => {
         addMoney(getMoneyPerSecond() / 10);
@@ -362,6 +365,9 @@ function startInterval() {
     }, 100);
 }
 
+/**
+ * Stoppt das Interval
+ */
 function stopInterval() {
     if (intervalId) {
         clearInterval(intervalId);
@@ -930,6 +936,7 @@ function buildBackgrounds(value, id) {
         input.addEventListener('change', () => {
             r.style.setProperty('--background', 'url(img/bg' + i + '.png)');
             saveToSettings('background', 'img/bg' + i + '.png');
+            playSoundEffekt("sounds/select.wav");
         });
     }
 }
