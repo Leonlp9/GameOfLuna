@@ -4,131 +4,132 @@
 const shopItems = [
     {
         name: 'Kaninchen',
-        startPrice: 10,
-        priceIncrease: 1.1,
-        generateMoneyPerSecond: 0.25,
-        generateMoneyIncrease: 1.05,
+        startPrice: 12,
+        priceIncrease: 1.18,
+        generateMoneyPerSecond: 0.6,
+        generateMoneyIncrease: 1.12,
     },
     {
         name: 'Rollerblades',
-        startPrice: 250,
-        priceIncrease: 1.1,
-        generateMoneyPerSecond: 12.5,
-        generateMoneyIncrease: 1.05,
+        startPrice: 420,
+        priceIncrease: 1.25,
+        generateMoneyPerSecond: 20,
+        generateMoneyIncrease: 1.14,
     },
     {
         name: 'Laptop',
-        startPrice: 1500,
-        priceIncrease: 1.1,
-        generateMoneyPerSecond: 150,
-        generateMoneyIncrease: 1.05,
+        startPrice: 2750,
+        priceIncrease: 1.27,
+        generateMoneyPerSecond: 250,
+        generateMoneyIncrease: 1.16,
     },
     {
         name: 'Informatik',
-        startPrice: 10000,
-        priceIncrease: 1.2,
-        generateMoneyPerSecond: 1000,
-        generateMoneyIncrease: 1.1,
+        startPrice: 18250,
+        priceIncrease: 1.30,
+        generateMoneyPerSecond: 1700,
+        generateMoneyIncrease: 1.18,
     },
     {
         name: 'RAM',
-        startPrice: 50000,
-        priceIncrease: 1.2,
-        generateMoneyPerSecond: 5000,
-        generateMoneyIncrease: 1.1,
+        startPrice: 90000,
+        priceIncrease: 1.32,
+        generateMoneyPerSecond: 8000,
+        generateMoneyIncrease: 1.20,
     },
     {
         name: 'Speicherkarte',
-        startPrice: 1000000,
-        priceIncrease: 1.2,
-        generateMoneyPerSecond: 100000,
-        generateMoneyIncrease: 1.1,
+        startPrice: 1800000,
+        priceIncrease: 1.35,
+        generateMoneyPerSecond: 160000,
+        generateMoneyIncrease: 1.22,
     },
     {
         name: 'Lenkrad',
-        startPrice: 75000000,
-        priceIncrease: 1.3,
-        generateMoneyPerSecond: 5000000,
-        generateMoneyIncrease: 1.15,
+        startPrice: 105000000,
+        priceIncrease: 1.38,
+        generateMoneyPerSecond: 6000000,
+        generateMoneyIncrease: 1.24,
     },
     {
         name: 'Pedale',
-        startPrice: 1000000000,
-        priceIncrease: 1.3,
-        generateMoneyPerSecond: 25500000,
-        generateMoneyIncrease: 1.15,
+        startPrice: 1650000000,
+        priceIncrease: 1.41,
+        generateMoneyPerSecond: 32000000,
+        generateMoneyIncrease: 1.26,
     },
     {
         name: 'Schalthebel',
-        startPrice: 10000000000,
-        priceIncrease: 1.3,
-        generateMoneyPerSecond: 100000000,
-        generateMoneyIncrease: 1.15,
+        startPrice: 22000000000,
+        priceIncrease: 1.43,
+        generateMoneyPerSecond: 160000000,
+        generateMoneyIncrease: 1.28,
     },
     {
         name: 'Laptopkühler',
-        startPrice: 100000000000,
-        priceIncrease: 1.4,
-        generateMoneyPerSecond: 500000000,
-        generateMoneyIncrease: 1.2,
+        startPrice: 275000000000,
+        priceIncrease: 1.46,
+        generateMoneyPerSecond: 800000000,
+        generateMoneyIncrease: 1.30,
     },
     {
         name: 'Grafikkarte',
-        startPrice: 750000000000,
-        priceIncrease: 1.4,
-        generateMoneyPerSecond: 2500000000,
-        generateMoneyIncrease: 1.2,
+        startPrice: 1150000000000,
+        priceIncrease: 1.48,
+        generateMoneyPerSecond: 4000000000,
+        generateMoneyIncrease: 1.32,
     },
     {
         name: 'Führerschein',
-        startPrice: 10000000000000,
-        priceIncrease: 1.4,
-        generateMoneyPerSecond: 10000000000,
-        generateMoneyIncrease: 1.2,
+        startPrice: 25000000000000,
+        priceIncrease: 1.50,
+        generateMoneyPerSecond: 17000000000,
+        generateMoneyIncrease: 1.34,
     },
     {
         name: 'Auto',
-        startPrice: 100000000000000,
-        priceIncrease: 1.5,
-        generateMoneyPerSecond: 50000000000,
-        generateMoneyIncrease: 1.25,
+        startPrice: 375000000000000,
+        priceIncrease: 1.52,
+        generateMoneyPerSecond: 85000000000,
+        generateMoneyIncrease: 1.36,
     },
     {
         name: 'Autolift',
-        startPrice: 1000000000000000,
-        priceIncrease: 1.5,
-        generateMoneyPerSecond: 250000000000,
-        generateMoneyIncrease: 1.25,
+        startPrice: 6500000000000000,
+        priceIncrease: 1.55,
+        generateMoneyPerSecond: 420000000000,
+        generateMoneyIncrease: 1.38,
     },
     {
         name: 'Garage',
-        startPrice: 10000000000000000,
-        priceIncrease: 1.5,
-        generateMoneyPerSecond: 15000000000000,
-        generateMoneyIncrease: 1.25,
+        startPrice: 120000000000000000,
+        priceIncrease: 1.57,
+        generateMoneyPerSecond: 25000000000000,
+        generateMoneyIncrease: 1.40,
     },
     {
         name: 'Werkstatt',
-        startPrice: 100000000000000000,
-        priceIncrease: 1.6,
-        generateMoneyPerSecond: 250000000000000,
-        generateMoneyIncrease: 1.3,
+        startPrice: 1750000000000000000,
+        priceIncrease: 1.60,
+        generateMoneyPerSecond: 500000000000000,
+        generateMoneyIncrease: 1.42,
     },
     {
         name: 'Autohaus',
-        startPrice: 1000000000000000000,
-        priceIncrease: 1.6,
-        generateMoneyPerSecond: 5000000000000000,
-        generateMoneyIncrease: 1.3,
+        startPrice: 22500000000000000000,
+        priceIncrease: 1.62,
+        generateMoneyPerSecond: 10000000000000000,
+        generateMoneyIncrease: 1.44,
     },
     {
         name: 'Automarke',
-        startPrice: 10000000000000000000,
-        priceIncrease: 1.6,
-        generateMoneyPerSecond: 100000000000000000,
-        generateMoneyIncrease: 1.3,
+        startPrice: 600000000000000000000,
+        priceIncrease: 1.65,
+        generateMoneyPerSecond: 200000000000000000,
+        generateMoneyIncrease: 1.46,
     }
 ];
+
 const upgrades = [
     {
         name: 'Finger',
@@ -220,7 +221,14 @@ const soundTracks = [
 const defaultSettings = {
     keepVariables: {
         "rebirthsPoints": 0.0,
-        "settings": {}
+        "settings": {
+            "color-theme": "#f75218",
+            "always-show-timer": false,
+            "background": "img/bg1.png",
+            "moneyEffect": true,
+            "musik": 0.5,
+            "sound": 0.75,
+        }
     },
     resetVariables: {
         "currentBalance": 0.0,
@@ -254,26 +262,10 @@ function saveGame() {
 function loadGame() {
     const r = document.querySelector(':root');
 
-    game = JSON.parse(localStorage.getItem('game'));
-    if (!game) {
-        game = defaultSettings;
-    }
-    if (!game.resetVariables) {
-        game.resetVariables = defaultSettings.resetVariables;
-    }
-    if (!game.keepVariables) {
-        game.keepVariables = defaultSettings.keepVariables;
-    }
-    Object.keys(defaultSettings.resetVariables).forEach(key => {
-        if (!game.resetVariables[key]) {
-            game.resetVariables[key] = defaultSettings.resetVariables[key];
-        }
-    });
-    Object.keys(defaultSettings.keepVariables).forEach(key => {
-        if (!game.keepVariables[key]) {
-            game.keepVariables[key] = defaultSettings.keepVariables[key];
-        }
-    });
+    game = JSON.parse(localStorage.getItem('game')) || {};
+    game.resetVariables = Object.assign({}, defaultSettings.resetVariables, game.resetVariables);
+    game.keepVariables = Object.assign({}, defaultSettings.keepVariables, game.keepVariables);
+    game.keepVariables.settings = Object.assign({}, defaultSettings.keepVariables.settings, game.keepVariables.settings);
 
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
@@ -284,19 +276,19 @@ function loadGame() {
 
     updateIncomePerSecondElement();
 
-    const colorTheme = getSetting('color-theme') || '#f75218';
+    const colorTheme = getSetting('color-theme');
     r.style.setProperty('--clicker-color', colorTheme);
     document.getElementById('color-theme').value = colorTheme;
 
-    document.getElementById('always-show-timer-checkbox').checked = getSetting('always-show-timer') === true;
-    document.getElementById('skills').classList.toggle('alwaysShowTimer', getSetting('always-show-timer') === true);
+    document.getElementById('always-show-timer-checkbox').checked = getSetting('always-show-timer');
+    document.getElementById('skills').classList.toggle('alwaysShowTimer', getSetting('always-show-timer'));
 
-    const background = getSetting('background') || 'img/bg1.png';
+    const background = getSetting('background');
     r.style.setProperty('--background', 'url(' + background + ')');
 
-    document.getElementById('moneyEffect').checked = getSetting('moneyEffect') !== undefined ? getSetting('moneyEffect') : true;
+    document.getElementById('moneyEffect').checked = getSetting('moneyEffect');
 
-    let musik = getSetting('musik') || 0.5;
+    let musik = getSetting('musik');
     document.getElementById('musik').value = musik;
     document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
@@ -307,7 +299,7 @@ function loadGame() {
         window.addEventListener('keypress', initiateMusicOnInteraction);
     }
 
-    let sound = getSetting('sound') || 0.75;
+    let sound = getSetting('sound');
     document.getElementById('sound').value = sound;
     document.getElementById('soundValue').textContent = Math.round(sound * 100) + '%';
 
@@ -365,7 +357,9 @@ function uploadGame() {
         reader.onload = () => {
             game = JSON.parse(reader.result || '{}');
             saveGame();
+            audio.pause();
             loadGame();
+            startMusic();
         }
         reader.readAsText(file);
     }
@@ -793,7 +787,7 @@ function getMoneyPerSecond() {
  */
 function getMoneyPerSecondWithClicks() {
     let lastClicksSum = lastClicks.reduce((sum, click) => sum + click, 0);
-    return getMoneyPerSecond() + lastClicksSum / 10;
+    return getMoneyPerSecond() + lastClicksSum;
 }
 
 /**
@@ -1407,7 +1401,7 @@ function scrollManager(id) {
             let rect = element.getBoundingClientRect();
             let distanceFromCenter = Math.abs(rect.left + rect.width / 2 - centerX);
             let influence = Math.max(1 - distanceFromCenter / (containerRect.width / 2), 0);
-            let offset = Math.min(speed * 20, 200) * (1-influence); // Adjust the factor to control vertical movement
+            let offset = Math.min(speed * 20, 100) * (1-influence); // Adjust the factor to control vertical movement
             element.style.transform = `translateY(${offset}px)`;
         }
     }
