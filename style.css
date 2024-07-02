@@ -747,6 +747,9 @@ body{
     border-radius: 10px;
     text-align: center;
     box-shadow: 5px 5px 0 3px #404040;
+
+    animation: confirmOverlay 0.5s;
+    animation-fill-mode: forwards;
 }
 .confirm-overlay-title {
     font-size: 24px;
@@ -787,4 +790,15 @@ body{
     height: 100%;
     transform: rotate(-30deg) translate(-15%, -10%);
     position: absolute;
+}
+@keyframes confirmOverlay {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
