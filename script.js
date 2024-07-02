@@ -217,12 +217,10 @@ const soundTracks = [
     "sounds/musik/SoundTrack6.mp3",
     "sounds/musik/SoundTrack7.mp3",
 ];
-
-let settings = {};
-
-let game = {
+const defaultSettings = {
     keepVariables: {
         "rebirthsPoints": 0.0,
+        "settings": {}
     },
     resetVariables: {
         "currentBalance": 0.0,
@@ -230,6 +228,8 @@ let game = {
         "shopItemsBought": {},
     }
 }
+
+let game = {}
 
 let lastClicks = [];
 let audio;
@@ -254,15 +254,17 @@ function saveGame() {
 function loadGame() {
     const r = document.querySelector(':root');
 
+    game = JSON.parse(localStorage.getItem('game'));
+    if (!game) {
+        game = defaultSettings;
+    }
+
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
     registerTab('skinsTabTitle', 'skins', 'Skins');
     createShop();
     createUpgrades();
     createSkins();
-    loadSettings();
-
-    game = JSON.parse(localStorage.getItem('game')) || game;
 
     updateIncomePerSecondElement();
 
@@ -328,6 +330,9 @@ function resetGame() {
     loadGame();
 }
 
+/**
+ * Speichert das Spiel in einer Datei
+ */
 function downloadGame() {
     const a = document.createElement('a');
     a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(game));
@@ -335,6 +340,9 @@ function downloadGame() {
     a.click();
 }
 
+/**
+ * Lädt das Spiel von einer Datei
+ */
 function uploadGame() {
     const input = document.createElement('input');
     input.type = 'file';
@@ -364,15 +372,8 @@ function uploadGame() {
  * @param value
  */
 function saveToSettings(key, value) {
-    settings[key] = value;
-    localStorage.setItem('settings', JSON.stringify(settings));
-}
-
-/**
- * Loads the settings from the local storage
- */
-function loadSettings() {
-    settings = JSON.parse(localStorage.getItem('settings')) || {};
+    game.keepVariables.settings[key] = value;
+    saveGame();
 }
 
 /**
@@ -381,7 +382,10 @@ function loadSettings() {
  * @returns {*}
  */
 function getSetting(key) {
-    return settings[key];
+    if (game.keepVariables.settings[key] === undefined) {
+        return defaultSettings.keepVariables.settings[key];
+    }
+    return game.keepVariables.settings[key];
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
