@@ -267,6 +267,7 @@ function loadGame() {
     game.keepVariables = Object.assign({}, defaultSettings.keepVariables, game.keepVariables);
     game.keepVariables.settings = Object.assign({}, defaultSettings.keepVariables.settings, game.keepVariables.settings);
 
+    createSettings();
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
     registerTab('skinsTabTitle', 'skins', 'Skins');
@@ -276,21 +277,10 @@ function loadGame() {
 
     updateIncomePerSecondElement();
 
-    const colorTheme = getSetting('color-theme');
-    r.style.setProperty('--clicker-color', colorTheme);
-    document.getElementById('color-theme').value = colorTheme;
-
-    document.getElementById('always-show-timer-checkbox').checked = getSetting('always-show-timer');
     document.getElementById('skills').classList.toggle('alwaysShowTimer', getSetting('always-show-timer'));
 
     const background = getSetting('background');
     r.style.setProperty('--background', 'url(' + background + ')');
-
-    document.getElementById('moneyEffect').checked = getSetting('moneyEffect');
-
-    let musik = getSetting('musik');
-    document.getElementById('musik').value = musik;
-    document.getElementById('musikValue').textContent = Math.round(musik * 100) + '%';
 
     setSkin(game.resetVariables.selectedSkin);
 
@@ -298,12 +288,6 @@ function loadGame() {
         window.addEventListener('click', initiateMusicOnInteraction);
         window.addEventListener('keypress', initiateMusicOnInteraction);
     }
-
-    let sound = getSetting('sound');
-    document.getElementById('sound').value = sound;
-    document.getElementById('soundValue').textContent = Math.round(sound * 100) + '%';
-
-    buildBackgrounds();
 
     setInterval(() => {
         addMoney(getMoneyPerSecond() / 10);
@@ -900,8 +884,8 @@ function setSkin(skin) {
 /**
  * Build the Backgrounds in the settings
  */
-function buildBackgrounds() {
-    const backgrounds = document.getElementById('backgrounds');
+function buildBackgrounds(value, id) {
+    const backgrounds = document.getElementById(id);
     backgrounds.innerHTML = '';
     const r = document.querySelector(':root');
     for (let i = 1; i <= 9; i++) {
@@ -910,7 +894,7 @@ function buildBackgrounds() {
         input.id = 'background' + i;
         input.name = 'background';
         input.value = 'background' + i;
-        if (r.style.getPropertyValue('--background').includes('bg' + i + '.png') || getSetting('background') === undefined && i === 1) {
+        if (value === 'img/bg' + i + '.png') {
             input.checked = true;
         }
         backgrounds.appendChild(input);
@@ -923,6 +907,11 @@ function buildBackgrounds() {
         img.alt = 'background' + i;
         label.appendChild(img);
         backgrounds.appendChild(label);
+
+        input.addEventListener('change', () => {
+            r.style.setProperty('--background', 'url(img/bg' + i + '.png)');
+            saveToSettings('background', 'img/bg' + i + '.png');
+        });
     }
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -1188,18 +1177,248 @@ function customInfoScreen(title, message) {
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Settings
+ *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /**
- * This function is called when the user clicks on the clicker
+ * Adds the events to the settings
+ * @param title
+ * @param id
+ * @param value
+ * @param changeCallback
+ * @param inputCallback
  */
-function userKlick() {
-    addMoney(getMoneyPerSecond() / 5 + 1);
-    summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
-    lastClicks.push(getMoneyPerSecond() / 5 + 1);
-    setTimeout(() => {
-        lastClicks.shift();
-    }, 1000);
-    playSoundEffekt("sounds/click.wav");
+function createNewColorSelectionSetting(title, id, value, changeCallback, inputCallback) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('color');
+    settings.appendChild(container);
+
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.innerText = title;
+    container.appendChild(label);
+
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.id = id;
+    input.value = value;
+    container.appendChild(input);
+
+    input.addEventListener('change', () => changeCallback(input));
+    input.addEventListener('input', () => inputCallback(input));
+
+    inputCallback(input);
 }
+
+/**
+ * Adds the events to the settings
+ * @param title
+ * @param id
+ * @param checked
+ * @param changeCallback
+ */
+function createNewCheckboxSetting(title, id, checked, changeCallback) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('checkbox');
+    settings.appendChild(container);
+
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.innerText = title;
+    container.appendChild(label);
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = id;
+    input.checked = checked;
+    input.addEventListener('change', () => changeCallback(input));
+    container.appendChild(input);
+
+}
+
+/**
+ * Adds the events to the settings
+ * @param title
+ * @param id
+ * @param value
+ * @param min
+ * @param max
+ * @param step
+ * @param changeCallback
+ * @param inputCallback
+ */
+function createNewRangeSetting(title, id, value, min, max, step, changeCallback, inputCallback) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('range');
+    settings.appendChild(container);
+
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.innerText = title + ': ' + Math.round(value * 100) + '%';
+    container.appendChild(label);
+
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.id = id;
+    input.min = min;
+    input.max = max;
+    input.step = step;
+    input.value = value;
+    input.addEventListener('change', () => changeCallback(input));
+    input.addEventListener('input', () => {
+        inputCallback(input);
+        label.innerText = title + ': ' + Math.round(input.value * 100) + '%';
+    });
+    container.appendChild(input);
+}
+
+/**
+ * Adds the events to the settings
+ * @param title
+ * @param id
+ * @param clickCallback
+ * @param isWarning
+ */
+function createNewButtonSetting(title, id, clickCallback, isWarning = false) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('button');
+    settings.appendChild(container);
+    container.innerText = title;
+    container.addEventListener('click', () => clickCallback(container));
+
+    if (isWarning) {
+        container.classList.add('warning');
+    }
+}
+
+/**
+ * Adds the events to the settings
+ * @param title
+ * @param id
+ * @param value
+ * @param fillCallback
+ * @param changeCallback
+ */
+function createNewRadioSetting(title, id, value, fillCallback, changeCallback) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('radio');
+    settings.appendChild(container);
+
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.innerText = title;
+    container.appendChild(label);
+
+    const input = document.createElement('div');
+    input.id = id;
+    input.addEventListener('click', () => changeCallback(input));
+    container.appendChild(input);
+
+    fillCallback(value, id);
+
+}
+
+/**
+ * Creates the settings
+ */
+function createSettings(){
+    document.getElementById('settings-content').innerHTML = '';
+
+    createNewColorSelectionSetting('Clicker Farbe', 'color-theme', getSetting('color-theme'), (input) => {
+            playSoundEffekt("sounds/select.wav");
+        },
+        (input) => {
+            const r = document.querySelector(':root');
+            r.style.setProperty('--clicker-color', input.value);
+            saveToSettings('color-theme', input.value);
+        });
+
+    createNewRadioSetting('Hintergrund', 'background', getSetting('background'), (value, id) => {
+        buildBackgrounds(value, id);
+    }, (input) => {});
+
+    createNewCheckboxSetting('Immer Timer anzeigen', 'always-show-timer', getSetting('always-show-timer'), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        const checked = input.checked;
+        document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
+        saveToSettings('always-show-timer', checked);
+    });
+
+    createNewCheckboxSetting('Geld Effekt', 'moneyEffect', getSetting('moneyEffect'), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        saveToSettings('moneyEffect', input.checked);
+    });
+
+    createNewRangeSetting('Musik', 'musik', getSetting('musik'), 0, 1, 0.01, (input) => {
+        playSoundEffekt("sounds/select.wav");
+    }, (input) => {
+        saveToSettings('musik', input.value);
+        audio.volume = input.value;
+        if (input.value > 0 && audio.paused) {
+            startMusic();
+        } else if (input.value === '0' && !audio.paused) {
+            audio.pause();
+        }
+    });
+
+    createNewRangeSetting('Sound', 'sound', getSetting('sound'), 0, 1, 0.01, (input) => {
+        playSoundEffekt("sounds/select.wav");
+    }, (input) => {
+        saveToSettings('sound', input.value);
+    });
+
+    createNewButtonSetting('Spielstand herunterladen', 'download', (button) => {
+        playSoundEffekt("sounds/select.wav");
+        downloadGame();
+    });
+
+    createNewButtonSetting('Spielstand hochladen', 'upload', (button) => {
+        playSoundEffekt("sounds/select.wav");
+        uploadGame();
+    });
+
+    createNewButtonSetting('Reset Settings', 'reset-settings', (button) => {
+        customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
+            game.keepVariables.settings = defaultSettings.keepVariables.settings;
+            saveGame();
+            loadGame();
+            audio.pause();
+            startMusic();
+        });
+    }, true);
+
+    createNewButtonSetting('Reset Game', 'reset', (button) => {
+        customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
+            game.keepVariables.settings = defaultSettings.keepVariables.settings;
+            resetGame();
+        });
+    }, true);
+}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
 
 /**
  * This function sets the events
@@ -1221,29 +1440,6 @@ function settingEvents() {
         if (e.key === ' ') {
             userKlick();
         }
-    });
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        Resets
-     *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    document.getElementById('reset').addEventListener('click', () => {
-        customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
-            game.keepVariables.settings = defaultSettings.keepVariables.settings;
-            resetGame();
-        });
-    });
-
-    document.getElementById('reset-settings').addEventListener('click', () => {
-        customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
-            game.keepVariables.settings = defaultSettings.keepVariables.settings;
-            saveGame();
-            loadGame();
-            audio.pause();
-            startMusic();
-        });
     });
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -1276,68 +1472,20 @@ function settingEvents() {
         document.getElementById('settings').classList.remove('settingsVisible');
         playSoundEffekt("sounds/select.wav");
     });
-
-
-    //
-    // Settings
-    //
-
-    //color picker
-    document.getElementById('color-theme').addEventListener('input', () => {
-        const r = document.querySelector(':root');
-        r.style.setProperty('--clicker-color', document.getElementById('color-theme').value);
-        saveToSettings('color-theme', document.getElementById('color-theme').value);
-    });
-
-    //checkbox
-    document.getElementById('always-show-timer-checkbox').addEventListener('change', () => {
-        const checked = document.getElementById('always-show-timer-checkbox').checked;
-        document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
-        saveToSettings('always-show-timer', checked);
-        playSoundEffekt("sounds/select.wav");
-    });
-
-    //radio
-    document.getElementById('backgrounds').addEventListener('click', function (e) {
-        if (e.target.tagName === 'IMG') {
-            const r = document.querySelector(':root');
-            r.style.setProperty('--background', 'url(' + e.target.src + ')');
-            saveToSettings('background', e.target.src);
-            playSoundEffekt("sounds/select.wav");
-        }
-    });
-
-    //checkbox
-    document.getElementById('moneyEffect').addEventListener('click', () => {
-        const checked = document.getElementById('moneyEffect').checked;
-        saveToSettings('moneyEffect', checked);
-        playSoundEffekt("sounds/select.wav");
-    });
-
-    //slider
-    document.getElementById('musik').addEventListener('input', () => {
-        const value = document.getElementById('musik').value;
-        document.getElementById('musikValue').textContent = Math.round(value * 100) + '%';
-        saveToSettings('musik', value);
-        audio.volume = value;
-        if (value > 0 && audio.paused) {
-            startMusic();
-        } else if (value === '0' && !audio.paused) {
-            audio.pause();
-        }
-    });
-
-    //slider
-    document.getElementById('sound').addEventListener('change', () => {
-        playSoundEffekt("sounds/new.wav");
-    });
-    document.getElementById('sound').addEventListener('input', () => {
-        const value = document.getElementById('sound').value;
-        document.getElementById('soundValue').textContent = Math.round(value * 100) + '%';
-        saveToSettings('sound', value);
-    });
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+    /**
+     * This function is called when the user clicks on the clicker
+     */
+    function userKlick() {
+        addMoney(getMoneyPerSecond() / 5 + 1);
+        summonFallingMoneyEffectAtCursor(getMoneyPerSecond() / 5 + 1);
+        lastClicks.push(getMoneyPerSecond() / 5 + 1);
+        setTimeout(() => {
+            lastClicks.shift();
+        }, 1000);
+        playSoundEffekt("sounds/click.wav");
+    }
 }
 
 /**
