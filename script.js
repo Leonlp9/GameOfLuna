@@ -258,6 +258,22 @@ function loadGame() {
     if (!game) {
         game = defaultSettings;
     }
+    if (!game.resetVariables) {
+        game.resetVariables = defaultSettings.resetVariables;
+    }
+    if (!game.keepVariables) {
+        game.keepVariables = defaultSettings.keepVariables;
+    }
+    Object.keys(defaultSettings.resetVariables).forEach(key => {
+        if (!game.resetVariables[key]) {
+            game.resetVariables[key] = defaultSettings.resetVariables[key];
+        }
+    });
+    Object.keys(defaultSettings.keepVariables).forEach(key => {
+        if (!game.keepVariables[key]) {
+            game.keepVariables[key] = defaultSettings.keepVariables[key];
+        }
+    });
 
     registerTab('skillSetTabTitle', 'skills', 'Skillset');
     registerTab('upgradesTabTitle', 'upgrades', 'Upgrades');
@@ -347,7 +363,7 @@ function uploadGame() {
         const file = input.files[0];
         const reader = new FileReader();
         reader.onload = () => {
-            game = JSON.parse(reader.result);
+            game = JSON.parse(reader.result || '{}');
             saveGame();
             loadGame();
         }
@@ -378,9 +394,6 @@ function saveToSettings(key, value) {
  * @returns {*}
  */
 function getSetting(key) {
-    if (game.keepVariables.settings[key] === undefined) {
-        return defaultSettings.keepVariables.settings[key];
-    }
     return game.keepVariables.settings[key];
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
