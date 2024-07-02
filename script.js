@@ -321,11 +321,7 @@ function loadGame() {
  * Lösche das Spiel
  */
 function resetGame() {
-    game.resetVariables = {
-        "currentBalance": 0.0,
-        "selectedSkin": "Standard",
-        "shopItemsBought": {},
-    }
+    game.resetVariables = defaultSettings.resetVariables;
     saveGame();
     loadGame();
 }
@@ -489,6 +485,7 @@ function createShop() {
             event.preventDefault();
         });
         img.src = `img/${shopItem.name.toLowerCase()}.png`;
+
         iconElement.classList.add('skill-icon');
         element.appendChild(iconElement);
 
@@ -593,10 +590,13 @@ function createUpgrades() {
     rebirthElement.classList.add('rebirth');
     rebirthElement.addEventListener('click', () => {
         customConfirm('Rebirth', 'Möchtest du wirklich ein rebirth machen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
-            game.resetVariables.currentBalance = 0;
-            game.resetVariables.shopItemsBought = {};
+            game.resetVariables = defaultSettings.resetVariables;
+
+            //Todo berechnen wie viele punkte gegeben werden sollen
+            game.keepVariables.rebirthsPoints++;
+
             saveGame();
-            window.location.reload();
+            loadGame();
         });
     });
 
@@ -1224,14 +1224,14 @@ function settingEvents() {
      *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     document.getElementById('reset').addEventListener('click', () => {
         customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
-            localStorage.clear();
+            game.keepVariables.settings = defaultSettings.keepVariables.settings;
             resetGame();
         });
     });
 
     document.getElementById('reset-settings').addEventListener('click', () => {
         customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
-            localStorage.removeItem('settings');
+            game.keepVariables.settings = defaultSettings.keepVariables.settings;
             saveGame();
             loadGame();
             audio.pause();
