@@ -242,6 +242,7 @@ let game = {}
 let lastClicks = [];
 let audio;
 let eventsAdded = false;
+let intervalId = null;
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 
@@ -289,19 +290,8 @@ function loadGame() {
         window.addEventListener('keypress', initiateMusicOnInteraction);
     }
 
-    setInterval(() => {
-        addMoney(getMoneyPerSecond() / 10);
-        updateIncomePerSecondElement();
-        saveGame();
-
-        //zu einer sehr kleinen Wahrscheinlichkeit fällt ein Superluna vom Himmel
-        if (Math.random() < 0.00025) {
-            spawnFallingSuperLuna();
-        }
-
-        updateShop()
-        updateSkins()
-    }, 100);
+    stopInterval();
+    startInterval();
 
     if (!eventsAdded) {
         settingEvents();
@@ -348,6 +338,35 @@ function uploadGame() {
         reader.readAsText(file);
     }
     input.click();
+}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    Interval
+ *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+function startInterval() {
+    intervalId = setInterval(() => {
+        addMoney(getMoneyPerSecond() / 10);
+        updateIncomePerSecondElement();
+        saveGame();
+
+        // zu einer sehr kleinen Wahrscheinlichkeit fällt ein Superluna vom Himmel
+        if (Math.random() < 0.00025) {
+            spawnFallingSuperLuna();
+        }
+
+        updateShop();
+        updateSkins();
+    }, 100);
+}
+
+function stopInterval() {
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -1345,7 +1364,7 @@ function createNewRadioSetting(title, id, value, fillCallback, changeCallback) {
 function createSettings(){
     document.getElementById('settings-content').innerHTML = '';
 
-    createNewColorSelectionSetting('Clicker Farbe', 'color-theme', getSetting('color-theme'), (input) => {
+    createNewColorSelectionSetting('Clicker Farbe', 'color-theme', getSetting('color-theme'), () => {
             playSoundEffekt("sounds/select.wav");
         },
         (input) => {
@@ -1356,7 +1375,7 @@ function createSettings(){
 
     createNewRadioSetting('Hintergrund', 'background', getSetting('background'), (value, id) => {
         buildBackgrounds(value, id);
-    }, (input) => {});
+    }, () => {});
 
     createNewCheckboxSetting('Immer Timer anzeigen', 'always-show-timer', getSetting('always-show-timer'), (input) => {
         playSoundEffekt("sounds/select.wav");
@@ -1370,7 +1389,7 @@ function createSettings(){
         saveToSettings('moneyEffect', input.checked);
     });
 
-    createNewRangeSetting('Musik', 'musik', getSetting('musik'), 0, 1, 0.01, (input) => {
+    createNewRangeSetting('Musik', 'musik', getSetting('musik'), 0, 1, 0.01, () => {
         playSoundEffekt("sounds/select.wav");
     }, (input) => {
         saveToSettings('musik', input.value);
@@ -1382,23 +1401,23 @@ function createSettings(){
         }
     });
 
-    createNewRangeSetting('Sound', 'sound', getSetting('sound'), 0, 1, 0.01, (input) => {
+    createNewRangeSetting('Sound', 'sound', getSetting('sound'), 0, 1, 0.01, () => {
         playSoundEffekt("sounds/select.wav");
     }, (input) => {
         saveToSettings('sound', input.value);
     });
 
-    createNewButtonSetting('Spielstand herunterladen', 'download', (button) => {
+    createNewButtonSetting('Spielstand herunterladen', 'download', () => {
         playSoundEffekt("sounds/select.wav");
         downloadGame();
     });
 
-    createNewButtonSetting('Spielstand hochladen', 'upload', (button) => {
+    createNewButtonSetting('Spielstand hochladen', 'upload', () => {
         playSoundEffekt("sounds/select.wav");
         uploadGame();
     });
 
-    createNewButtonSetting('Reset Settings', 'reset-settings', (button) => {
+    createNewButtonSetting('Reset Settings', 'reset-settings', () => {
         customConfirm('Reset Settings', 'Möchtest du wirklich deine Einstellungen zurücksetzen?', 'Ja', 'Nein', () => {
             game.keepVariables.settings = defaultSettings.keepVariables.settings;
             saveGame();
@@ -1408,7 +1427,7 @@ function createSettings(){
         });
     }, true);
 
-    createNewButtonSetting('Reset Game', 'reset', (button) => {
+    createNewButtonSetting('Reset Game', 'reset', () => {
         customConfirm('Reset Game', 'Möchtest du wirklich dein Spiel zurücksetzen?', 'Ja', 'Nein', () => {
             game.keepVariables.settings = defaultSettings.keepVariables.settings;
             resetGame();
