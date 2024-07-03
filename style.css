@@ -17,6 +17,7 @@ body{
 
 #ui {
     z-index: 9999;
+    overflow: hidden;
 }
 
 #ui #income{
@@ -56,10 +57,9 @@ body{
 }
 
 #settings-menu {
-    display: none;
     position: fixed;
     top: 0;
-    right: 0;
+    right: -303px;
     width: 300px;
     height: 100%;
     background: #333;
@@ -69,6 +69,7 @@ body{
     font-family: 'Madimi One', cursive;
     overflow-y: scroll;
     box-shadow: 0 0 2px 2px #404040;
+    transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 #settings-menu::-webkit-scrollbar {
@@ -78,6 +79,10 @@ body{
 #settings-menu::-webkit-scrollbar-thumb {
     background: #555;
     border-radius: 10px;
+}
+
+.settingsVisible #settings-menu {
+    right: 0;
 }
 
 #settings-content > div {
@@ -119,9 +124,6 @@ body{
     background: rgba(255, 0, 0, 0.1);
 }
 
-.settingsVisible #settings-menu {
-    display: block;
-}
 
 #settings-close {
     position: absolute;
