@@ -129,7 +129,7 @@ const shopItems = [
         generateMoneyIncrease: 1.46,
     }
 ];
-
+const liveImageUrl = 'https://visage.surgeplay.com/full/384/derkail';
 const upgrades = [
     {
         name: 'Finger',
@@ -228,6 +228,7 @@ const defaultSettings = {
             "moneyEffect": true,
             "musik": 0.5,
             "sound": 0.75,
+            "currentMinecraftSkin": false,
         }
     },
     resetVariables: {
@@ -605,15 +606,19 @@ function createUpgrades() {
     rebirthElement.classList.add('upgrade');
     rebirthElement.classList.add('rebirth');
     rebirthElement.addEventListener('click', () => {
-        customConfirm('Rebirth', 'Möchtest du wirklich ein rebirth machen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
-            game.resetVariables = defaultSettings.resetVariables;
+        if (game.resetVariables.currentBalance / 10000000000 < 1) {
+            customInfoScreen('Rebirth', 'Du hast nicht genug Geld für ein Rebirth. Du benötigst mindestens ' + formatMoney(10000000000) + ' €.');
+        }else {
+            customConfirm('Rebirth', 'Möchtest du wirklich ein rebirth machen? Du wirst all dein Geld und Skills verlieren aber erhältst dafür Rebirth-Punkte, die du in Upgrades investieren kannst.', 'Ja', 'Nein', () => {
+                game.resetVariables = defaultSettings.resetVariables;
 
-            //Todo berechnen wie viele punkte gegeben werden sollen
-            game.keepVariables.rebirthsPoints++;
+                //Todo berechnen wie viele punkte gegeben werden sollen
+                game.keepVariables.rebirthsPoints++;
 
-            saveGame();
-            loadGame();
-        });
+                saveGame();
+                loadGame();
+            });
+        }
     });
 
     const rebirthTitleElement = document.createElement('div');
@@ -730,7 +735,11 @@ function createSkins() {
         const img = new Image();
         img.src = skin.url;
         img.onload = () => {
-            iconElement.style.backgroundImage = `url('${skin.url}')`;
+            if (skin.name === 'Minecraft-Luna' && getSetting('currentMinecraftSkin') === true) {
+                iconElement.style.backgroundImage = `url('${liveImageUrl}')`;
+            } else {
+                iconElement.style.backgroundImage = `url('${skin.url}')`;
+            }
         }
         img.onerror = () => {
             iconElement.style.backgroundImage = 'url("img/loading.png")';
@@ -759,7 +768,7 @@ function createSkins() {
 /**
  * Updates the skins
  */
-function updateSkins() {
+function updateSkins(changeMinecraftSkin = false) {
     skins.forEach(updateSkinElement);
 
     function updateSkinElement(skin) {
@@ -769,6 +778,16 @@ function updateSkins() {
             setSkin(skin.name)
         }else if (skin.requiredPerSecond > getMoneyPerSecond() && !element.classList.contains('locked')) {
             element.classList.add('locked');
+        }
+
+        if (changeMinecraftSkin) {
+            //get child #skin-icon
+            const iconElement = element.querySelector('.skin-icon');
+            if (skin.name === 'Minecraft-Luna' && getSetting('currentMinecraftSkin') === false) {
+                iconElement.style.backgroundImage = `url('${skin.url}')`;
+            } else if (skin.name === 'Minecraft-Luna' && getSetting('currentMinecraftSkin') === true) {
+                iconElement.style.backgroundImage = `url('${liveImageUrl}')`;
+            }
         }
     }
 
@@ -910,7 +929,15 @@ function setSkin(skin) {
     });
     document.getElementById("skin-" + skin).classList.add('selected');
 
-    document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
+    if (getSetting('currentMinecraftSkin') === false) {
+        document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
+    }else {
+        if (skin === 'Minecraft-Luna') {
+            document.getElementById('clicker').style.backgroundImage = `url('${liveImageUrl}')`;
+        }else {
+            document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
+        }
+    }
 }
 
 /**
@@ -1391,18 +1418,6 @@ function createSettings(){
         buildBackgrounds(value, id);
     }, () => {});
 
-    createNewCheckboxSetting('Immer Timer anzeigen', 'always-show-timer', getSetting('always-show-timer'), (input) => {
-        playSoundEffekt("sounds/select.wav");
-        const checked = input.checked;
-        document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
-        saveToSettings('always-show-timer', checked);
-    });
-
-    createNewCheckboxSetting('Geld Effekt', 'moneyEffect', getSetting('moneyEffect'), (input) => {
-        playSoundEffekt("sounds/select.wav");
-        saveToSettings('moneyEffect', input.checked);
-    });
-
     createNewRangeSetting('Musik', 'musik', getSetting('musik'), 0, 1, 0.01, () => {
         playSoundEffekt("sounds/select.wav");
     }, (input) => {
@@ -1419,6 +1434,27 @@ function createSettings(){
         playSoundEffekt("sounds/select.wav");
     }, (input) => {
         saveToSettings('sound', input.value);
+    });
+
+    createNewCheckboxSetting('Immer Timer anzeigen', 'always-show-timer', getSetting('always-show-timer'), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        const checked = input.checked;
+        document.getElementById('skills').classList.toggle('alwaysShowTimer', checked);
+        saveToSettings('always-show-timer', checked);
+    });
+
+    createNewCheckboxSetting('Geld Effekt', 'moneyEffect', getSetting('moneyEffect'), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        saveToSettings('moneyEffect', input.checked);
+    });
+
+    createNewCheckboxSetting("Current Minecraft Skin", "currentMinecraftSkin", getSetting("currentMinecraftSkin"), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        saveToSettings("currentMinecraftSkin", input.checked);
+        updateSkins(true);
+        if (game.resetVariables.selectedSkin === "Minecraft-Luna") {
+            setSkin("Minecraft-Luna");
+        }
     });
 
     createNewButtonSetting('Spielstand herunterladen', 'download', () => {
@@ -1458,6 +1494,12 @@ function createSettings(){
  */
 function settingEvents() {
 
+    //jeder rechtsklick wird verhindert und zu einem linksklick umgewandelt
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.target.click();
+    });
+
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         Clicker
      *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -1465,9 +1507,6 @@ function settingEvents() {
         userKlick();
     });
 
-    document.getElementById('clicker').addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-    });
     //wenn leertaste gedrückt wird, wird ein Klick simuliert
     document.addEventListener('keyup', (e) => {
         if (e.key === ' ') {
