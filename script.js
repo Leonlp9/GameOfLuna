@@ -189,6 +189,11 @@ const skins = [
         requiredPerSecond: 1000000,
     },
     {
+        name: 'Glitch-Luna',
+        url: 'img/skins/glitch.png',
+        requiredPerSecond: 10000000,
+    },
+    {
         name: 'Kobold-Luna',
         url: 'img/skins/kobold.webp',
         requiredPerSecond: 1e301,
@@ -201,6 +206,11 @@ const skins = [
     {
         name: 'Biker-Luna',
         url: 'img/skins/biker.webp',
+        requiredPerSecond: 1e301,
+    },
+    {
+        name: 'Astronaut-Luna',
+        url: 'img/skins/astronaut.webp',
         requiredPerSecond: 1e301,
     },
     {
@@ -229,6 +239,7 @@ const defaultSettings = {
             "musik": 0.5,
             "sound": 0.75,
             "currentMinecraftSkin": false,
+            "autoChangeSkins": true,
         }
     },
     resetVariables: {
@@ -775,7 +786,9 @@ function updateSkins(changeMinecraftSkin = false) {
         const element = document.getElementById('skin-' + skin.name);
         if (skin.requiredPerSecond <= getMoneyPerSecond() && element.classList.contains('locked')) {
             element.classList.remove('locked');
-            setSkin(skin.name)
+            if (getSetting("autoChangeSkins")) {
+                setSkin(skin.name)
+            }
         }else if (skin.requiredPerSecond > getMoneyPerSecond() && !element.classList.contains('locked')) {
             element.classList.add('locked');
         }
@@ -1455,6 +1468,11 @@ function createSettings(){
         if (game.resetVariables.selectedSkin === "Minecraft-Luna") {
             setSkin("Minecraft-Luna");
         }
+    });
+
+    createNewCheckboxSetting("Automatisch Skins ändern", "autoChangeSkins", getSetting("autoChangeSkins"), (input) => {
+        playSoundEffekt("sounds/select.wav");
+        saveToSettings("autoChangeSkins", input.checked);
     });
 
     createNewButtonSetting('Spielstand herunterladen', 'download', () => {

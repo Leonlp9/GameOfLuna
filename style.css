@@ -234,6 +234,18 @@ body{
     transform: translate(-50%, -65%) rotate(45deg);
 }
 
+.setting-container.range {
+    flex-direction: column
+}
+
+.setting-container.checkbox {
+    justify-content: space-between;
+}
+
+.setting-container.color {
+    justify-content: space-between;
+}
+
 #always-show-timer {
     display: flex;
     align-items: center;
@@ -341,6 +353,7 @@ body{
     background-position: center;
     background-size: cover;
     text-shadow: 3px 3px 2px #303030FF;
+    filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
 }
 
 
