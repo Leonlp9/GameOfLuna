@@ -129,7 +129,7 @@ const shopItems = [
         generateMoneyIncrease: 1.46,
     }
 ];
-const liveImageUrl = 'https://visage.surgeplay.com/full/384/derkail';
+const liveImageUrl = 'https://visage.surgeplay.com/full/384/frkls.webp';
 const upgrades = [
     {
         name: 'Finger',
@@ -185,8 +185,8 @@ const skins = [
     },
     {
         name: 'Racing-Luna',
-        url: 'img/skins/race.webp',
-        requiredPerSecond: 1e301,
+        url: 'img/skins/race.png',
+        requiredPerSecond: 1000000,
     },
     {
         name: 'Kobold-Luna',
