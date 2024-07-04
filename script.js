@@ -1542,6 +1542,9 @@ function settingEvents() {
         document.getElementById('settings').classList.toggle('settingsVisible');
         playSoundEffekt("sounds/select.wav");
         //scroll im settings menu nach oben
+        if(document.getElementById('settings').classList.contains('settingsVisible')){
+            document.getElementById('settings-menu').scrollTop = 0;
+        }
     });
 
     //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen, wenn es geöffnet ist
