@@ -172,6 +172,12 @@ body{
     flex-direction: column;
 }
 
+.setting-container.radio div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .setting-container.radio input[type="radio"] {
     display: none;
 }
