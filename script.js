@@ -469,13 +469,13 @@ const skins = [
         requiredPerSecond: 100000000,
     },
     {
-        name: 'Kobold-Luna',
-        url: 'img/skins/kobold.webp',
-        requiredPerSecond: 1e301,
+        name: 'Business-Luna',
+        url: 'img/skins/business.png',
+        requiredPerSecond: 1000000000,
     },
     {
-        name: 'Business-Luna',
-        url: 'img/skins/business.webp',
+        name: 'Kobold-Luna',
+        url: 'img/skins/kobold.webp',
         requiredPerSecond: 1e301,
     },
     {
@@ -790,16 +790,15 @@ function createShop() {
 
         const iconElement = document.createElement('div');
 
-        //check if the image exists
         const img = new Image();
         img.onload = () => {
             iconElement.style.backgroundImage = `url('${shopItem.img}')`;
         };
-        img.onerror = (event => {
+        img.onerror = () => {
             iconElement.style.backgroundImage = 'url("img/loading.png")';
-            event.preventDefault();
-        });
-        img.src = `${shopItem.img}`;
+        };
+        img.src = shopItem.img;
+
 
         iconElement.classList.add('skill-icon');
         element.appendChild(iconElement);
