@@ -1452,6 +1452,55 @@ function spawnFallingSuperLuna(){
 
     animate();
 }
+
+function addEffect(name, amount, duration){
+    let effect = document.createElement('div');
+    effect.classList.add('effect');
+    effect.innerText = name + ' +' + formatMoney(amount);
+    document.body.appendChild(effect);
+
+    setTimeout(() => {
+        effect.remove();
+    }, duration * 1000);
+}
+
+function spawnFallingKaffee(){
+    let cursorX = Math.random() * window.innerWidth;
+    let cursorY = 0;
+
+    const cursor = document.createElement('div');
+    cursor.style.backgroundImage = 'url("img/kaffeemaschine.png")';
+    cursor.classList.add('falling-object');
+
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+
+    cursor.style.width = '100px';
+    cursor.style.height = '140px';
+    cursor.style.pointerEvents = 'click';
+    cursor.style.animation = 'kaffeefall 2s infinite linear';
+    cursor.addEventListener('click', () => {
+        cursor.remove();
+        addEffect("Kaffee", 1.5, 10);
+        playSoundEffekt("sounds/clickSuperLuna.wav");
+    });
+    document.body.appendChild(cursor);
+
+    //move down slowly
+    let verticalSpeed = 1;
+
+    function animate() {
+        if (cursor.offsetTop > window.innerHeight) {
+            cursor.remove();
+        } else {
+            cursor.style.top = cursor.offsetTop + verticalSpeed + 'px';
+            requestAnimationFrame(animate);
+        }
+    }
+
+    animate();
+
+}
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 

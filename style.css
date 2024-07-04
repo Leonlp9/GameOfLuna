@@ -690,6 +690,14 @@ body{
     100% { transform: translateX(0) rotate(0deg); }
 }
 
+@keyframes kaffeefall {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1) rotate(0deg); }
+    75% { transform: scale(1.1) rotate(-5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
 .skill.info {
     font-family: 'Madimi One', cursive;
     font-size: 20px;
@@ -888,4 +896,20 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 0 #404040;
+    z-index: 9999;
 }
