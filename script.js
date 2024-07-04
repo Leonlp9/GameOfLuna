@@ -1541,6 +1541,7 @@ function settingEvents() {
     document.getElementById('settings-icon').addEventListener('click', () => {
         document.getElementById('settings').classList.toggle('settingsVisible');
         playSoundEffekt("sounds/select.wav");
+        //scroll im settings menu nach oben
     });
 
     //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen, wenn es geöffnet ist

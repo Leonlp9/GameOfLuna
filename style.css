@@ -58,22 +58,23 @@ body{
 
 #settings-menu {
     position: fixed;
-    top: 0;
-    right: -303px;
-    width: 300px;
-    height: 100%;
-    background: #333;
+    left: 50%;
+    bottom: -50%;
+    transform: translateX(-50%) translateY(50%);
+    width: clamp(300px, 50%, 500px);
+    height: clamp(100px, 75%, 800px);
+    border-radius: 10px;
+    background: #404040;
     color: white;
     font-size: 20px;
     z-index: 100;
     font-family: 'Madimi One', cursive;
     overflow-y: scroll;
-    box-shadow: 0 0 2px 2px #404040;
-    transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: bottom 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 #settings-menu::-webkit-scrollbar {
-    width: 10px;
+    width: 15px;
 }
 
 #settings-menu::-webkit-scrollbar-thumb {
@@ -82,7 +83,7 @@ body{
 }
 
 .settingsVisible #settings-menu {
-    right: 0;
+    bottom: 50%;
 }
 
 #settings-content > div {
