@@ -509,7 +509,7 @@ const defaultSettings = {
         "settings": {
             "color-theme": "#f75218",
             "always-show-timer": false,
-            "background": "img/bg1.png",
+            "background": "img/backgrounds/bg1.png",
             "moneyEffect": true,
             "musik": 0.5,
             "sound": 0.75,
