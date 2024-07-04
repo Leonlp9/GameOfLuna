@@ -1424,6 +1424,26 @@ function createNewRadioSetting(title, id, value, fillCallback, changeCallback) {
 
 }
 
+function createNewInfoSetting(title, id, description) {
+    const settings = document.getElementById('settings-content');
+
+    const container = document.createElement('div');
+    container.id = id + '-container';
+    container.classList.add('setting-container');
+    container.classList.add('info');
+    settings.appendChild(container);
+
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.innerText = title;
+    container.appendChild(label);
+
+    const input = document.createElement('div');
+    input.id = id;
+    input.innerText = description;
+    container.appendChild(input);
+}
+
 /**
  * Creates the settings
  */
@@ -1513,6 +1533,18 @@ function createSettings(){
             resetGame();
         });
     }, true);
+
+    getLastGitHubCommitTitle().then(commitTitle => {
+        getLastGitHubCommitDate().then(commitDate => {
+            //2024-07-04T10:21:41Z -> date
+            let date = new Date(commitDate);
+            // 04.07.2024 03:00 -> format
+            let dateFormat = date.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC'});
+
+            createNewInfoSetting('Version: ', 'last-update', 'Letztes Update: ' + commitTitle
+                + '\n' + dateFormat.replace(',', ''));
+        });
+    });
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -1732,6 +1764,28 @@ function registerTab(tabTitleId, tabContentId, titleText) {
     });
 
     scrollManager(tabContentId);
+}
+
+async function getLastGitHubCommitTitle() {
+    try {
+        const response = await fetch('https://api.github.com/repos/Leonlp9/GameOfLuna/commits');
+        const data = await response.json();
+        return data[0].commit.message; // Dies gibt den Commit-Titel zurück
+    } catch (error) {
+        console.error('Fehler beim Abrufen des letzten Commit-Titels:', error);
+        return null; // Im Fehlerfall null zurückgeben oder entsprechend anpassen
+    }
+}
+
+async function getLastGitHubCommitDate() {
+    try {
+        const response = await fetch('https://api.github.com/repos/Leonlp9/GameOfLuna/commits');
+        const data = await response.json();
+        return data[0].commit.author.date; // Dies gibt das Datum des letzten Commits zurück
+    } catch (error) {
+        console.error('Fehler beim Abrufen des letzten Commit-Datums:', error);
+        return null; // Im Fehlerfall null zurückgeben oder entsprechend anpassen
+    }
 }
 
 loadGame();

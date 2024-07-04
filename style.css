@@ -253,6 +253,25 @@ body{
     justify-content: space-between;
 }
 
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info label {
+    font-size: 20px;
+    font-family: 'Madimi One', cursive;
+    color: #cfcfcf;
+    margin-bottom: 5px;
+}
+
+.info div {
+    font-size: 15px;
+    font-family: 'Madimi One', cursive;
+    color: #878787;
+    text-align: center;
+}
+
 #always-show-timer {
     display: flex;
     align-items: center;
