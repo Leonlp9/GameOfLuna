@@ -561,6 +561,37 @@ body{
     display: none;
 }
 
+.skill-story-description {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(25%, -25%);
+    font-family: 'Madimi One', cursive;
+    font-size: 20px;
+    color: var(--clicker-color);
+    text-align: center;
+    background: white;
+    border: 2px solid var(--clicker-color);
+    border-radius: 25px;
+    opacity: 0.1;
+    transition: opacity 0.1s, background 0.1s, transform 0.1s;
+}
+
+.skill:hover .skill-story-description {
+    opacity: 1;
+}
+
+.skill-story-description:hover {
+    background: #fafafa;
+    transform: scale(1.1) translate(25%, -25%);
+}
+
+.skill-amount:empty ~ .skill-story-description {
+    display: none;
+}
+
 .upgrade .upgrade-price,
 .skill-price {
     font-family: 'Madimi One', cursive;
@@ -794,7 +825,7 @@ body{
     border-radius: 10px;
     text-align: center;
     box-shadow: 5px 5px 0 3px #404040;
-
+    width: clamp(200px, 90%, 400px);
     animation: confirmOverlay 0.5s;
     animation-fill-mode: forwards;
 }
@@ -848,4 +879,13 @@ body{
     100% {
         transform: translate(-50%, -50%) scale(1);
     }
+}
+
+.confirm-overlay-image {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }

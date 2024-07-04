@@ -4,6 +4,21 @@
 const shopItems = [
     {
         name: 'Kaninchen',
+        img: 'img/kaninchen.png',
+        storyDescription: {
+            title: 'Kaninchen',
+            description: 'Luna besitzt drei Kaninchen. Sie sind sehr süß und flauschig. Sie bringen dir Geld, wenn du sie streichelst.',
+            images: [
+                'img/kaninchen.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Full House',
+                description: 'Besitze Oreo, Tinto und Sky',
+                rewardAtAmountOf: 3,
+            }
+        ],
         startPrice: 12,
         priceIncrease: 1.18,
         generateMoneyPerSecond: 0.6,
@@ -11,6 +26,21 @@ const shopItems = [
     },
     {
         name: 'Rollerblades',
+        img: 'img/rollerblades.png',
+        storyDescription: {
+            title: 'Rollerblades',
+            description: 'Luna hat sich Rollerblades gekauft. Sie fährt damit durch die Stadt und sammelt Geld.',
+            images: [
+                'img/rollerblades.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Speedy',
+                description: 'Besitze die Rollerblades',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 420,
         priceIncrease: 1.25,
         generateMoneyPerSecond: 20,
@@ -18,6 +48,21 @@ const shopItems = [
     },
     {
         name: 'Laptop',
+        img: 'img/laptop.png',
+        storyDescription: {
+            title: 'Laptop',
+            description: 'Luna hat sich einen neuen Laptop gekauft. Sie arbeitet damit und verdient Geld.',
+            images: [
+                'img/laptop.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Oh nein mein Akku',
+                description: 'Kaufe dir einen zweiten Laptop',
+                rewardAtAmountOf: 2,
+            }
+        ],
         startPrice: 2750,
         priceIncrease: 1.27,
         generateMoneyPerSecond: 250,
@@ -25,6 +70,26 @@ const shopItems = [
     },
     {
         name: 'Informatik',
+        img: 'img/informatik.png',
+        storyDescription: {
+            title: 'Informatik',
+            description: 'Luna hat die Schule gewechselt und lernt jetzt Informatik. Sie verdient Geld durch Programmieren.',
+            images: [
+                'img/informatik.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Programmierer',
+                description: 'Lerne Informatik',
+                rewardAtAmountOf: 1,
+            },
+            {
+                title: 'Polyglot',
+                description: 'Beherrsche 10 Programmiersprachen',
+                rewardAtAmountOf: 10,
+            }
+        ],
         startPrice: 18250,
         priceIncrease: 1.30,
         generateMoneyPerSecond: 1700,
@@ -32,6 +97,21 @@ const shopItems = [
     },
     {
         name: 'RAM',
+        img: 'img/ram.png',
+        storyDescription: {
+            title: 'RAM',
+            description: 'Luna hat ihren Laptop aufgerüstet. Sie kann jetzt mehr Programme gleichzeitig laufen lassen. 40GB RAM!',
+            images: [
+                'img/ram.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Was frisst hier so viel RAM?',
+                description: 'Habe 40GB RAM',
+                rewardAtAmountOf: 40,
+            }
+        ],
         startPrice: 90000,
         priceIncrease: 1.32,
         generateMoneyPerSecond: 8000,
@@ -39,6 +119,21 @@ const shopItems = [
     },
     {
         name: 'Speicherkarte',
+        img: 'img/speicherkarte.png',
+        storyDescription: {
+            title: 'Speicherkarte',
+            description: 'Luna hat sich eine neue Speicherkarte gekauft. Sie kann jetzt mehr Daten speichern.',
+            images: [
+                'img/speicherkarte.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Speicherplatz',
+                description: 'Habe 100TB Speicherplatz',
+                rewardAtAmountOf: 100,
+            }
+        ],
         startPrice: 1800000,
         priceIncrease: 1.35,
         generateMoneyPerSecond: 160000,
@@ -46,6 +141,21 @@ const shopItems = [
     },
     {
         name: 'Lenkrad',
+        img: 'img/lenkrad.png',
+        storyDescription: {
+            title: 'Lenkrad',
+            description: 'Luna hat sich ein Lenkrad für ihren Laptop gekauft. Sie spielt jetzt Autorennspiele.',
+            images: [
+                'img/lenkrad.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Angehende Rennfahrerin',
+                description: 'Gewinne 10 Rennen in Forza Horizon 4',
+                rewardAtAmountOf: 10,
+            }
+        ],
         startPrice: 105000000,
         priceIncrease: 1.38,
         generateMoneyPerSecond: 6000000,
@@ -53,6 +163,21 @@ const shopItems = [
     },
     {
         name: 'Pedale',
+        img: 'img/pedale.png',
+        storyDescription: {
+            title: 'Pedale',
+            description: 'Luna hat sich Pedale für ihr Lenkrad gekauft. Sie kann jetzt auch bremsen.',
+            images: [
+                'img/pedale.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Rennfahrerin',
+                description: 'Gewinne 10 Rennen in Forza Horizon 4',
+                rewardAtAmountOf: 25,
+            }
+        ],
         startPrice: 1650000000,
         priceIncrease: 1.41,
         generateMoneyPerSecond: 32000000,
@@ -60,6 +185,21 @@ const shopItems = [
     },
     {
         name: 'Schalthebel',
+        img: 'img/schalthebel.png',
+        storyDescription: {
+            title: 'Schalthebel',
+            description: 'Luna hat sich einen Schalthebel für ihr Lenkrad gekauft. Sie kann jetzt auch schalten.',
+            images: [
+                'img/schalthebel.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Profi-Rennfahrerin',
+                description: 'Gewinne 100 Rennen in Forza Horizon 4',
+                rewardAtAmountOf: 50,
+            }
+        ],
         startPrice: 22000000000,
         priceIncrease: 1.43,
         generateMoneyPerSecond: 160000000,
@@ -67,6 +207,21 @@ const shopItems = [
     },
     {
         name: 'Laptopkühler',
+        img: 'img/laptopkühler.png',
+        storyDescription: {
+            title: 'Laptopkühler',
+            description: 'Luna hat sich einen Laptopkühler gekauft. Ihr Laptop wird nicht mehr so heiß.',
+            images: [
+                'img/laptopkühler.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Kühlung',
+                description: 'Habe einen Laptopkühler',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 275000000000,
         priceIncrease: 1.46,
         generateMoneyPerSecond: 800000000,
@@ -74,6 +229,21 @@ const shopItems = [
     },
     {
         name: 'Grafikkarte',
+        img: 'img/grafikkarte.png',
+        storyDescription: {
+            title: 'Grafikkarte',
+            description: 'Luna hat sich eine neue Grafikkarte gekauft. Sie kann jetzt bessere Spiele spielen.',
+            images: [
+                'img/grafikkarte.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Gaming',
+                description: 'Habe eine Grafikkarte',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 1150000000000,
         priceIncrease: 1.48,
         generateMoneyPerSecond: 4000000000,
@@ -81,6 +251,21 @@ const shopItems = [
     },
     {
         name: 'Führerschein',
+        img: 'img/führerschein.png',
+        storyDescription: {
+            title: 'Führerschein',
+            description: 'Luna hat ihren Führerschein gemacht. Sie fährt jetzt Auto und verdient Geld.',
+            images: [
+                'img/führerschein.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Autofahrerin',
+                description: 'Mache deinen Führerschein',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 25000000000000,
         priceIncrease: 1.50,
         generateMoneyPerSecond: 17000000000,
@@ -88,6 +273,21 @@ const shopItems = [
     },
     {
         name: 'Auto',
+        img: 'img/auto.png',
+        storyDescription: {
+            title: 'Auto',
+            description: 'Luna hat sich ein Auto gekauft. Sie fährt jetzt durch die Stadt und verdient Geld.',
+            images: [
+                'img/auto.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Autofahrerin',
+                description: 'Kaufe dir ein Auto',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 375000000000000,
         priceIncrease: 1.52,
         generateMoneyPerSecond: 85000000000,
@@ -95,6 +295,21 @@ const shopItems = [
     },
     {
         name: 'Autolift',
+        img: 'img/autolift.png',
+        storyDescription: {
+            title: 'Autolift',
+            description: 'Luna hat sich einen Autolift gekauft. Sie kann jetzt Autos reparieren und verdient Geld.',
+            images: [
+                'img/autolift.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Mechanikerin',
+                description: 'Habe einen Autolift',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 6500000000000000,
         priceIncrease: 1.55,
         generateMoneyPerSecond: 420000000000,
@@ -102,6 +317,21 @@ const shopItems = [
     },
     {
         name: 'Garage',
+        img: 'img/garage.png',
+        storyDescription: {
+            title: 'Garage',
+            description: 'Luna hat sich eine Garage gekauft. Sie kann jetzt mehrere Autos reparieren und verdient Geld.',
+            images: [
+                'img/garage.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Mechanikerin',
+                description: 'Habe eine Garage',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 120000000000000000,
         priceIncrease: 1.57,
         generateMoneyPerSecond: 25000000000000,
@@ -109,6 +339,21 @@ const shopItems = [
     },
     {
         name: 'Werkstatt',
+        img: 'img/werkstatt.png',
+        storyDescription: {
+            title: 'Werkstatt',
+            description: 'Luna hat sich eine Werkstatt gekauft. Sie kann jetzt Autos reparieren und verdient Geld.',
+            images: [
+                'img/werkstatt.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Mechanikerin',
+                description: 'Habe eine Werkstatt',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 1750000000000000000,
         priceIncrease: 1.60,
         generateMoneyPerSecond: 500000000000000,
@@ -116,6 +361,21 @@ const shopItems = [
     },
     {
         name: 'Autohaus',
+        img: 'img/autohaus.png',
+        storyDescription: {
+            title: 'Autohaus',
+            description: 'Luna hat sich ein Autohaus gekauft. Sie kann jetzt Autos verkaufen und verdient Geld.',
+            images: [
+                'img/autohaus.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Autoverkäuferin',
+                description: 'Habe ein Autohaus',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 22500000000000000000,
         priceIncrease: 1.62,
         generateMoneyPerSecond: 10000000000000000,
@@ -123,6 +383,21 @@ const shopItems = [
     },
     {
         name: 'Automarke',
+        img: 'img/automarke.png',
+        storyDescription: {
+            title: 'Automarke',
+            description: 'Luna hat sich eine Automarke gekauft. Sie kann jetzt Autos produzieren und verdient Geld.',
+            images: [
+                'img/automarke.png',
+            ]
+        },
+        advancements: [
+            {
+                title: 'Autoherstellerin',
+                description: 'Habe eine Automarke',
+                rewardAtAmountOf: 1,
+            }
+        ],
         startPrice: 600000000000000000000,
         priceIncrease: 1.65,
         generateMoneyPerSecond: 200000000000000000,
@@ -518,18 +793,23 @@ function createShop() {
         //check if the image exists
         const img = new Image();
         img.onload = () => {
-            iconElement.style.backgroundImage = `url('img/${shopItem.name.toLowerCase()}.png')`;
+            iconElement.style.backgroundImage = `url('${shopItem.img}')`;
         };
         img.onerror = (event => {
             iconElement.style.backgroundImage = 'url("img/loading.png")';
             event.preventDefault();
         });
-        img.src = `img/${shopItem.name.toLowerCase()}.png`;
+        img.src = `${shopItem.img}`;
 
         iconElement.classList.add('skill-icon');
         element.appendChild(iconElement);
 
         element.addEventListener('click', () => {
+            //wenn nicht auf das child element description geklickt wurde
+            if (event.target === element.querySelector('.skill-story-description')) {
+                return;
+            }
+
             const price = Math.round(shopItem.startPrice * Math.pow(shopItem.priceIncrease, game.resetVariables.shopItemsBought[shopItem.name] ? game.resetVariables.shopItemsBought[shopItem.name] : 0));
             if (game.resetVariables.currentBalance >= price) {
 
@@ -572,8 +852,15 @@ function createShop() {
         const amountElement = document.createElement('div');
         amountElement.classList.add('skill-amount');
         amountElement.innerText = game.resetVariables.shopItemsBought[shopItem.name];
-
         element.appendChild(amountElement);
+
+        const storyDescriptionElement = document.createElement('div');
+        storyDescriptionElement.classList.add('skill-story-description');
+        storyDescriptionElement.innerText = 'i';
+        storyDescriptionElement.addEventListener('click', () => {
+            customInfoScreen(shopItem.storyDescription.title, shopItem.storyDescription.description, shopItem.storyDescription.images);
+        });
+        element.appendChild(storyDescriptionElement);
 
         return element;
     }
@@ -1176,8 +1463,9 @@ function spawnFallingSuperLuna(){
  * Creates an overlay
  * @param title
  * @param message
+ * @param images
  */
-function createOverlay(title, message) {
+function createOverlay(title, message, images = []) {
     const overlay = document.createElement('div');
     overlay.classList.add('confirm-overlay');
 
@@ -1193,6 +1481,13 @@ function createOverlay(title, message) {
     textElement.classList.add('confirm-overlay-text');
     textElement.innerText = message;
     content.appendChild(textElement);
+
+    images.forEach(image => {
+        const imgElement = document.createElement('img');
+        imgElement.src = image;
+        imgElement.classList.add('confirm-overlay-image');
+        content.appendChild(imgElement);
+    });
 
     const buttonsElement = document.createElement('div');
     buttonsElement.classList.add('confirm-overlay-buttons');
@@ -1243,11 +1538,13 @@ function customConfirm(title, message, confirmText, cancelText, confirmCallback)
  * Creates a custom info screen
  * @param title
  * @param message
+ * @param images
  */
-function customInfoScreen(title, message) {
+function customInfoScreen(title, message, images = []) {
     playSoundEffekt("sounds/select.wav");
 
-    const overlay = createOverlay(title, message);
+    const overlay = createOverlay(title, message, images);
+
     const buttonsElement = overlay.querySelector('.confirm-overlay-buttons');
 
     const okElement = document.createElement('div');
