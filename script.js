@@ -189,9 +189,9 @@ const skins = [
         requiredPerSecond: 1000000,
     },
     {
-        name: 'Glitch-Luna',
-        url: 'img/skins/glitch.png',
-        requiredPerSecond: 10000000,
+        name: 'Sherlock-Luna',
+        url: 'img/skins/sherlock.png',
+        requiredPerSecond: 100000000,
     },
     {
         name: 'Kobold-Luna',
@@ -249,16 +249,16 @@ const defaultSettings = {
     }
 }
 const backgroundImages = [
-    'img/bg1.png',
-    'img/bg2.png',
-    'img/bg3.png',
-    'img/bg4.png',
-    'img/bg5.png',
-    'img/bg6.png',
-    'img/bg7.png',
-    'img/bg8.png',
-    'img/bg9.png',
-    'img/bg10.png',
+    'img/backgrounds/bg1.png',
+    'img/backgrounds/bg2.png',
+    'img/backgrounds/bg3.png',
+    'img/backgrounds/bg4.png',
+    'img/backgrounds/bg5.png',
+    'img/backgrounds/bg6.png',
+    'img/backgrounds/bg7.png',
+    'img/backgrounds/bg8.png',
+    'img/backgrounds/bg9.png',
+    'img/backgrounds/bg10.png',
 ];
 
 let game = {}
@@ -952,7 +952,9 @@ function setSkin(skin) {
     skins.forEach(skin => {
         document.getElementById("skin-" + skin.name).classList.remove('selected');
     });
-    document.getElementById("skin-" + skin).classList.add('selected');
+    if (document.getElementById("skin-" + skin)){
+        document.getElementById("skin-" + skin).classList.add('selected');
+    }
 
     if (getSetting('currentMinecraftSkin') === false) {
         document.getElementById('clicker').style.backgroundImage = `url('${skins.find(s => s.name === skin).url}')`;
