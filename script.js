@@ -248,6 +248,18 @@ const defaultSettings = {
         "shopItemsBought": {},
     }
 }
+const backgroundImages = [
+    'img/bg1.png',
+    'img/bg2.png',
+    'img/bg3.png',
+    'img/bg4.png',
+    'img/bg5.png',
+    'img/bg6.png',
+    'img/bg7.png',
+    'img/bg8.png',
+    'img/bg9.png',
+    'img/bg10.png',
+];
 
 let game = {}
 
@@ -960,13 +972,13 @@ function buildBackgrounds(value, id) {
     const backgrounds = document.getElementById(id);
     backgrounds.innerHTML = '';
     const r = document.querySelector(':root');
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= backgroundImages.length; i++) {
         const input = document.createElement('input');
         input.type = 'radio';
         input.id = 'background' + i;
         input.name = 'background';
         input.value = 'background' + i;
-        if (value === 'img/bg' + i + '.png') {
+        if (value === backgroundImages[i - 1]) {
             input.checked = true;
         }
         backgrounds.appendChild(input);
@@ -975,14 +987,14 @@ function buildBackgrounds(value, id) {
         label.htmlFor = 'background' + i;
         label.style.height = '50px';
         const img = document.createElement('img');
-        img.src = 'img/bg' + i + '.png';
+        img.src = backgroundImages[i - 1];
         img.alt = 'background' + i;
         label.appendChild(img);
         backgrounds.appendChild(label);
 
         input.addEventListener('change', () => {
-            r.style.setProperty('--background', 'url(img/bg' + i + '.png)');
-            saveToSettings('background', 'img/bg' + i + '.png');
+            r.style.setProperty('--background', 'url(' + backgroundImages[i - 1] + ')');
+            saveToSettings('background', backgroundImages[i - 1]);
             playSoundEffekt("sounds/select.wav");
         });
     }
