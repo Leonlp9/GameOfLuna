@@ -1539,7 +1539,15 @@ function createSettings(){
             //2024-07-04T10:21:41Z -> date
             let date = new Date(commitDate);
             // 04.07.2024 03:00 -> format
-            let dateFormat = date.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC'});
+            let dateFormat = date.toLocaleDateString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone: 'Europe/Berlin'
+            });
 
             createNewInfoSetting('Version: ', 'last-update', 'Letztes Update: ' + commitTitle
                 + '\n' + dateFormat.replace(',', ''));
