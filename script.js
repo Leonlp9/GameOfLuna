@@ -240,8 +240,8 @@ const shopItems = [
         advancements: [
             {
                 title: 'Gaming',
-                description: 'Habe eine Grafikkarte',
-                rewardAtAmountOf: 1,
+                description: 'Habe eine externe Grafikkarte',
+                rewardAtAmountOf: 2,
             }
         ],
         startPrice: 1150000000000,
@@ -264,6 +264,11 @@ const shopItems = [
                 title: 'Autofahrerin',
                 description: 'Mache deinen Führerschein',
                 rewardAtAmountOf: 1,
+            },
+            {
+                title: 'Motorradfahrerin',
+                description: 'Mache deinen Motorradführerschein',
+                rewardAtAmountOf: 2,
             }
         ],
         startPrice: 25000000000000,
@@ -284,7 +289,7 @@ const shopItems = [
         advancements: [
             {
                 title: 'Autofahrerin',
-                description: 'Kaufe dir ein Auto',
+                description: 'Kaufe dir ein eigenes Auto',
                 rewardAtAmountOf: 1,
             }
         ],
@@ -825,6 +830,14 @@ function createShop() {
                 playSoundEffekt("sounds/buy.mp3");
             }else {
                 playSoundEffekt("sounds/error.mp3")
+            }
+
+            if (shopItem.advancements) {
+                shopItem.advancements.forEach(advancement => {
+                    if (game.resetVariables.shopItemsBought[shopItem.name] === advancement.rewardAtAmountOf) {
+                        customInfoScreen(advancement.title, advancement.description);
+                    }
+                });
             }
         });
 
