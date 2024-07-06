@@ -1988,11 +1988,11 @@ function settingEvents() {
         let deltaX = touchEndX - touchStartX;
 
         if (deltaX > 25) { // Swipe nach rechts
-            document.getElementById('previousPage').click();
-            playSoundEffekt("sounds/select.wav")
-        } else if (deltaX < -25) { // Swipe nach links
             document.getElementById('nextPage').click();
             playSoundEffekt("sounds/select.wav")
+        } else if (deltaX < -25) { // Swipe nach links
+            playSoundEffekt("sounds/select.wav")
+            document.getElementById('previousPage').click();
         }
 
         // Reset
