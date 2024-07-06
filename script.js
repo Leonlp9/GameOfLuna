@@ -1500,6 +1500,12 @@ function createOverlay(title, message, images = []) {
     const overlay = document.createElement('div');
     overlay.classList.add('confirm-overlay');
 
+    overlay.addEventListener('click', () => {
+        if (event.target === overlay) {
+            overlay.remove();
+        }
+    });
+
     const content = document.createElement('div');
     content.classList.add('confirm-overlay-content');
 
