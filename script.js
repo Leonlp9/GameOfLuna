@@ -1913,10 +1913,19 @@ function settingEvents() {
         userKlick();
     });
 
+    let clicked = false;
     //wenn leertaste gedrückt wird, wird ein Klick simuliert
+    document.addEventListener('keydown', (e) => {
+        if (e.key === ' ' && !clicked) {
+            userKlick();
+            clicked = true;
+        }
+    });
+
+    //wenn leertaste losgelassen wird, wird clicked auf false gesetzt
     document.addEventListener('keyup', (e) => {
         if (e.key === ' ') {
-            userKlick();
+            clicked = false;
         }
     });
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
