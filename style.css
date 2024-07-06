@@ -407,7 +407,7 @@ body{
     font-weight: bold;
     font-family: 'Jua', sans-serif;
     position: fixed;
-    transform: translate(-50%, -50%);
+    transform: translate(-150%, -50%);
     z-index: 99;
     font-size: 3em;
     word-break: keep-all;

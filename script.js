@@ -937,6 +937,8 @@ function createUpgrades() {
                 //Todo berechnen wie viele punkte gegeben werden sollen
                 game.keepVariables.rebirthsPoints++;
 
+
+
                 saveGame();
                 loadGame();
             });
@@ -992,7 +994,7 @@ function createUpgrades() {
 
         const priceElement = document.createElement('div');
         priceElement.classList.add('upgrade-price');
-        priceElement.innerText = upgrade.price + ' R.';
+        priceElement.innerText = upgrade.price + ' RP.';
         element.appendChild(priceElement);
 
         const descriptionElement = document.createElement('div');
@@ -1239,6 +1241,9 @@ function getCalculatedTimeStampWhenReachableBalance(neededBalance) {
  */
 function updateIncomePerSecondElement() {
     document.getElementById('income-per-second').innerText = formatMoney(getMoneyPerSecondWithClicks()) + '/s';
+    document.getElementById('rebirth-points').innerText = game.keepVariables.rebirthsPoints + ' RP.';
+    document.getElementById('auto-clicker-multiplier').innerText = getAutoMultiplier().toString() + 'x Auto';
+    document.getElementById('click-value-multiplier').innerText = getClickMultiplier().toString() + 'x Click';
 }
 
 /**
@@ -1411,12 +1416,17 @@ function createFallingObject(type, config)  {
     let horizontalSpeed = config.horizontalSpeed || 0;
     const gravity = config.gravity || 0;
 
+    let lastTime = Date.now();
+
     function animate() {
+        let diffTime = Date.now() - lastTime;
+        lastTime = Date.now();
+
         if (cursor.offsetTop > window.innerHeight) {
             cursor.remove();
         } else {
-            cursor.style.top = cursor.offsetTop + verticalSpeed + 'px';
-            cursor.style.left = cursor.offsetLeft + horizontalSpeed + 'px';
+            cursor.style.top = cursor.offsetTop + (verticalSpeed * diffTime / 10) + 'px';
+            cursor.style.left = cursor.offsetLeft + (horizontalSpeed * diffTime / 10) + 'px';
             verticalSpeed += gravity;
             requestAnimationFrame(animate);
         }
@@ -1892,9 +1902,6 @@ function createSettings(){
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-
-
-
 /**
  * This function sets the events
  */
@@ -2183,6 +2190,14 @@ async function getLastGitHubCommitDate() {
         console.error('Fehler beim Abrufen des letzten Commit-Datums:', error);
         return null; // Im Fehlerfall null zurückgeben oder entsprechend anpassen
     }
+}
+
+function getClickMultiplier() {
+    return 1;
+}
+
+function getAutoMultiplier() {
+    return 1;
 }
 
 loadGame();
