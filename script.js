@@ -828,16 +828,16 @@ function createShop() {
 
                 saveGame();
                 playSoundEffekt("sounds/buy.mp3");
+
+                if (shopItem.advancements) {
+                    shopItem.advancements.forEach(advancement => {
+                        if (game.resetVariables.shopItemsBought[shopItem.name] === advancement.rewardAtAmountOf) {
+                            customInfoScreen(advancement.title, advancement.description, ["https://cdn-icons-png.flaticon.com/512/4387/4387887.png"]);
+                        }
+                    });
+                }
             }else {
                 playSoundEffekt("sounds/error.mp3")
-            }
-
-            if (shopItem.advancements) {
-                shopItem.advancements.forEach(advancement => {
-                    if (game.resetVariables.shopItemsBought[shopItem.name] === advancement.rewardAtAmountOf) {
-                        customInfoScreen(advancement.title, advancement.description, ["https://cdn-icons-png.flaticon.com/512/4387/4387887.png"]);
-                    }
-                });
             }
         });
 
