@@ -1976,15 +1976,15 @@ function settingEvents() {
     let touchStartX = 0;
     let touchEndX = 0;
 
-    document.getElementById('income-content').addEventListener('touchstart', function(event) {
+    document.getElementById('income').addEventListener('touchstart', function(event) {
         touchStartX = event.touches[0].clientX;
     });
 
-    document.getElementById('income-content').addEventListener('touchmove', function(event) {
+    document.getElementById('income').addEventListener('touchmove', function(event) {
         touchEndX = event.touches[0].clientX;
     });
 
-    document.getElementById('income-content').addEventListener('touchend', function() {
+    document.getElementById('income').addEventListener('touchend', function() {
         let deltaX = touchEndX - touchStartX;
 
         if (deltaX > 25) { // Swipe nach rechts
