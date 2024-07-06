@@ -1956,6 +1956,48 @@ function settingEvents() {
     });
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+    document.getElementById('nextPage').addEventListener('click', () => {
+        let visible = document.querySelector('.income-values.visible');
+        let next = visible.nextElementSibling || document.querySelector('.income-values:first-child');
+        visible.classList.remove('visible');
+        next.classList.add('visible');
+        playSoundEffekt("sounds/select.wav");
+    });
+
+    document.getElementById('previousPage').addEventListener('click', () => {
+        let visible = document.querySelector('.income-values.visible');
+        let previous = visible.previousElementSibling || document.querySelector('.income-values:last-child');
+        visible.classList.remove('visible');
+        previous.classList.add('visible');
+        playSoundEffekt("sounds/select.wav");
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.getElementById('income-content').addEventListener('touchstart', function(event) {
+        touchStartX = event.touches[0].clientX;
+    });
+
+    document.getElementById('income-content').addEventListener('touchmove', function(event) {
+        touchEndX = event.touches[0].clientX;
+    });
+
+    document.getElementById('income-content').addEventListener('touchend', function() {
+        let deltaX = touchEndX - touchStartX;
+
+        if (deltaX > 25) { // Swipe nach rechts
+            document.getElementById('previousPage').click();
+        } else if (deltaX < -25) { // Swipe nach links
+            document.getElementById('nextPage').click();
+        }
+
+        // Reset
+        touchStartX = 0;
+        touchEndX = 0;
+    });
+
     /**
      * This function is called when the user clicks on the clicker
      */
@@ -1983,7 +2025,7 @@ function scrollManager(id) {
     let speed = 0;
 
     // Event listener for wheel events
-    skills.addEventListener('wheel', function(e) {
+    skills.addEventListener('wheel', function (e) {
         if (e.deltaY !== 0 || e.deltaX !== 0) {
             e.preventDefault();
             scrollTarget += e.deltaY !== 0 ? e.deltaY : e.deltaX;
@@ -1991,7 +2033,7 @@ function scrollManager(id) {
     });
 
     // Event listener for touchstart events
-    skills.addEventListener('touchstart', function(e) {
+    skills.addEventListener('touchstart', function (e) {
         startTouchX = e.touches[0].clientX;
     });
 
