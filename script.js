@@ -1412,7 +1412,7 @@ function createFallingObject(type, config)  {
 
     document.body.appendChild(cursor);
 
-    let verticalSpeed = config.verticalSpeed || 1;
+    let verticalSpeed = config.verticalSpeed || 0.1;
     let horizontalSpeed = config.horizontalSpeed || 0;
     const gravity = config.gravity || 0;
 
@@ -1425,8 +1425,8 @@ function createFallingObject(type, config)  {
         if (cursor.offsetTop > window.innerHeight) {
             cursor.remove();
         } else {
-            cursor.style.top = cursor.offsetTop + (verticalSpeed * diffTime / 10) + 'px';
-            cursor.style.left = cursor.offsetLeft + (horizontalSpeed * diffTime / 10) + 'px';
+            cursor.style.top = cursor.offsetTop + (verticalSpeed * diffTime) + 'px';
+            cursor.style.left = cursor.offsetLeft + (horizontalSpeed * diffTime) + 'px';
             verticalSpeed += gravity;
             requestAnimationFrame(animate);
         }
@@ -1452,9 +1452,9 @@ function summonFallingMoneyEffectAtCursor(amount) {
         cursorX,
         cursorY,
         amount,
-        verticalSpeed: -Math.random() * 4 - 4,
-        horizontalSpeed: Math.random() * 6 - 3,
-        gravity: Math.random() * 0.2 + 0.1
+        verticalSpeed: (-Math.random() * 4 - 4) / 10,
+        horizontalSpeed: (Math.random() * 6 - 3) / 10,
+        gravity: (Math.random() * 0.2 + 0.1) / 10
     });
 }
 
@@ -1944,30 +1944,38 @@ function settingEvents() {
     *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     document.getElementById('settings-icon').addEventListener('click', () => {
         document.getElementById('settings').classList.toggle('settingsVisible');
+
+        //play css animation
+        setTimeout(() => {
+
+            if (document.getElementById('settings').classList.contains('settingsVisible')) {
+                document.getElementById('settings-menu-content').classList.add('settingsAnimation');
+            }else {
+                document.getElementById('settings-menu-content').classList.remove('settingsAnimation');
+            }
+        }, 1);
+
         playSoundEffekt("sounds/select.wav");
         //scroll im settings menu nach oben
         if(document.getElementById('settings').classList.contains('settingsVisible')){
-            document.getElementById('settings-menu').scrollTop = 0;
+            document.getElementById('settings-menu-content').scrollTop = 0;
         }
     });
 
-    //wenn außerhalb des Settings-Menüs geklickt wird, wird es geschlossen, wenn es geöffnet ist
-    document.addEventListener('click', (e) => {
-        if (!document.getElementById('settings').contains(e.target) && document.getElementById('settings').classList.contains('settingsVisible')) {
+    document.getElementById("settings-menu").addEventListener("click", (e) => {
+        //wenn kein child geklickt wurde, dann schließe setting
 
-            //außer es das geklickte Element hat die Klasse confirm-overlay oder ist ein Kind davon
-            if (e.target.classList.contains('confirm-overlay') || e.target.closest('.confirm-overlay')) {
-                return;
-            }
-
+        if (e.target === document.getElementById("settings-menu")) {
             document.getElementById('settings').classList.remove('settingsVisible');
-
-            playSoundEffekt("sounds/select.wav")
+            document.getElementById('settings-menu-content').classList.remove('settingsAnimation');
+            playSoundEffekt("sounds/select.wav");
         }
+
     });
 
     document.getElementById('settings-close').addEventListener('click', () => {
         document.getElementById('settings').classList.remove('settingsVisible');
+        document.getElementById('settings-menu-content').classList.remove('settingsAnimation');
         playSoundEffekt("sounds/select.wav");
     });
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
