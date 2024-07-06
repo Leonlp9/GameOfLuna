@@ -1375,39 +1375,41 @@ function removeMoney(amount) {
 *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /**
  * Summons a falling money effect at the cursor
- * @param amount
+ * @param type
+ * @param config
  */
-function summonFallingMoneyEffectAtCursor(amount) {
-    if (getSetting('moneyEffect') === false) {
-        return;
-    }
-
-    //count the amount of objects that are currently falling
-    let fallingMoney = document.getElementsByClassName('falling-money').length;
-
-    if (fallingMoney > 20) {
-        return;
-    }
-
-
-    let cursorX = event.clientX ? event.clientX : window.innerWidth / 2;
-    let cursorY = event.clientY ? event.clientY : window.innerHeight / 2;
+function createFallingObject(type, config)  {
+    let cursorX = config.cursorX || Math.random() * window.innerWidth;
+    let cursorY = config.cursorY || 0;
 
     const cursor = document.createElement('div');
-    cursor.innerText = '💸+' + formatMoney(amount);
-    cursor.classList.add('falling-money');
+    if (type === 'money') {
+        cursor.innerText = '💸+' + formatMoney(config.amount);
+    } else {
+        cursor.style.backgroundImage = `url("${config.imageUrl}")`;
+    }
+    cursor.classList.add(type === 'money' ? 'falling-money' : 'falling-collectible');
     cursor.classList.add('falling-object');
 
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
+    cursor.style.width = config.width || '100px';
+    cursor.style.height = config.height || '100px';
+    cursor.style.pointerEvents = type === 'money' ? 'none' : 'click';
+    cursor.style.animation = config.animation || 'none';
 
-    cursor.style.pointerEvents = 'none';
+    if (type !== 'money') {
+        cursor.addEventListener('click', () => {
+            cursor.remove();
+            config.onClick();
+        });
+    }
 
     document.body.appendChild(cursor);
 
-    let verticalSpeed = - Math.random() * 4 - 4;
-    let horizontalSpeed = Math.random() * 6 - 3;
-    const gravity = Math.random() * 0.2 + 0.1;
+    let verticalSpeed = config.verticalSpeed || 1;
+    let horizontalSpeed = config.horizontalSpeed || 0;
+    const gravity = config.gravity || 0;
 
     function animate() {
         if (cursor.offsetTop > window.innerHeight) {
@@ -1423,46 +1425,52 @@ function summonFallingMoneyEffectAtCursor(amount) {
     animate();
 }
 
-/**
- * Summons a falling superluna randomly at the top of the screen
- */
-function spawnFallingSuperLuna(){
-    let cursorX = Math.random() * window.innerWidth;
-    let cursorY = 0;
-
-    const cursor = document.createElement('div');
-    cursor.style.backgroundImage = 'url("img/superluna.png")';
-    cursor.classList.add('falling-collectible');
-    cursor.classList.add('falling-object');
-
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-
-    cursor.style.width = '100px';
-    cursor.style.height = '100px';
-    cursor.style.pointerEvents = 'click';
-    cursor.style.animation = 'featherFall 2s infinite linear';
-    cursor.addEventListener('click', () => {
-        cursor.remove();
-        addMoney(getMoneyPerSecond() * 60);
-        summonFallingMoneyEffectAtCursor(getMoneyPerSecond() * 60);
-        playSoundEffekt("sounds/clickSuperLuna.wav");
-    });
-    document.body.appendChild(cursor);
-
-    //move down slowly
-    let verticalSpeed = 1;
-
-    function animate() {
-        if (cursor.offsetTop > window.innerHeight) {
-            cursor.remove();
-        } else {
-            cursor.style.top = cursor.offsetTop + verticalSpeed + 'px';
-            requestAnimationFrame(animate);
-        }
+function summonFallingMoneyEffectAtCursor(amount) {
+    if (getSetting('moneyEffect') === false) {
+        return;
     }
 
-    animate();
+    let fallingMoney = document.getElementsByClassName('falling-money').length;
+    if (fallingMoney > 20) {
+        return;
+    }
+
+    let cursorX = event.clientX ? event.clientX : window.innerWidth / 2;
+    let cursorY = event.clientY ? event.clientY : window.innerHeight / 2;
+
+    createFallingObject('money', {
+        cursorX,
+        cursorY,
+        amount,
+        verticalSpeed: -Math.random() * 4 - 4,
+        horizontalSpeed: Math.random() * 6 - 3,
+        gravity: Math.random() * 0.2 + 0.1
+    });
+}
+
+function spawnFallingSuperLuna() {
+    createFallingObject('superluna', {
+        imageUrl: 'img/superluna.png',
+        animation: 'featherFall 2s infinite linear',
+        onClick: () => {
+            addMoney(getMoneyPerSecond() * 60);
+            summonFallingMoneyEffectAtCursor(getMoneyPerSecond() * 60);
+            playSoundEffekt("sounds/clickSuperLuna.wav");
+        }
+    });
+}
+
+function spawnFallingKaffee() {
+    createFallingObject('kaffee', {
+        imageUrl: 'img/kaffeemaschine.png',
+        width: '100px',
+        height: '140px',
+        animation: 'kaffeefall 2s infinite linear',
+        onClick: () => {
+            addEffect("Kaffee", 1.5, 10);
+            playSoundEffekt("sounds/clickSuperLuna.wav");
+        }
+    });
 }
 
 function addEffect(name, amount, duration){
@@ -1474,44 +1482,6 @@ function addEffect(name, amount, duration){
     setTimeout(() => {
         effect.remove();
     }, duration * 1000);
-}
-
-function spawnFallingKaffee(){
-    let cursorX = Math.random() * window.innerWidth;
-    let cursorY = 0;
-
-    const cursor = document.createElement('div');
-    cursor.style.backgroundImage = 'url("img/kaffeemaschine.png")';
-    cursor.classList.add('falling-object');
-
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-
-    cursor.style.width = '100px';
-    cursor.style.height = '140px';
-    cursor.style.pointerEvents = 'click';
-    cursor.style.animation = 'kaffeefall 2s infinite linear';
-    cursor.addEventListener('click', () => {
-        cursor.remove();
-        addEffect("Kaffee", 1.5, 10);
-        playSoundEffekt("sounds/clickSuperLuna.wav");
-    });
-    document.body.appendChild(cursor);
-
-    //move down slowly
-    let verticalSpeed = 1;
-
-    function animate() {
-        if (cursor.offsetTop > window.innerHeight) {
-            cursor.remove();
-        } else {
-            cursor.style.top = cursor.offsetTop + verticalSpeed + 'px';
-            requestAnimationFrame(animate);
-        }
-    }
-
-    animate();
-
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
