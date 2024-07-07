@@ -6,23 +6,11 @@ document.addEventListener('contextmenu', event => {
 });
 
 
-const cardImageLinks = [
-    '../img/auto.png',
-    '../img/informatik.png',
-    '../img/kaffeemaschine.png',
-    '../img/kaninchen.png',
-    '../img/laptop.png',
-    '../img/lenkrad.png',
-    '../img/ram.png',
-    '../img/rollerblades.png',
-    '../img/speicherkarte.png',
-    '../img/superluna.png',
-    '../img/skins/sherlock.png',
-    '../img/skins/race.png',
-    '../img/skins/allergie.webp',
-    '../img/skins/clicker.webp',
-    '../img/skins/business.png',
-]
+const cardImageLinks = []
+//cardImageLinks mit Bildern füllen aus images und ein "../" voranstellen
+getImagesOfType("object").forEach(imageLink => {
+    cardImageLinks.push('../' + imageLink);
+});
 
 //get random image links with amount of parameter, no duplicates
 function getRandomImageLinks(amount) {

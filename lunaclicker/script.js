@@ -1,15 +1,16 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Variables
 *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 const shopItems = [
     {
         name: 'Kaninchen',
-        img: 'img/kaninchen.png',
+        img: getLinkForImage("kaninchen"),
         storyDescription: {
             title: 'Kaninchen',
             description: 'Luna besitzt drei Kaninchen. Sie sind sehr süß und flauschig. Sie bringen dir Geld, wenn du sie streichelst.',
             images: [
-                'img/kaninchen.png',
+                getLinkForImage("kaninchen"),
             ]
         },
         advancements: [
@@ -26,12 +27,12 @@ const shopItems = [
     },
     {
         name: 'Rollerblades',
-        img: 'img/rollerblades.png',
+        img: getLinkForImage("rollerblades"),
         storyDescription: {
             title: 'Rollerblades',
             description: 'Luna hat sich Rollerblades gekauft. Sie fährt damit durch die Stadt und sammelt Geld.',
             images: [
-                'img/rollerblades.png',
+                getLinkForImage("rollerblades"),
             ]
         },
         advancements: [
@@ -48,12 +49,12 @@ const shopItems = [
     },
     {
         name: 'Laptop',
-        img: 'img/laptop.png',
+        img: getLinkForImage("laptop"),
         storyDescription: {
             title: 'Laptop',
             description: 'Luna hat sich einen neuen Laptop gekauft. Sie arbeitet damit und verdient Geld.',
             images: [
-                'img/laptop.png',
+                getLinkForImage("laptop"),
             ]
         },
         advancements: [
@@ -70,12 +71,12 @@ const shopItems = [
     },
     {
         name: 'Informatik',
-        img: 'img/informatik.png',
+        img: getLinkForImage("informatik"),
         storyDescription: {
             title: 'Informatik',
             description: 'Luna hat die Schule gewechselt und lernt jetzt Informatik. Sie verdient Geld durch Programmieren.',
             images: [
-                'img/informatik.png',
+                getLinkForImage("informatik"),
             ]
         },
         advancements: [
@@ -97,12 +98,12 @@ const shopItems = [
     },
     {
         name: 'RAM',
-        img: 'img/ram.png',
+        img: getLinkForImage("ram"),
         storyDescription: {
             title: 'RAM',
             description: 'Luna hat ihren Laptop aufgerüstet. Sie kann jetzt mehr Programme gleichzeitig laufen lassen. 40GB RAM!',
             images: [
-                'img/ram.png',
+                getLinkForImage("ram"),
             ]
         },
         advancements: [
@@ -119,12 +120,12 @@ const shopItems = [
     },
     {
         name: 'Speicherkarte',
-        img: 'img/speicherkarte.png',
+        img: getLinkForImage("speicherkarte"),
         storyDescription: {
             title: 'Speicherkarte',
             description: 'Luna hat sich eine neue Speicherkarte gekauft. Sie kann jetzt mehr Daten speichern.',
             images: [
-                'img/speicherkarte.png',
+                getLinkForImage("speicherkarte"),
             ]
         },
         advancements: [
@@ -141,12 +142,12 @@ const shopItems = [
     },
     {
         name: 'Lenkrad',
-        img: 'img/lenkrad.png',
+        img: getLinkForImage("lenkrad"),
         storyDescription: {
             title: 'Lenkrad',
             description: 'Luna hat sich ein Lenkrad für ihren Laptop gekauft. Sie spielt jetzt Autorennspiele.',
             images: [
-                'img/lenkrad.png',
+                getLinkForImage("lenkrad"),
             ]
         },
         advancements: [
@@ -163,12 +164,12 @@ const shopItems = [
     },
     {
         name: 'Pedale',
-        img: 'img/pedale.png',
+        img: getLinkForImage("pedale"),
         storyDescription: {
             title: 'Pedale',
             description: 'Luna hat sich Pedale für ihr Lenkrad gekauft. Sie kann jetzt auch bremsen.',
             images: [
-                'img/pedale.png',
+                getLinkForImage("pedale"),
             ]
         },
         advancements: [
@@ -185,12 +186,12 @@ const shopItems = [
     },
     {
         name: 'Schalthebel',
-        img: 'img/schalthebel.png',
+        img: getLinkForImage("schalthebel"),
         storyDescription: {
             title: 'Schalthebel',
             description: 'Luna hat sich einen Schalthebel für ihr Lenkrad gekauft. Sie kann jetzt auch schalten.',
             images: [
-                'img/schalthebel.png',
+                getLinkForImage("schalthebel")
             ]
         },
         advancements: [
@@ -207,12 +208,12 @@ const shopItems = [
     },
     {
         name: 'Laptopkühler',
-        img: 'img/laptopkühler.png',
+        img: getLinkForImage("laptopkühler"),
         storyDescription: {
             title: 'Laptopkühler',
             description: 'Luna hat sich einen Laptopkühler gekauft. Ihr Laptop wird nicht mehr so heiß.',
             images: [
-                'img/laptopkühler.png',
+                getLinkForImage("laptopkühler"),
             ]
         },
         advancements: [
@@ -229,12 +230,12 @@ const shopItems = [
     },
     {
         name: 'Grafikkarte',
-        img: 'img/grafikkarte.png',
+        img: getLinkForImage("grafikkarte"),
         storyDescription: {
             title: 'Grafikkarte',
             description: 'Luna hat sich eine neue Grafikkarte gekauft. Sie kann jetzt bessere Spiele spielen.',
             images: [
-                'img/grafikkarte.png',
+                getLinkForImage("grafikkarte")
             ]
         },
         advancements: [
@@ -251,12 +252,12 @@ const shopItems = [
     },
     {
         name: 'Führerschein',
-        img: 'img/führerschein.png',
+        img: getLinkForImage("führerschein"),
         storyDescription: {
             title: 'Führerschein',
             description: 'Luna hat ihren Führerschein gemacht. Sie fährt jetzt Auto und verdient Geld.',
             images: [
-                'img/führerschein.png',
+                getLinkForImage("führerschein")
             ]
         },
         advancements: [
@@ -278,12 +279,12 @@ const shopItems = [
     },
     {
         name: 'Auto',
-        img: 'img/auto.png',
+        img: getLinkForImage("auto"),
         storyDescription: {
             title: 'Auto',
             description: 'Luna hat sich ein Auto gekauft. Sie fährt jetzt durch die Stadt und verdient Geld.',
             images: [
-                'img/auto.png',
+                getLinkForImage("auto")
             ]
         },
         advancements: [
@@ -300,12 +301,12 @@ const shopItems = [
     },
     {
         name: 'Autolift',
-        img: 'img/autolift.png',
+        img: getLinkForImage("autolift"),
         storyDescription: {
             title: 'Autolift',
             description: 'Luna hat sich einen Autolift gekauft. Sie kann jetzt Autos reparieren und verdient Geld.',
             images: [
-                'img/autolift.png',
+                getLinkForImage("autolift")
             ]
         },
         advancements: [
@@ -322,12 +323,12 @@ const shopItems = [
     },
     {
         name: 'Garage',
-        img: 'img/garage.png',
+        img: getLinkForImage("garage"),
         storyDescription: {
             title: 'Garage',
             description: 'Luna hat sich eine Garage gekauft. Sie kann jetzt mehrere Autos reparieren und verdient Geld.',
             images: [
-                'img/garage.png',
+                getLinkForImage("garage")
             ]
         },
         advancements: [
@@ -344,12 +345,12 @@ const shopItems = [
     },
     {
         name: 'Werkstatt',
-        img: 'img/werkstatt.png',
+        img: getLinkForImage("werkstatt"),
         storyDescription: {
             title: 'Werkstatt',
             description: 'Luna hat sich eine Werkstatt gekauft. Sie kann jetzt Autos reparieren und verdient Geld.',
             images: [
-                'img/werkstatt.png',
+                getLinkForImage("werkstatt")
             ]
         },
         advancements: [
@@ -366,12 +367,12 @@ const shopItems = [
     },
     {
         name: 'Autohaus',
-        img: 'img/autohaus.png',
+        img: getLinkForImage("autohaus"),
         storyDescription: {
             title: 'Autohaus',
             description: 'Luna hat sich ein Autohaus gekauft. Sie kann jetzt Autos verkaufen und verdient Geld.',
             images: [
-                'img/autohaus.png',
+                getLinkForImage("autohaus")
             ]
         },
         advancements: [
@@ -388,12 +389,12 @@ const shopItems = [
     },
     {
         name: 'Automarke',
-        img: 'img/automarke.png',
+        img: getLinkForImage("automarke"),
         storyDescription: {
             title: 'Automarke',
             description: 'Luna hat sich eine Automarke gekauft. Sie kann jetzt Autos produzieren und verdient Geld.',
             images: [
-                'img/automarke.png',
+                getLinkForImage("automarke")
             ]
         },
         advancements: [
@@ -413,30 +414,35 @@ const liveImageUrl = 'https://visage.surgeplay.com/full/384/frkls.webp';
 const upgrades = [
     {
         name: 'Finger',
+        url: '../' + getLinkForImage("finger"),
         description: 'Erhöht die Menge an Geld, die du pro Klick erhältst.',
         price: 1,
         increase: 4,
     },
     {
         name: 'Kaffeemaschine',
+        url: '../' + getLinkForImage("kaffeemaschine"),
         description: 'Dein Kaffeerausch hält länger an.',
         price: 2,
         increase: 1.1,
     },
     {
         name: "Superluna",
+        url: '../' + getLinkForImage("superluna"),
         description: "Die Monde welche vom Himmel fallen, geben dir mehr Geld.",
         price: 3,
         increase: 1.1,
     },
     {
         name: 'IDE',
+        url: '../' + getLinkForImage("ide"),
         description: 'Erhöht enorm die Menge an Geld, die du pro Sekunde durch Laptop und Informatik erhältst.',
         price: 1,
         increase: 1.1,
     },
     {
         name: 'Ginger',
+        url: '../' + getLinkForImage("ginger"),
         description: 'Erhöht die Menge an Geld, die du pro Sekunde erhältst.',
         price: 2,
         increase: 6,
@@ -445,62 +451,62 @@ const upgrades = [
 const skins = [
     {
         name: 'Standard',
-        url: '../img/skins/clicker.webp',
+        url: '../' + getLinkForImage("clicker"),
         requiredPerSecond: 0,
     },
     {
         name: 'Allergie-Luna',
-        url: '../img/skins/allergie.webp',
+        url: '../' + getLinkForImage("allergie"),
         requiredPerSecond: 1000,
     },
     {
         name: 'Gacha-Luna',
-        url: '../img/skins/gacha.webp',
+        url: '../' + getLinkForImage("gacha"),
         requiredPerSecond: 10000,
     },
     {
         name: 'Minecraft-Luna',
-        url: '../img/skins/minecraft.webp',
+        url: '../' + getLinkForImage("minecraft"),
         requiredPerSecond: 100000,
     },
     {
         name: 'Racing-Luna',
-        url: '../img/skins/race.png',
+        url: '../' + getLinkForImage("race"),
         requiredPerSecond: 1000000,
     },
     {
         name: 'Sherlock-Luna',
-        url: '../img/skins/sherlock.png',
+        url: '../' + getLinkForImage("sherlock"),
         requiredPerSecond: 100000000,
     },
     {
         name: 'Business-Luna',
-        url: '../img/skins/business.png',
+        url: '../' + getLinkForImage("business"),
         requiredPerSecond: 1000000000,
     },
     {
         name: 'Karneval-Luna',
-        url: 'img/skins/karneval.png',
+        url: '../' + getLinkForImage("karneval"),
         requiredPerSecond: 1e301,
     },
     {
         name: 'Kobold-Luna',
-        url: '../img/skins/kobold.webp',
+        url: '../' + getLinkForImage("kobold"),
         requiredPerSecond: 1e301,
     },
     {
         name: 'Biker-Luna',
-        url: '../img/skins/biker.webp',
+        url: '../' + getLinkForImage("biker"),
         requiredPerSecond: 1e301,
     },
     {
         name: 'Astronaut-Luna',
-        url: '../img/skins/astronaut.webp',
+        url: '../' + getLinkForImage("astronaut"),
         requiredPerSecond: 1e301,
     },
     {
         name: 'Ulna Reykenbrek',
-        url: '../img/skins/ulna.webp',
+        url: '../' + getLinkForImage("ulna"),
         requiredPerSecond: 1e301,
     }
 ];
@@ -519,7 +525,7 @@ const defaultSettings = {
         "settings": {
             "color-theme": "#f75218",
             "always-show-timer": false,
-            "background": "../img/backgrounds/bg1.png",
+            "background": "../" + getLinkForImage("bg1"),
             "moneyEffect": true,
             "musik": 0.5,
             "sound": 0.75,
@@ -533,18 +539,7 @@ const defaultSettings = {
         "shopItemsBought": {},
     }
 }
-const backgroundImages = [
-    '../img/backgrounds/bg1.png',
-    '../img/backgrounds/bg2.png',
-    '../img/backgrounds/bg3.png',
-    '../img/backgrounds/bg4.png',
-    '../img/backgrounds/bg5.png',
-    '../img/backgrounds/bg6.png',
-    '../img/backgrounds/bg7.png',
-    '../img/backgrounds/bg8.png',
-    '../img/backgrounds/bg9.png',
-    '../img/backgrounds/bg10.png',
-];
+const backgroundImages = addPreviousStringToArray(getImagesOfType("background"));
 
 let game = {}
 
@@ -800,15 +795,7 @@ function createShop() {
 
         const iconElement = document.createElement('div');
 
-        const img = new Image();
-        img.onload = () => {
-            iconElement.style.backgroundImage = `url('../${shopItem.img}')`;
-        };
-        img.onerror = () => {
-            iconElement.style.backgroundImage = 'url("../img/loading.png")';
-        };
-        img.src = '../' + shopItem.img;
-
+        iconElement.style.backgroundImage = `url('../${shopItem.img}')`;
 
         iconElement.classList.add('skill-icon');
         element.appendChild(iconElement);
@@ -992,17 +979,7 @@ function createUpgrades() {
         const iconElement = document.createElement('div');
         iconElement.classList.add('upgrade-icon');
 
-        //check if the image exists
-        const img = new Image();
-        img.onload = () => {
-            iconElement.style.backgroundImage = `url('../img/${upgrade.name.toLowerCase()}.png')`;
-        };
-        img.onerror = (event => {
-            iconElement.style.backgroundImage = 'url("../img/loading.png")';
-            //disable console error
-            event.preventDefault();
-        });
-        img.src = `../img/${upgrade.name.toLowerCase()}.png`;
+        iconElement.style.backgroundImage = `url('${upgrade.url}')`;
         element.appendChild(iconElement);
 
         const priceElement = document.createElement('div');
