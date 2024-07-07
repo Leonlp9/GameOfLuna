@@ -1,3 +1,4 @@
+let cardAmount = 10;
 
 //rechtsklick wird zu linksklick
 document.addEventListener('contextmenu', event => {
@@ -40,27 +41,7 @@ function addCardToCards(cardImageLink) {
                 </div>
             `;
     document.getElementById('cards').appendChild(card);
-}
 
-function shuffleCards() {
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        const randomIndex = Math.floor(Math.random() * cards.length);
-        const randomCard = cards[randomIndex];
-        card.parentNode.insertBefore(randomCard, card);
-    });
-}
-
-const randomImageLinks = getRandomImageLinks(10);
-
-randomImageLinks.forEach(imageLink => {
-    addCardToCards(imageLink);
-    addCardToCards(imageLink);
-});
-
-shuffleCards();
-
-document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
         if (card.classList.contains('open')) return;
         if (getOpenCards().length >= 2) return;
@@ -76,6 +57,12 @@ document.querySelectorAll('.card').forEach(card => {
                     setTimeout(() => {
                         card.classList.remove('open');
                         card.classList.add('matched');
+
+                        if (isAllMatched()) {
+                            setTimeout(() => {
+                                openSelectionStartScreen()
+                            }, 1000);
+                        }
                     }, 750);
                 });
             } else {
@@ -85,7 +72,30 @@ document.querySelectorAll('.card').forEach(card => {
             }
         }
     });
-});
+}
+
+function shuffleCards() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const randomIndex = Math.floor(Math.random() * cards.length);
+        const randomCard = cards[randomIndex];
+        card.parentNode.insertBefore(randomCard, card);
+    });
+}
+
+function placeCards(){
+    //delete all cards
+    document.getElementById('cards').innerHTML = '';
+
+    const randomImageLinks = getRandomImageLinks(cardAmount);
+
+    randomImageLinks.forEach(imageLink => {
+        addCardToCards(imageLink);
+        addCardToCards(imageLink);
+    });
+
+    shuffleCards();
+}
 
 function getOpenCards() {
     return Array.from(document.querySelectorAll('.card.open'));
@@ -96,3 +106,74 @@ function closeOpenCards() {
         card.classList.remove('open');
     });
 }
+
+function isAllMatched() {
+    return document.querySelectorAll('.card.matched').length === document.querySelectorAll('.card').length;
+}
+
+function openSelectionStartScreen() {
+
+    const background = document.createElement('div');
+    background.classList.add('background');
+
+    const selectionStartScreen = document.createElement('div');
+    selectionStartScreen.classList.add('selection-start-screen');
+
+    const title = document.createElement('h1');
+    title.textContent = 'Memory';
+    selectionStartScreen.appendChild(title);
+
+    const buttons = document.createElement('div');
+    buttons.classList.add('buttons');
+    selectionStartScreen.appendChild(buttons);
+
+    const botButton = document.createElement('button');
+    botButton.classList.add('bot-button');
+    botButton.innerHTML = 'Bot <i class="fas fa-robot"></i>';
+    botButton.addEventListener('click', () => {
+        background.remove();
+        placeCards();
+    });
+
+    const multiplayerButton = document.createElement('button');
+    multiplayerButton.classList.add('multiplayer-button');
+    multiplayerButton.innerHTML = 'Multiplayer <i class="fas fa-user"></i><i class="fas fa-user"></i>';
+    multiplayerButton.addEventListener('click', () => {
+        background.remove();
+        placeCards();
+    });
+
+    const singleplayerButton = document.createElement('button');
+    singleplayerButton.classList.add('singleplayer-button');
+    singleplayerButton.innerHTML = 'Singleplayer <i class="fas fa-user"></i>';
+    singleplayerButton.addEventListener('click', () => {
+        background.remove();
+        placeCards();
+    });
+
+    buttons.appendChild(botButton);
+    buttons.appendChild(multiplayerButton);
+    buttons.appendChild(singleplayerButton);
+
+    const label = document.createElement('label');
+    label.textContent = 'Card Amount:';
+    label.htmlFor = 'card-amount-input';
+    selectionStartScreen.appendChild(label);
+
+    const cardAmountInput = document.createElement('input');
+    cardAmountInput.id = 'card-amount-input';
+    cardAmountInput.type = 'number';
+    cardAmountInput.min = 2;
+    cardAmountInput.max = 20;
+    cardAmountInput.value = cardAmount;
+    cardAmountInput.addEventListener('change', () => {
+        cardAmount = cardAmountInput.value;
+    });
+    selectionStartScreen.appendChild(cardAmountInput);
+
+    background.appendChild(selectionStartScreen);
+
+    document.body.appendChild(background);
+}
+
+openSelectionStartScreen()

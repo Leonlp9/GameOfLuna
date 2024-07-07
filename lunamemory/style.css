@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Jua&family=Madimi+One&family=Poetsen+One&display=swap');
+
 * {
     user-select: none;
 }
@@ -75,4 +77,70 @@ body {
     flex-wrap: wrap;
     align-content: center;
     gap: 10px;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selection-start-screen {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Baloo Tamma 2', cursive;
+}
+
+button:hover {
+    background: #e0e0e0;
+}
+
+label {
+    font-size: 20px;
+    font-family: 'Baloo Tamma 2', cursive;
+}
+
+input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Baloo Tamma 2', cursive;
+    width: calc(100% - 10px);
+}
+
+input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+    margin: 0;
+    font-family: 'Baloo Tamma 2', cursive;
 }
