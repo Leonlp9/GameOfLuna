@@ -133,6 +133,10 @@ function getImagesOfType(type) {
     return Object.values(images).filter(image => image.type === type).map(image => image.url);
 }
 
+function getImagesOfTypes(types) {
+    return Object.values(images).filter(image => types.includes(image.type)).map(image => image.url);
+}
+
 function getAllImagesWithoutTypes(types) {
     //types = ["object", "skin"]
     return Object.values(images).filter(image => !types.includes(image.type)).map(image => image.url);

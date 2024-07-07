@@ -1,4 +1,4 @@
-let cardAmount = 10;
+let cardAmount = 9;
 
 //rechtsklick wird zu linksklick
 document.addEventListener('contextmenu', event => {
@@ -9,7 +9,7 @@ document.addEventListener('contextmenu', event => {
 
 const cardImageLinks = []
 //cardImageLinks mit Bildern füllen aus images und ein "../" voranstellen
-getImagesOfType("object").forEach(imageLink => {
+getImagesOfTypes(["object", "skin"]).forEach(imageLink => {
     cardImageLinks.push('../' + imageLink);
 });
 
