@@ -445,57 +445,62 @@ const upgrades = [
 const skins = [
     {
         name: 'Standard',
-        url: 'img/skins/clicker.webp',
+        url: '../img/skins/clicker.webp',
         requiredPerSecond: 0,
     },
     {
         name: 'Allergie-Luna',
-        url: 'img/skins/allergie.webp',
+        url: '../img/skins/allergie.webp',
         requiredPerSecond: 1000,
     },
     {
         name: 'Gacha-Luna',
-        url: 'img/skins/gacha.webp',
+        url: '../img/skins/gacha.webp',
         requiredPerSecond: 10000,
     },
     {
         name: 'Minecraft-Luna',
-        url: 'img/skins/minecraft.webp',
+        url: '../img/skins/minecraft.webp',
         requiredPerSecond: 100000,
     },
     {
         name: 'Racing-Luna',
-        url: 'img/skins/race.png',
+        url: '../img/skins/race.png',
         requiredPerSecond: 1000000,
     },
     {
         name: 'Sherlock-Luna',
-        url: 'img/skins/sherlock.png',
+        url: '../img/skins/sherlock.png',
         requiredPerSecond: 100000000,
     },
     {
         name: 'Business-Luna',
-        url: 'img/skins/business.png',
+        url: '../img/skins/business.png',
         requiredPerSecond: 1000000000,
     },
     {
+        name: 'Karneval-Luna',
+        url: 'img/skins/karneval.png',
+        requiredPerSecond: 1e301,
+    },
+    {
         name: 'Kobold-Luna',
-        url: 'img/skins/kobold.webp',
+        url: '../img/skins/kobold.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Biker-Luna',
-        url: 'img/skins/biker.webp',
+        url: '../img/skins/biker.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Astronaut-Luna',
-        url: 'img/skins/astronaut.webp',
+        url: '../img/skins/astronaut.webp',
         requiredPerSecond: 1e301,
     },
     {
         name: 'Ulna Reykenbrek',
-        url: 'img/skins/ulna.webp',
+        url: '../img/skins/ulna.webp',
         requiredPerSecond: 1e301,
     }
 ];
@@ -529,16 +534,16 @@ const defaultSettings = {
     }
 }
 const backgroundImages = [
-    'img/backgrounds/bg1.png',
-    'img/backgrounds/bg2.png',
-    'img/backgrounds/bg3.png',
-    'img/backgrounds/bg4.png',
-    'img/backgrounds/bg5.png',
-    'img/backgrounds/bg6.png',
-    'img/backgrounds/bg7.png',
-    'img/backgrounds/bg8.png',
-    'img/backgrounds/bg9.png',
-    'img/backgrounds/bg10.png',
+    '../img/backgrounds/bg1.png',
+    '../img/backgrounds/bg2.png',
+    '../img/backgrounds/bg3.png',
+    '../img/backgrounds/bg4.png',
+    '../img/backgrounds/bg5.png',
+    '../img/backgrounds/bg6.png',
+    '../img/backgrounds/bg7.png',
+    '../img/backgrounds/bg8.png',
+    '../img/backgrounds/bg9.png',
+    '../img/backgrounds/bg10.png',
 ];
 
 let game = {}
@@ -719,7 +724,7 @@ function playSoundEffekt(sound) {
         return;
     }
 
-    let audio = new Audio(sound);
+    let audio = new Audio('../' + sound);
     audio.volume = document.getElementById('sound').value;
     audio.play().then();
 }
@@ -797,12 +802,12 @@ function createShop() {
 
         const img = new Image();
         img.onload = () => {
-            iconElement.style.backgroundImage = `url('${shopItem.img}')`;
+            iconElement.style.backgroundImage = `url('../${shopItem.img}')`;
         };
         img.onerror = () => {
-            iconElement.style.backgroundImage = 'url("img/loading.png")';
+            iconElement.style.backgroundImage = 'url("../img/loading.png")';
         };
-        img.src = shopItem.img;
+        img.src = '../' + shopItem.img;
 
 
         iconElement.classList.add('skill-icon');
@@ -870,7 +875,15 @@ function createShop() {
         storyDescriptionElement.classList.add('skill-story-description');
         storyDescriptionElement.innerText = 'i';
         storyDescriptionElement.addEventListener('click', () => {
-            customInfoScreen(shopItem.storyDescription.title, shopItem.storyDescription.description, shopItem.storyDescription.images);
+
+            let images = shopItem.storyDescription.images;
+
+            //allen images ein ../ vorweg setzen
+            images = images.map(image => {
+                return '../' + image;
+            });
+
+            customInfoScreen(shopItem.storyDescription.title, shopItem.storyDescription.description, images);
         });
         element.appendChild(storyDescriptionElement);
 
@@ -982,14 +995,14 @@ function createUpgrades() {
         //check if the image exists
         const img = new Image();
         img.onload = () => {
-            iconElement.style.backgroundImage = `url('img/${upgrade.name.toLowerCase()}.png')`;
+            iconElement.style.backgroundImage = `url('../img/${upgrade.name.toLowerCase()}.png')`;
         };
         img.onerror = (event => {
-            iconElement.style.backgroundImage = 'url("img/loading.png")';
+            iconElement.style.backgroundImage = 'url("../img/loading.png")';
             //disable console error
             event.preventDefault();
         });
-        img.src = `img/${upgrade.name.toLowerCase()}.png`;
+        img.src = `../img/${upgrade.name.toLowerCase()}.png`;
         element.appendChild(iconElement);
 
         const priceElement = document.createElement('div');
@@ -1066,7 +1079,7 @@ function createSkins() {
             }
         }
         img.onerror = () => {
-            iconElement.style.backgroundImage = 'url("img/loading.png")';
+            iconElement.style.backgroundImage = 'url("../img/loading.png")';
         }
 
         element.addEventListener('click', () => {

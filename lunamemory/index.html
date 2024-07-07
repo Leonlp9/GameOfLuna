@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luna Memory</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!--    mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0, width=device-width, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/8482ce4752.js" crossorigin="anonymous"></script>
+
+    <!--    icons-->
+    <link rel="apple-touch-icon" sizes="120x120" href="../icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="../icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="../icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="../icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <!--   og link-->
+    <meta property="og:title" content="Luna Memory">
+    <meta property="og:description" content="Ein Memory Spiel mit Luna, ihren Gegenständen und Freunden.">
+    <meta property="og:image" content="https://leonlp9.github.io/GameOfLuna/img/skins/sherlock.png">
+    <meta property="og:type" content="website">
+
+    <!--    crawler-->
+    <meta name="description" content="Ein Memory Spiel mit Luna, ihren Gegenständen und Freunden.">
+    <meta name="keywords" content="Luna, Memory, Luna Memory, Game, Luna Game, Luna Memory Game, Luna Memory Game Of Luna, Game Of Luna, Luna Game Of Luna, Luna Memory Game Of Luna">
+    <meta name="author" content="Leon lp9">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="3 days">
+    <meta name="language" content="German">
+    <meta name="distribution" content="Global">
+    <meta name="rating" content="General">
+
+    <style>
+        .card {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .card .front, .card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card img {
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            object-fit: contain;
+        }
+
+        .card .back {
+            transform: rotateY(180deg);
+            background: url("gameImg/cardRueckseite.png") center center no-repeat;
+            background-size: cover;
+        }
+
+        .card .front {
+            transform: rotateY(0deg);
+            background: url("gameImg/cardVorderseite.png") center center no-repeat;
+            background-size: cover;
+        }
+
+        .card.open {
+            transform: rotateY(180deg);
+        }
+
+        #cards {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            align-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="cards">
+    <div class="card">
+        <div class="front"></div>
+        <div class="back">
+            <img src="../img/kaffeemaschine.png" alt="Back">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="front"></div>
+        <div class="back">
+            <img src="../img/kaffeemaschine.png" alt="Back">
+        </div>
+    </div>
+    <div class="card">
+        <div class="front"></div>
+        <div class="back">
+            <img src="../img/kaffeemaschine.png" alt="Back">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="front"></div>
+        <div class="back">
+            <img src="../img/kaffeemaschine.png" alt="Back">
+        </div>
+    </div>
+    <div class="card">
+        <div class="front"></div>
+        <div class="back">
+            <img src="../img/kaffeemaschine.png" alt="Back">
+        </div>
+    </div>
+</div>
+
+    <script>
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
