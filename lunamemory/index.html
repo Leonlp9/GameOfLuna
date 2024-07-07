@@ -90,42 +90,58 @@
     </style>
 </head>
 <body>
-<div id="cards">
-    <div class="card">
-        <div class="front"></div>
-        <div class="back">
-            <img src="../img/kaffeemaschine.png" alt="Back">
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="front"></div>
-        <div class="back">
-            <img src="../img/kaffeemaschine.png" alt="Back">
-        </div>
-    </div>
-    <div class="card">
-        <div class="front"></div>
-        <div class="back">
-            <img src="../img/kaffeemaschine.png" alt="Back">
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="front"></div>
-        <div class="back">
-            <img src="../img/kaffeemaschine.png" alt="Back">
-        </div>
-    </div>
-    <div class="card">
-        <div class="front"></div>
-        <div class="back">
-            <img src="../img/kaffeemaschine.png" alt="Back">
-        </div>
-    </div>
-</div>
+<div id="cards"></div>
 
     <script>
+        const cardImageLinks = [
+            '../img/auto.png',
+            '../img/informatik.png',
+            '../img/kaffeemaschine.png',
+            '../img/kaninchen.png',
+            '../img/laptop.png',
+            '../img/lenkrad.png',
+            '../img/ram.png',
+            '../img/rollerblades.png',
+            '../img/speicherkarte.png',
+            '../img/superluna.png',
+            '../img/skins/sherlock.png',
+            '../img/skins/race.png',
+            '../img/skins/allergie.webp',
+            '../img/skins/clicker.webp',
+            '../img/skins/business.png',
+        ]
+
+        //get random image links with amount of parameter, no duplicates
+        function getRandomImageLinks(amount) {
+            const randomImageLinks = [];
+            while (randomImageLinks.length < amount) {
+                const randomIndex = Math.floor(Math.random() * cardImageLinks.length);
+                const randomImageLink = cardImageLinks[randomIndex];
+                if (!randomImageLinks.includes(randomImageLink)) {
+                    randomImageLinks.push(randomImageLink);
+                }
+            }
+            return randomImageLinks;
+        }
+
+        function addCardToCards(cardImageLink) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <div class="front"></div>
+                <div class="back">
+                    <img src="${cardImageLink}" alt="Back">
+                </div>
+            `;
+            document.getElementById('cards').appendChild(card);
+        }
+
+        const randomImageLinks = getRandomImageLinks(10);
+        randomImageLinks.forEach(imageLink => {
+            addCardToCards(imageLink);
+            addCardToCards(imageLink);
+        });
+
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', () => {
                 card.classList.toggle('open');
