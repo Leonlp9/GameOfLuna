@@ -49,7 +49,7 @@ const images = {
     },
     allergie: {
         url: "img/skins/allergie.webp",
-        type: "object"
+        type: "skin"
     },
     business: {
         url: "img/skins/business.png",
