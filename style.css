@@ -302,6 +302,10 @@ body{
     justify-content: space-between;
 }
 
+.setting-container.spacer {
+    height: 40px;
+}
+
 .info {
     display: flex;
     flex-direction: column;

@@ -1613,184 +1613,6 @@ function customInfoScreen(title, message, images = []) {
     Settings
  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /**
- * Adds the events to the settings
- * @param title
- * @param id
- * @param value
- * @param changeCallback
- * @param inputCallback
- */
-function createNewColorSelectionSetting(title, id, value, changeCallback, inputCallback) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('color');
-    settings.appendChild(container);
-
-    const label = document.createElement('label');
-    label.htmlFor = id;
-    label.innerText = title;
-    container.appendChild(label);
-
-    const input = document.createElement('input');
-    input.type = 'color';
-    input.id = id;
-    input.value = value;
-    container.appendChild(input);
-
-    input.addEventListener('change', () => changeCallback(input));
-    input.addEventListener('input', () => inputCallback(input));
-
-    inputCallback(input);
-}
-
-/**
- * Adds the events to the settings
- * @param title
- * @param id
- * @param checked
- * @param changeCallback
- */
-function createNewCheckboxSetting(title, id, checked, changeCallback) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('checkbox');
-    settings.appendChild(container);
-
-    const label = document.createElement('label');
-    label.htmlFor = id;
-    label.innerText = title;
-    container.appendChild(label);
-
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.id = id;
-    input.checked = checked;
-    input.addEventListener('change', () => changeCallback(input));
-    container.appendChild(input);
-
-}
-
-/**
- * Adds the events to the settings
- * @param title
- * @param id
- * @param value
- * @param min
- * @param max
- * @param step
- * @param changeCallback
- * @param inputCallback
- */
-function createNewRangeSetting(title, id, value, min, max, step, changeCallback, inputCallback) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('range');
-    settings.appendChild(container);
-
-    const label = document.createElement('label');
-    label.htmlFor = id;
-    label.innerText = title + ': ' + Math.round(value * 100) + '%';
-    container.appendChild(label);
-
-    const input = document.createElement('input');
-    input.type = 'range';
-    input.id = id;
-    input.min = min;
-    input.max = max;
-    input.step = step;
-    input.value = value;
-    input.addEventListener('change', () => changeCallback(input));
-    input.addEventListener('input', () => {
-        inputCallback(input);
-        label.innerText = title + ': ' + Math.round(input.value * 100) + '%';
-    });
-    container.appendChild(input);
-}
-
-/**
- * Adds the events to the settings
- * @param title
- * @param id
- * @param clickCallback
- * @param isWarning
- */
-function createNewButtonSetting(title, id, clickCallback, isWarning = false) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('button');
-    settings.appendChild(container);
-    container.innerText = title;
-    container.addEventListener('click', () => clickCallback(container));
-
-    if (isWarning) {
-        container.classList.add('warning');
-    }
-}
-
-/**
- * Adds the events to the settings
- * @param title
- * @param id
- * @param value
- * @param fillCallback
- * @param changeCallback
- */
-function createNewRadioSetting(title, id, value, fillCallback, changeCallback) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('radio');
-    settings.appendChild(container);
-
-    const label = document.createElement('label');
-    label.htmlFor = id;
-    label.innerText = title;
-    container.appendChild(label);
-
-    const input = document.createElement('div');
-    input.id = id;
-    input.addEventListener('click', () => changeCallback(input));
-    container.appendChild(input);
-
-    fillCallback(value, id);
-
-}
-
-function createNewInfoSetting(title, id, description) {
-    const settings = document.getElementById('settings-content');
-
-    const container = document.createElement('div');
-    container.id = id + '-container';
-    container.classList.add('setting-container');
-    container.classList.add('info');
-    settings.appendChild(container);
-
-    const label = document.createElement('label');
-    label.htmlFor = id;
-    label.innerText = title;
-    container.appendChild(label);
-
-    const input = document.createElement('div');
-    input.id = id;
-    input.innerText = description;
-    container.appendChild(input);
-}
-
-/**
  * Creates the settings
  */
 function createSettings(){
@@ -1880,6 +1702,11 @@ function createSettings(){
         });
     }, true);
 
+    //credits
+    createNewButtonSetting('Credits', 'credits', () => {
+        customInfoScreen('Credits', 'Idee von Leon, Kai\nProgrammiert von Leon\nDesign von Kai\nMusik von Suno Ai\nProtagonistin: Luna');
+    });
+
     getLastGitHubCommitTitle().then(commitTitle => {
         getLastGitHubCommitDate().then(commitDate => {
             //2024-07-04T10:21:41Z -> date
@@ -1899,6 +1726,193 @@ function createSettings(){
                 + '\n' + dateFormat.replace(',', ''));
         });
     });
+
+    /**
+     * Adds the events to the settings
+     * @param title
+     * @param id
+     * @param value
+     * @param changeCallback
+     * @param inputCallback
+     */
+    function createNewColorSelectionSetting(title, id, value, changeCallback, inputCallback) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('color');
+        settings.appendChild(container);
+
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerText = title;
+        container.appendChild(label);
+
+        const input = document.createElement('input');
+        input.type = 'color';
+        input.id = id;
+        input.value = value;
+        container.appendChild(input);
+
+        input.addEventListener('change', () => changeCallback(input));
+        input.addEventListener('input', () => inputCallback(input));
+
+        inputCallback(input);
+    }
+
+    /**
+     * Adds the events to the settings
+     * @param title
+     * @param id
+     * @param checked
+     * @param changeCallback
+     */
+    function createNewCheckboxSetting(title, id, checked, changeCallback) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('checkbox');
+        settings.appendChild(container);
+
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerText = title;
+        container.appendChild(label);
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.id = id;
+        input.checked = checked;
+        input.addEventListener('change', () => changeCallback(input));
+        container.appendChild(input);
+
+    }
+
+    /**
+     * Adds the events to the settings
+     * @param title
+     * @param id
+     * @param value
+     * @param min
+     * @param max
+     * @param step
+     * @param changeCallback
+     * @param inputCallback
+     */
+    function createNewRangeSetting(title, id, value, min, max, step, changeCallback, inputCallback) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('range');
+        settings.appendChild(container);
+
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerText = title + ': ' + Math.round(value * 100) + '%';
+        container.appendChild(label);
+
+        const input = document.createElement('input');
+        input.type = 'range';
+        input.id = id;
+        input.min = min;
+        input.max = max;
+        input.step = step;
+        input.value = value;
+        input.addEventListener('change', () => changeCallback(input));
+        input.addEventListener('input', () => {
+            inputCallback(input);
+            label.innerText = title + ': ' + Math.round(input.value * 100) + '%';
+        });
+        container.appendChild(input);
+    }
+
+    /**
+     * Adds the events to the settings
+     * @param title
+     * @param id
+     * @param clickCallback
+     * @param isWarning
+     */
+    function createNewButtonSetting(title, id, clickCallback, isWarning = false) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('button');
+        settings.appendChild(container);
+        container.innerText = title;
+        container.addEventListener('click', () => clickCallback(container));
+
+        if (isWarning) {
+            container.classList.add('warning');
+        }
+    }
+
+    /**
+     * Adds the events to the settings
+     * @param title
+     * @param id
+     * @param value
+     * @param fillCallback
+     * @param changeCallback
+     */
+    function createNewRadioSetting(title, id, value, fillCallback, changeCallback) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('radio');
+        settings.appendChild(container);
+
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerText = title;
+        container.appendChild(label);
+
+        const input = document.createElement('div');
+        input.id = id;
+        input.addEventListener('click', () => changeCallback(input));
+        container.appendChild(input);
+
+        fillCallback(value, id);
+
+    }
+
+    function createNewInfoSetting(title, id, description) {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.id = id + '-container';
+        container.classList.add('setting-container');
+        container.classList.add('info');
+        settings.appendChild(container);
+
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerText = title;
+        container.appendChild(label);
+
+        const input = document.createElement('div');
+        input.id = id;
+        input.innerText = description;
+        container.appendChild(input);
+    }
+
+    function createNewSpacerSetting() {
+        const settings = document.getElementById('settings-content');
+
+        const container = document.createElement('div');
+        container.classList.add('setting-container');
+        container.classList.add('spacer');
+        settings.appendChild(container);
+    }
 }
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -2008,15 +2022,13 @@ function settingEvents() {
         touchEndX = event.touches[0].clientX;
     });
 
-    document.getElementById('income').addEventListener('touchend', function() {
+    document.getElementById('income-content').addEventListener('touchend', function() {
         let deltaX = touchEndX - touchStartX;
 
-        if (deltaX > 25) { // Swipe nach rechts
-            document.getElementById('nextPage').click();
-            playSoundEffekt("sounds/select.wav")
-        } else if (deltaX < -25) { // Swipe nach links
-            playSoundEffekt("sounds/select.wav")
+        if (deltaX > 25) {
             document.getElementById('previousPage').click();
+        } else if (deltaX < -25) {
+            document.getElementById('nextPage').click();
         }
 
         // Reset
