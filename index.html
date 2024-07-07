@@ -124,7 +124,7 @@
         }, 0);
 
         setTimeout(function () {
-            loadingAnimation.style.opacity = "0";
+            loadingAnimation.remove()
             callback()
         }, 250);
     }
