@@ -85,6 +85,12 @@ function addCardToCards(cardImageLink) {
                 setTimeout(() => {
                     closeOpenCards();
                     setOtherPlayer();
+
+                    if (mode === 'bot') {
+                        setTimeout(() => {
+                            botPlay();
+                        }, 800);
+                    }
                 }, 1500);
             }
         }
@@ -203,9 +209,11 @@ function openSelectionStartScreen() {
     document.body.appendChild(background);
 }
 
+
 let seenCards = {}; // Store the seen cards
 
 function openCard(element) {
+    if (!element) return; // Ensure the element is valid
     element.classList.add('open');
     // Add card to seenCards
     const imageLink = element.dataset.imageLink;
@@ -215,39 +223,64 @@ function openCard(element) {
     if (!seenCards[imageLink].includes(element)) seenCards[imageLink].push(element);
 }
 
+let interval = null;
 // bot jede sekunde eine karte öffnen
 function botPlay() {
     if (whoIsPlaying === 'bot') {
         if (!isStarted) return;
         if (getOpenCards().length >= 2) return;
 
+        clearInterval(interval)
+        interval = setInterval(() => {
+            botPlay();
+        }, 1000);
+
         let cardToOpen = null;
 
         // Prioritize known pairs
         for (const imageLink in seenCards) {
             if (seenCards[imageLink].length === 2) {
+                //wenn die karte schon matched ist, dann die andere karte nehmen
+                if (seenCards[imageLink][0].classList.contains('matched')) {
+                    continue;
+                }
+
                 cardToOpen = seenCards[imageLink][0];
-                if (cardToOpen.classList.contains('open'))
+                if (cardToOpen.classList.contains('open')) {
                     cardToOpen = seenCards[imageLink][1];
+                }
+                console.log('Known pair', cardToOpen)
                 break;
             }
         }
 
-        // If no known pair, open a random card
         if (!cardToOpen) {
-            //wenn noch karten gibt, die er nicht kennt wähle eine zufällige davon
-            const closedCards = Array.from(document.querySelectorAll('.card')).filter(card => !card.classList.contains('open'));
-            cardToOpen = closedCards[Math.floor(Math.random() * closedCards.length)];
+            // Open random card
+            let closedCards = Array.from(document.querySelectorAll('.card:not(.open):not(.matched)'));
+            closedCards = closedCards.filter(card => !seenCards[card.dataset.imageLink]);
+            if (closedCards.length > 0) {
+                cardToOpen = closedCards[Math.floor(Math.random() * closedCards.length)];
+                console.log('Random card', cardToOpen)
+            }
         }
 
-        openCard(cardToOpen);
+        if (!cardToOpen) {
+            // Full random card
+            const allClosedCards = Array.from(document.querySelectorAll('.card:not(.open):not(.matched)'));
+            if (allClosedCards.length > 0) {
+                cardToOpen = allClosedCards[Math.floor(Math.random() * allClosedCards.length)];
+                console.log('Full random card', cardToOpen)
+            }
+        }
 
-        // Only open one card per interval
-        setTimeout(() => {
-            if (getOpenCards().length === 2) {
-                const [firstCard, secondCard] = getOpenCards();
+        if (cardToOpen) {
+            openCard(cardToOpen);
+
+            const openCards = getOpenCards();
+            if (openCards.length === 2) {
+                const [firstCard, secondCard] = openCards;
                 if (firstCard.dataset.imageLink === secondCard.dataset.imageLink) {
-                    getOpenCards().forEach(card => {
+                    openCards.forEach(card => {
                         setTimeout(() => {
                             card.classList.remove('open');
                             card.classList.add('matched');
@@ -260,8 +293,6 @@ function botPlay() {
                             }
                         }, 750);
                     });
-                    // Remove matched cards from seenCards
-                    delete seenCards[firstCard.dataset.imageLink];
                 } else {
                     setTimeout(() => {
                         closeOpenCards();
@@ -269,11 +300,7 @@ function botPlay() {
                     }, 1500);
                 }
             }
-        }, 750);
+        }
     }
 }
-
-
-setInterval(botPlay, 1000);
-
 openSelectionStartScreen()
