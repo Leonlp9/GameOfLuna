@@ -17,6 +17,16 @@ body {
     perspective: 1000px;
     transform-style: preserve-3d;
     transition: transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
+    animation: cardInAnimation 1s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+@keyframes cardInAnimation {
+    0% {
+        transform: scale(0.5);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .card .front, .card .back {
@@ -385,4 +395,19 @@ h1 {
 
 .setting-container.spacer {
     height: 40px;
+}
+
+.ask-menu {
+    padding: 20px;
+    border-radius: 15px;
+    background: #ffffff;
+    font-size: 20px;
+    font-family: 'Madimi One', cursive;
+    display: flex;
+    flex-direction: column;
+}
+
+.ask-menu-buttons {
+    display: flex;
+    gap: 10px;
 }

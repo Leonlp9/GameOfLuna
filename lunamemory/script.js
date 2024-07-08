@@ -1,6 +1,7 @@
 let cardAmount = 9;
 let isStarted = false;
 let mode = 'singleplayer';
+let botDifficulty = 'easy';
 let whoIsPlaying = 'player1';
 
 //rechtsklick wird zu linksklick
@@ -36,8 +37,42 @@ function setOtherPlayer() {
         whoIsPlaying = whoIsPlaying === 'player1' ? 'player2' : 'player1';
     }else if (mode === 'bot') {
         whoIsPlaying = whoIsPlaying === 'player1' ? 'bot' : 'player1';
+        if (botDifficulty === 'medium') {
+            forgetOneRandomCard();
+        }
     }else if (mode === 'singleplayer') {
         whoIsPlaying = 'player1';
+    }
+}
+
+function checkOpenCards() {
+    const openCards = getOpenCards();
+    const [firstCard, secondCard] = openCards;
+    if (firstCard.dataset.imageLink === secondCard.dataset.imageLink) {
+        openCards.forEach(card => {
+            setTimeout(() => {
+                card.classList.remove('open');
+                card.classList.add('matched');
+
+                if (isAllMatched()) {
+                    setTimeout(() => {
+                        isStarted = false;
+                        openSelectionStartScreen()
+                    }, 1000);
+                }
+            }, 750);
+        });
+    } else {
+        setOtherPlayer();
+        setTimeout(() => {
+            closeOpenCards();
+
+            if (mode === 'bot') {
+                setTimeout(() => {
+                    botPlay();
+                }, 800);
+            }
+        }, 1500);
     }
 }
 
@@ -66,33 +101,7 @@ function addCardToCards(cardImageLink) {
 
         const openCards = getOpenCards();
         if (openCards.length === 2) {
-            const [firstCard, secondCard] = openCards;
-            if (firstCard.dataset.imageLink === secondCard.dataset.imageLink) {
-                openCards.forEach(card => {
-                    setTimeout(() => {
-                        card.classList.remove('open');
-                        card.classList.add('matched');
-
-                        if (isAllMatched()) {
-                            setTimeout(() => {
-                                isStarted = false;
-                                openSelectionStartScreen()
-                            }, 1000);
-                        }
-                    }, 750);
-                });
-            } else {
-                setTimeout(() => {
-                    closeOpenCards();
-                    setOtherPlayer();
-
-                    if (mode === 'bot') {
-                        setTimeout(() => {
-                            botPlay();
-                        }, 800);
-                    }
-                }, 1500);
-            }
+            checkOpenCards();
         }
     });
 }
@@ -108,6 +117,7 @@ function shuffleCards() {
 
 function placeCards(){
     //delete all cards
+    seenCards = {};
     document.getElementById('cards').innerHTML = '';
 
     const randomImageLinks = getRandomImageLinks(cardAmount);
@@ -158,8 +168,43 @@ function openSelectionStartScreen() {
         background.remove();
         mode = 'bot';
         whoIsPlaying = 'player1';
-        isStarted = true;
-        placeCards();
+
+        openAskMenu("Schwierigkeit", ['Easy', 'Medium', 'Hard', 'Impossible'], [
+            () => {
+                botDifficulty = 'easy';
+                isStarted = true;
+                placeCards();
+            },
+            () => {
+                botDifficulty = 'medium';
+                isStarted = true;
+                placeCards();
+            },
+            () => {
+                botDifficulty = 'hard';
+                isStarted = true;
+                placeCards();
+            },
+            () => {
+                botDifficulty = 'impossible';
+                isStarted = true;
+                placeCards();
+            }
+        ],
+        [
+            'Der Bot wird zufällig Karten öffnen',
+            'Der Bot wird bekannte Paare bevorzugen und zufällig Karten öffnen aber nach jedem Spieler wechsel eine Zufällige Karte vergeßen',
+            'Der Bot wird bekannte Paare bevorzugen und zufällig Karten öffnen',
+            'Der Bot wird bekannte Paare bevorzugen und zufällig Karten öffnen welche er noch nicht gesehen hat'
+        ],
+        [
+            '#68b668',
+            '#f1c40f',
+            '#e74c3c',
+            '#8e44ad'
+        ]
+        );
+
     });
 
     const multiplayerButton = document.createElement('button');
@@ -209,6 +254,44 @@ function openSelectionStartScreen() {
     document.body.appendChild(background);
 }
 
+function openAskMenu(title, buttonTitles, buttonCallbacks, descriptions, colors) {
+    const background = document.createElement('div');
+    background.classList.add('background');
+
+    const askMenu = document.createElement('div');
+    askMenu.classList.add('ask-menu');
+
+    const askMenuTitle = document.createElement('h1');
+    askMenuTitle.textContent = title;
+    askMenu.appendChild(askMenuTitle);
+
+    const askMenuButtons = document.createElement('div');
+    askMenuButtons.classList.add('ask-menu-buttons');
+
+    buttonTitles.forEach((buttonTitle, index) => {
+        const button = document.createElement('button');
+        button.textContent = buttonTitle;
+        button.addEventListener('click', () => {
+            background.remove();
+            askMenu.remove();
+            buttonCallbacks[index]();
+        });
+        button.title = descriptions[index];
+        if (colors) {
+            button.style.backgroundColor = colors[index];
+            button.style.color = 'white';
+            button.style.fontWeight = 'bold';
+            button.style.textShadow = '1px 1px 1px black';
+        }
+        askMenuButtons.appendChild(button);
+    });
+
+    askMenu.appendChild(askMenuButtons);
+
+    background.appendChild(askMenu);
+
+    document.body.appendChild(background);
+}
 
 let seenCards = {}; // Store the seen cards
 
@@ -223,83 +306,80 @@ function openCard(element) {
     if (!seenCards[imageLink].includes(element)) seenCards[imageLink].push(element);
 }
 
+function forgetOneRandomCard() {
+    const imageLinks = Object.keys(seenCards);
+    const randomImageLink = imageLinks[Math.floor(Math.random() * imageLinks.length)];
+    const randomCard = seenCards[randomImageLink][Math.floor(Math.random() * seenCards[randomImageLink].length)];
+    seenCards[randomImageLink].splice(seenCards[randomImageLink].indexOf(randomCard), 1);
+
+    console.log('forget', randomCard);
+}
+
+function getRemainingCards() {
+    return Array.from(document.querySelectorAll('.card:not(.matched):not(.open)'));
+}
+
 let interval = null;
+
+function getRemainingCardsNotSeen() {
+    const remainingCards = getRemainingCards();
+    return remainingCards.filter(card => {
+        const imageLink = card.dataset.imageLink;
+        return !seenCards[imageLink];
+    });
+}
+
 // bot jede sekunde eine karte öffnen
 function botPlay() {
     if (whoIsPlaying === 'bot') {
         if (!isStarted) return;
         if (getOpenCards().length >= 2) return;
 
-        clearInterval(interval)
-        interval = setInterval(() => {
-            botPlay();
-        }, 1000);
-
         let cardToOpen = null;
 
-        // Prioritize known pairs
-        for (const imageLink in seenCards) {
-            if (seenCards[imageLink].length === 2) {
-                //wenn die karte schon matched ist, dann die andere karte nehmen
-                if (seenCards[imageLink][0].classList.contains('matched')) {
-                    continue;
+        if (botDifficulty === 'impossible' || botDifficulty === 'hard' || botDifficulty === 'medium') {
+            //check ob es 2 gleiche karten gibt im seenCards
+            const imageLinks = Object.keys(seenCards);
+            imageLinks.forEach(imageLink => {
+                if (seenCards[imageLink].length >= 2) {
+                    cardToOpen = seenCards[imageLink][0];
+                    if (cardToOpen.classList.contains('open')) {
+                        cardToOpen = seenCards[imageLink][1];
+                    }
                 }
+                if (cardToOpen && (cardToOpen.classList.contains('open') || cardToOpen.classList.contains('matched'))) {
+                    cardToOpen = null;
+                }
+            });
+        }
 
-                cardToOpen = seenCards[imageLink][0];
-                if (cardToOpen.classList.contains('open')) {
-                    cardToOpen = seenCards[imageLink][1];
-                }
-                console.log('Known pair', cardToOpen)
-                break;
+        if (botDifficulty === 'impossible') {
+            if (!cardToOpen) {
+                //eine zufällige karte öffnen, von dennen die noch nicht in seenCards sind
+                const notMatchedCards = getRemainingCardsNotSeen();
+                cardToOpen = notMatchedCards[Math.floor(Math.random() * notMatchedCards.length)];
             }
         }
 
-        if (!cardToOpen) {
-            // Open random card
-            let closedCards = Array.from(document.querySelectorAll('.card:not(.open):not(.matched)'));
-            closedCards = closedCards.filter(card => !seenCards[card.dataset.imageLink]);
-            if (closedCards.length > 0) {
-                cardToOpen = closedCards[Math.floor(Math.random() * closedCards.length)];
-                console.log('Random card', cardToOpen)
-            }
-        }
-
-        if (!cardToOpen) {
-            // Full random card
-            const allClosedCards = Array.from(document.querySelectorAll('.card:not(.open):not(.matched)'));
-            if (allClosedCards.length > 0) {
-                cardToOpen = allClosedCards[Math.floor(Math.random() * allClosedCards.length)];
-                console.log('Full random card', cardToOpen)
+        if (botDifficulty === 'easy' || !cardToOpen) {
+            console.log('random')
+            if (!cardToOpen){
+                const notMatchedCards = getRemainingCards();
+                cardToOpen = notMatchedCards[Math.floor(Math.random() * notMatchedCards.length)];
             }
         }
 
         if (cardToOpen) {
             openCard(cardToOpen);
+        }
 
-            const openCards = getOpenCards();
-            if (openCards.length === 2) {
-                const [firstCard, secondCard] = openCards;
-                if (firstCard.dataset.imageLink === secondCard.dataset.imageLink) {
-                    openCards.forEach(card => {
-                        setTimeout(() => {
-                            card.classList.remove('open');
-                            card.classList.add('matched');
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+            botPlay();
+        }, 1000);
 
-                            if (isAllMatched()) {
-                                setTimeout(() => {
-                                    isStarted = false;
-                                    openSelectionStartScreen();
-                                }, 1000);
-                            }
-                        }, 750);
-                    });
-                } else {
-                    setTimeout(() => {
-                        closeOpenCards();
-                        setOtherPlayer();
-                    }, 1500);
-                }
-            }
+        if (getOpenCards().length >= 2) {
+            checkOpenCards()
         }
     }
 }
