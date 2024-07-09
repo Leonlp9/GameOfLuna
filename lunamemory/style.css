@@ -111,6 +111,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    z-index: 99999;
 }
 
 .buttons {
@@ -159,244 +160,6 @@ h1 {
 }
 
 
-
-
-#settings-icon {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 30px;
-    color: var(--clicker-color);
-    text-shadow: 2px 2px 0 #404040;
-}
-
-#settings-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-#settings-menu-content {
-    position: fixed;
-    left: 50%;
-    bottom: -50%;
-    transform: translateX(-50%) translateY(50%);
-    width: clamp(300px, 90%, 600px);
-    height: clamp(100px, 75%, 900px);
-    border-radius: 15px;
-    background: #404040;
-    color: white;
-    font-size: 20px;
-    z-index: 100;
-    font-family: 'Madimi One', cursive;
-    overflow-y: scroll;
-    transition: bottom 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-    border: 5px solid #2e2e2e;
-    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
-}
-
-#settings-menu-content::-webkit-scrollbar {
-    width: 15px;
-}
-
-#settings-menu-content::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 10px;
-}
-
-.settingsVisible #settings-menu {
-    display: block;
-}
-
-.settingsAnimation#settings-menu-content {
-    bottom: 50%;
-}
-
-#settings-content > div {
-    padding: 20px;
-    border-bottom: 1px solid #555;
-}
-
-#settings-content > div:last-child {
-    border-bottom: none;
-}
-
-.setting-container.button {
-    cursor: pointer;
-    transition: background 0.1s;
-    text-shadow: 2px 2px 0 #404040;
-}
-
-.setting-container.button:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.setting-container.button.warning {
-    color: #dd4c4c;
-    cursor: pointer;
-    transition: background 0.1s;
-    text-shadow: 2px 2px 0 #970f0f;
-}
-
-.setting-container.button.warning:hover {
-    text-decoration: underline;
-    background: rgba(255, 0, 0, 0.1);
-}
-
-.setting-container.button.warning-settings {
-    color: #dd4c4c;
-    cursor: pointer;
-    transition: background 0.1s;
-    text-shadow: 2px 2px 0 #970f0f;
-}
-
-.setting-container.button.warning-settings:hover {
-    text-decoration: underline;
-    background: rgba(255, 0, 0, 0.1);
-}
-
-
-#settings-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 30px;
-    text-shadow: 2px 2px 0 #a3a3a3;
-}
-
-#settings-title {
-    text-align: center;
-    font-size: 30px;
-    margin-top: 20px;
-    font-family: 'Madimi One', cursive;
-    text-shadow: 2px 2px 0 #a3a3a3;
-}
-
-.setting-container {
-    display: flex;
-    align-items: center;
-}
-
-/*color input*/
-.setting-container input {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    margin: 0 10px;
-    cursor: pointer;
-    background: none;
-}
-
-#backgrounds{
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.setting-container.radio {
-    flex-direction: column;
-}
-
-.setting-container.radio div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.setting-container.radio input[type="radio"] {
-    display: none;
-}
-
-.setting-container.radio input[type="radio"] + label img {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    image-rendering: pixelated;
-    border: 1px solid transparent;
-}
-
-.setting-container.radio input[type="radio"]:checked + label img {
-    border: 2px solid #f75218;
-}
-
-#settings-content > div > input[type="range"] {
-    -webkit-appearance: none; /* Entfernt den Standard-Style in Chrome */
-    width: 100%;
-    height: 15px;
-    border-radius: 8px;
-    background: #d3d3d3;
-    outline: none;
-}
-
-#settings-content > div > input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Entfernt den Standard-Style in Chrome */
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: var(--clicker-color);
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-#settings-content > div > input[type="range"]:hover::-webkit-slider-thumb {
-    background: var(--clicker-color);
-}
-
-#settings-content > div > input[type="checkbox"] {
-    appearance: none;
-    background-color: #d3d3d3;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    position: relative;
-    outline: none;
-    border-radius: 5px;
-}
-
-#settings-content > div > input[type="checkbox"]:checked {
-    background-color: var(--clicker-color);
-}
-
-#settings-content > div > input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    width: 9px;
-    height: 16px;
-
-    border: solid var(--clicker-color);
-    filter: brightness(0.5);
-
-    border-width: 0 3px 3px 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -65%) rotate(45deg);
-}
-
-.setting-container.range {
-    flex-direction: column
-}
-
-.setting-container.checkbox {
-    justify-content: space-between;
-}
-
-.setting-container.color {
-    justify-content: space-between;
-}
-
-.setting-container.spacer {
-    height: 40px;
-}
-
 .ask-menu {
     padding: 20px;
     border-radius: 15px;
@@ -433,39 +196,39 @@ h1 {
     line-height: 1.2em;
 }
 
-.circle.bot{
+.bot{
     color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.circle.bot.easy{
+.bot.easy{
     background: #68b668;
     border: 5px solid #5aa95a;
 }
 
-.circle.bot.medium{
+.bot.medium{
     background: #f1c40f;
     border: 5px solid #d4b30f;
 }
 
-.circle.bot.hard{
+.bot.hard{
     background: #e74c3c;
     border: 5px solid #d93838;
 }
 
-.circle.bot.expert{
+.bot.expert{
     background: #8e44ad;
     border: 5px solid #7d3aa0;
 }
 
-.circle.player2{
+.player2{
     background: #e04040;
     color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border: 5px solid #d93838;
 }
 
-.circle.player1{
+.player1{
     background: #4090e0;
     color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -493,4 +256,23 @@ h1 {
         opacity: 0;
         transform: translate(-50%, -50%) scale(0);
     }
+}
+
+#punkteTafel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+}
+
+#punkteTafel > div {
+    font-size: 20px;
+    font-family: 'Madimi One', cursive;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    filter: drop-shadow(5px 5px 1px rgba(0, 0, 0, 0.25));
 }

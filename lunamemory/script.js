@@ -3,6 +3,11 @@ let isStarted = false;
 let mode = 'singleplayer';
 let botDifficulty = 'easy';
 let whoIsPlaying = 'player1';
+let points = {
+    player1: 0,
+    player2: 0,
+    bot: 0
+}
 
 //rechtsklick wird zu linksklick
 document.addEventListener('contextmenu', event => {
@@ -71,6 +76,14 @@ function checkOpenCards() {
                 }
             }, 750);
         });
+
+        setTimeout(() => {
+            if (mode === 'multiplayer' || mode === 'bot') {
+                points[whoIsPlaying] += 1;
+                document.getElementById(whoIsPlaying + 'Points').textContent = points[whoIsPlaying];
+            }
+        });
+
     } else {
         setOtherPlayer();
         setTimeout(() => {
@@ -127,6 +140,11 @@ function shuffleCards() {
 function placeCards(){
     //delete all cards
     seenCards = {};
+    points = {
+        player1: 0,
+        player2: 0,
+        bot: 0
+    }
     document.getElementById('cards').innerHTML = '';
 
     const randomImageLinks = getRandomImageLinks(cardAmount);
@@ -141,6 +159,34 @@ function placeCards(){
     setTimeout(() => {
         playSwitchToPlayerAnimation('Spieler 1\nist drann!')
     },500)
+
+    const tafel = document.getElementById("punkteTafel")
+    tafel.innerHTML = ""
+
+    //tafel mit spieler 1 und spieler 2 füllen oder bot
+    if (mode === 'multiplayer') {
+        const player1 = document.createElement('div');
+        player1.classList.add('player1');
+        player1.innerHTML = 'Spieler 1: <span id="player1Points">0</span>';
+        tafel.appendChild(player1);
+
+        const player2 = document.createElement('div');
+        player2.classList.add('player2');
+        player2.innerHTML = 'Spieler 2: <span id="player2Points">0</span>';
+        tafel.appendChild(player2);
+    }
+    if (mode === 'bot') {
+        const player1 = document.createElement('div');
+        player1.classList.add('player1');
+        player1.innerHTML = 'Spieler: <span id="player1Points">0</span>';
+        tafel.appendChild(player1);
+
+        const bot = document.createElement('div');
+        bot.classList.add('bot');
+        bot.classList.add(botDifficulty);
+        bot.innerHTML = 'Bot: <span id="botPoints">0</span>';
+        tafel.appendChild(bot);
+    }
 }
 
 function getOpenCards() {
