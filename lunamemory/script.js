@@ -35,11 +35,20 @@ function getRandomImageLinks(amount) {
 function setOtherPlayer() {
     if (mode === 'multiplayer') {
         whoIsPlaying = whoIsPlaying === 'player1' ? 'player2' : 'player1';
+
+        setTimeout(() => {
+            playSwitchToPlayerAnimation(whoIsPlaying === 'player1' ? 'Spieler 1\nist drann!' : 'Spieler 2\nist drann!')
+        }, 500);
+
     }else if (mode === 'bot') {
         whoIsPlaying = whoIsPlaying === 'player1' ? 'bot' : 'player1';
         if (botDifficulty === 'medium') {
             forgetOneRandomCard();
         }
+
+        setTimeout(() => {
+            playSwitchToPlayerAnimation(whoIsPlaying === 'player1' ? 'Spieler\nist drann!' : 'Bot\nist drann!')
+        }, 500);
     }else if (mode === 'singleplayer') {
         whoIsPlaying = 'player1';
     }
@@ -70,9 +79,9 @@ function checkOpenCards() {
             if (mode === 'bot') {
                 setTimeout(() => {
                     botPlay();
-                }, 800);
+                }, 1000);
             }
-        }, 1500);
+        }, 2000);
     }
 }
 
@@ -128,6 +137,10 @@ function placeCards(){
     });
 
     shuffleCards();
+
+    setTimeout(() => {
+        playSwitchToPlayerAnimation('Spieler 1\nist drann!')
+    },500)
 }
 
 function getOpenCards() {
@@ -169,7 +182,7 @@ function openSelectionStartScreen() {
         mode = 'bot';
         whoIsPlaying = 'player1';
 
-        openAskMenu("Schwierigkeit", ['Easy', 'Medium', 'Hard', 'Impossible'], [
+        openAskMenu("Schwierigkeit", ['Easy', 'Medium', 'Hard', 'Expert'], [
             () => {
                 botDifficulty = 'easy';
                 isStarted = true;
@@ -186,7 +199,7 @@ function openSelectionStartScreen() {
                 placeCards();
             },
             () => {
-                botDifficulty = 'impossible';
+                botDifficulty = 'expert';
                 isStarted = true;
                 placeCards();
             }
@@ -242,7 +255,7 @@ function openSelectionStartScreen() {
     cardAmountInput.id = 'card-amount-input';
     cardAmountInput.type = 'number';
     cardAmountInput.min = 2;
-    cardAmountInput.max = 20;
+    cardAmountInput.max = cardImageLinks.length;
     cardAmountInput.value = cardAmount;
     cardAmountInput.addEventListener('change', () => {
         cardAmount = cardAmountInput.value;
@@ -318,8 +331,6 @@ function forgetOneRandomCard() {
     const cards = seenCards[randomImageLink];
     const randomCard = cards[Math.floor(Math.random() * cards.length)];
     seenCards[randomImageLink] = cards.filter(card => card !== randomCard);
-
-    console.log('Bot forgot a card' + randomImageLink);
 }
 
 function getRemainingCards() {
@@ -344,7 +355,7 @@ function botPlay() {
 
         let cardToOpen = null;
 
-        if (botDifficulty === 'impossible' || botDifficulty === 'hard' || botDifficulty === 'medium') {
+        if (botDifficulty === 'expert' || botDifficulty === 'hard' || botDifficulty === 'medium') {
             //check ob es 2 gleiche karten gibt im seenCards
             const imageLinks = Object.keys(seenCards);
             imageLinks.forEach(imageLink => {
@@ -360,7 +371,7 @@ function botPlay() {
             });
         }
 
-        if (botDifficulty === 'impossible') {
+        if (botDifficulty === 'expert') {
             if (!cardToOpen) {
                 //eine zufällige karte öffnen, von dennen die noch nicht in seenCards sind
                 const notMatchedCards = getRemainingCardsNotSeen();
@@ -382,11 +393,30 @@ function botPlay() {
         if (interval) clearInterval(interval);
         interval = setInterval(() => {
             botPlay();
-        }, 1000);
+        }, 1250);
 
         if (getOpenCards().length >= 2) {
             checkOpenCards()
         }
     }
 }
+
+function playSwitchToPlayerAnimation(text){
+    const circle = document.createElement('div');
+    circle.classList.add('circle');
+    circle.classList.add(whoIsPlaying)
+    if (mode === 'bot') {
+        circle.classList.add(botDifficulty);
+    }
+
+    document.body.appendChild(circle);
+
+    circle.innerText = text;
+
+    //nach 3s löschen
+    setTimeout(() => {
+        circle.remove()
+    }, 3000)
+}
+
 openSelectionStartScreen()
