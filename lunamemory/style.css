@@ -12,8 +12,8 @@ body {
 
 .card {
     position: relative;
-    width: clamp(100px, 22vw, 200px);
-    height: clamp(100px, 22vw, 200px);
+    width: clamp(100px, 28vw, 200px);
+    height: clamp(100px, 28vw, 200px);
     perspective: 1000px;
     transform-style: preserve-3d;
     transition: transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -88,8 +88,8 @@ body {
     align-content: center;
     gap: 10px;
     min-height: calc(100vh - 40px);
-    padding-right: 40px;
-    padding-left: 40px;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .background {
@@ -191,7 +191,7 @@ h1 {
     font-size: 2em;
     font-family: 'Jua', sans-serif;
     animation: circleAnimation 2s cubic-bezier(0.4, 0.2, 0.2, 1);
-    z-index: 100;
+    z-index: 100000;
     opacity: 0;
     text-align: center;
     font-weight: bold;
