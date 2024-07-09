@@ -51,7 +51,8 @@
 
     const links = [
         "/GameOfLuna/lunaclicker",
-        "/GameOfLuna/lunamemory"
+        "/GameOfLuna/lunamemory",
+        "/GameOfLuna/lunaschach"
     ]
 
     function buildGameCard(link) {
@@ -106,8 +107,10 @@
             });
     });
 
+    let loadingAnimation = null;
+
     function playInAnimation(callback) {
-        const loadingAnimation = document.createElement("div");
+        loadingAnimation = document.createElement("div");
         loadingAnimation.style.position = "fixed";
         loadingAnimation.style.top = "0";
         loadingAnimation.style.left = "0";
@@ -124,10 +127,17 @@
         }, 0);
 
         setTimeout(function () {
-            loadingAnimation.remove()
             callback()
         }, 250);
     }
+
+    //event, wenn die seite wieder aufgerufen wurde (z.B. durch die zurück wisch geste, wo das die vorherige seite wieder angezeigt wird ohne sie neu zu laden
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+            loadingAnimation.remove();
+        }
+    });
+
 </script>
 
 </html>
