@@ -307,12 +307,19 @@ function openCard(element) {
 }
 
 function forgetOneRandomCard() {
+    //lösche eine zufällige karte aus seenCards welche noch nicht matched ist
     const imageLinks = Object.keys(seenCards);
-    const randomImageLink = imageLinks[Math.floor(Math.random() * imageLinks.length)];
-    const randomCard = seenCards[randomImageLink][Math.floor(Math.random() * seenCards[randomImageLink].length)];
-    seenCards[randomImageLink].splice(seenCards[randomImageLink].indexOf(randomCard), 1);
+    const notMatchedImageLinks = imageLinks.filter(imageLink => {
+        const cards = seenCards[imageLink];
+        return !cards.some(card => card.classList.contains('matched'));
+    });
+    if (notMatchedImageLinks.length === 0) return;
+    const randomImageLink = notMatchedImageLinks[Math.floor(Math.random() * notMatchedImageLinks.length)];
+    const cards = seenCards[randomImageLink];
+    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+    seenCards[randomImageLink] = cards.filter(card => card !== randomCard);
 
-    console.log('forget', randomCard);
+    console.log('Bot forgot a card' + randomImageLink);
 }
 
 function getRemainingCards() {
@@ -341,14 +348,14 @@ function botPlay() {
             //check ob es 2 gleiche karten gibt im seenCards
             const imageLinks = Object.keys(seenCards);
             imageLinks.forEach(imageLink => {
-                if (seenCards[imageLink].length >= 2) {
-                    cardToOpen = seenCards[imageLink][0];
-                    if (cardToOpen.classList.contains('open')) {
-                        cardToOpen = seenCards[imageLink][1];
+                //wenn es 2 gleiche karten gibt und eine der beiden oder beide nicht offen sind und beide nicht matched haben, dann öffne die karte der beiden, welche noch kein open hat und wenn beide kein open haben dann öffne eine zufällige
+                if (seenCards[imageLink].length === 2) {
+                    const [firstCard, secondCard] = seenCards[imageLink];
+                    if (!firstCard.classList.contains('open') && !firstCard.classList.contains('matched')) {
+                        cardToOpen = firstCard;
+                    } else if (!secondCard.classList.contains('open') && !secondCard.classList.contains('matched')) {
+                        cardToOpen = secondCard;
                     }
-                }
-                if (cardToOpen && (cardToOpen.classList.contains('open') || cardToOpen.classList.contains('matched'))) {
-                    cardToOpen = null;
                 }
             });
         }
@@ -362,7 +369,6 @@ function botPlay() {
         }
 
         if (botDifficulty === 'easy' || !cardToOpen) {
-            console.log('random')
             if (!cardToOpen){
                 const notMatchedCards = getRemainingCards();
                 cardToOpen = notMatchedCards[Math.floor(Math.random() * notMatchedCards.length)];
