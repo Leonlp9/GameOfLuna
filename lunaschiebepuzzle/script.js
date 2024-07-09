@@ -29,6 +29,7 @@ function getRandomFieldIdNearEmpty() {
 
 function createBoard() {
     started = false;
+    moves = 0;
     board = [];
     for (let i = 0; i < size; i++) {
         board.push([]);
