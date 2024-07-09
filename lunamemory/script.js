@@ -463,6 +463,14 @@ function playSwitchToPlayerAnimation(text){
     setTimeout(() => {
         circle.remove()
     }, 3000)
+
+    //allen divs aus punkteTafel die klasse thinking entfernen und der klasse des aktuellen spielers hinzufügen
+    const tafel = document.getElementById("punkteTafel")
+    tafel.childNodes.forEach(div => {
+        div.classList.remove('thinking')
+
+    })
+    tafel.querySelector('.' + whoIsPlaying).classList.add('thinking')
 }
 
 openSelectionStartScreen()

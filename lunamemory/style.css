@@ -260,6 +260,31 @@ h1 {
     }
 }
 
+.thinking{
+    position: relative;
+}
+
+.thinking:after {
+    content: "🤔";
+    font-size: 2em;
+    animation: thinking 2s infinite cubic-bezier(0.4, 0.2, 0.2, 1);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+}
+@keyframes thinking {
+    0% {
+        transform: translate(-50%, 80%);
+    }
+    50% {
+        transform: translate(-50%, 60%);
+    }
+    100% {
+        transform: translate(-50%, 80%);
+    }
+}
+
 #punkteTafel {
     width: 100%;
     display: flex;
