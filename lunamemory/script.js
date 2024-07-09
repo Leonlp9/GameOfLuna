@@ -187,6 +187,16 @@ function placeCards(){
         bot.innerHTML = 'Bot: <span id="botPoints">0</span>';
         tafel.appendChild(bot);
     }
+
+    //stop game button bottom center
+    const stopGameButton = document.createElement('button');
+    stopGameButton.classList.add('stop-game-button');
+    stopGameButton.id = 'stop-game-button';
+    stopGameButton.innerHTML = 'Spiel beenden <i class="fas fa-times"></i>';
+    stopGameButton.addEventListener('click', () => {
+        openSelectionStartScreen();
+    });
+    document.body.appendChild(stopGameButton);
 }
 
 function getOpenCards() {
@@ -206,11 +216,27 @@ function isAllMatched() {
 function openSelectionStartScreen() {
     isStarted = false;
 
+    //delete end game element if exists
+    const stopGameButton = document.getElementById('stop-game-button');
+    if (stopGameButton) stopGameButton.remove();
+
     const background = document.createElement('div');
     background.classList.add('background');
 
     const selectionStartScreen = document.createElement('div');
     selectionStartScreen.classList.add('selection-start-screen');
+    selectionStartScreen.style.position = 'relative';
+
+    const backHome = document.createElement('button');
+    backHome.classList.add('back-home');
+    backHome.style.position = 'absolute';
+    backHome.style.top = '10px';
+    backHome.style.left = '10px';
+    backHome.innerHTML = '<i class="fas fa-home"></i>';
+    backHome.addEventListener('click', () => {
+        location.href = '../index.html';
+    });
+    selectionStartScreen.appendChild(backHome);
 
     const title = document.createElement('h1');
     title.textContent = 'Memory';
@@ -366,17 +392,20 @@ function openCard(element) {
 }
 
 function forgetOneRandomCard() {
-    //lösche eine zufällige karte aus seenCards welche noch nicht matched ist
-    const imageLinks = Object.keys(seenCards);
-    const notMatchedImageLinks = imageLinks.filter(imageLink => {
-        const cards = seenCards[imageLink];
-        return !cards.some(card => card.classList.contains('matched'));
-    });
-    if (notMatchedImageLinks.length === 0) return;
-    const randomImageLink = notMatchedImageLinks[Math.floor(Math.random() * notMatchedImageLinks.length)];
-    const cards = seenCards[randomImageLink];
-    const randomCard = cards[Math.floor(Math.random() * cards.length)];
-    seenCards[randomImageLink] = cards.filter(card => card !== randomCard);
+    //zufällig 1 oder 2 mal wiederholen
+    for (let i = 0; i < Math.floor(Math.random() * 2) + 1; i++) {
+        //lösche eine zufällige karte aus seenCards welche noch nicht matched ist
+        const imageLinks = Object.keys(seenCards);
+        const notMatchedImageLinks = imageLinks.filter(imageLink => {
+            const cards = seenCards[imageLink];
+            return !cards.some(card => card.classList.contains('matched'));
+        });
+        if (notMatchedImageLinks.length === 0) return;
+        const randomImageLink = notMatchedImageLinks[Math.floor(Math.random() * notMatchedImageLinks.length)];
+        const cards = seenCards[randomImageLink];
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+        seenCards[randomImageLink] = cards.filter(card => card !== randomCard);
+    }
 }
 
 function getRemainingCards() {
