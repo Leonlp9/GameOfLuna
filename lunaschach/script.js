@@ -1,14 +1,4 @@
-let board = [
-    ['r-1', 'n-1', 'b-1', 'q-1', 'k-1', 'b-2', 'n-2', 'r-2'],
-    ['p-1', 'p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-7', 'p8'],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['P-1', 'P-2', 'P-3', 'P-4', 'P-5', 'P-6', 'P-7', 'P-8'],
-    ['R-1', 'N-1', 'B-1', 'Q-1', 'K-1', 'B-2', 'N-2', 'R-2']
-];
-
+let board = [];
 let isOut = []
 
 const textures = {
@@ -27,6 +17,7 @@ const textures = {
 };
 
 let turn = "white";
+let botDifficulty = null;
 
 function getPieceAtPosition(row, col) {
     return board[row][col];
@@ -281,8 +272,64 @@ function playSoundEffekt(sound) {
     audio.play().then();
 }
 
+function move(feld) {
+    const selected = document.getElementsByClassName("selected")[0];
+    const selectedFigureId = selected.id;
+    const oldPos = getLocationOfFigureId(selectedFigureId);
+    const newPos = [8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97];
+    playSoundEffekt("sounds/move.mp3")
+
+    //wenn eine figur geschlagen wurde
+    if (board[newPos[0]][newPos[1]] !== "") {
+        setTimeout(() => {
+            playSoundEffekt("sounds/hit.mp3")
+        }, 400)
+    }
+
+    //wenn ein könig geschlagen wurde
+    if (board[newPos[0]][newPos[1]].toUpperCase().includes("K")) {
+        setTimeout(() => {
+            playSoundEffekt("sounds/game-end.mp3")
+        }, 400)
+    }
+
+    hitFigureAtPosition(newPos[0], newPos[1]);
+
+    board[oldPos[0]][oldPos[1]] = "";
+    board[newPos[0]][newPos[1]] = selectedFigureId;
+
+    //wenn es ein bauer ist und an der anderen seite angekommen ist dann
+    askForTransformation(selectedFigureId);
+
+    updatePositions();
+
+    turn = turn === "white" ? "black" : "white";
+
+    hideAllValidFields()
+    removeSelectedFromAllFields();
+
+    botPlay();
+}
+
 function buildBrett(){
+    isOut = [];
+    botDifficulty = null;
+    turn = "white";
+    board = [
+        ['r-1', 'n-1', 'b-1', 'q-1', 'k-1', 'b-2', 'n-2', 'r-2'],
+        ['p-1', 'p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-7', 'p8'],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['P-1', 'P-2', 'P-3', 'P-4', 'P-5', 'P-6', 'P-7', 'P-8'],
+        ['R-1', 'N-1', 'B-1', 'Q-1', 'K-1', 'B-2', 'N-2', 'R-2']
+    ];
+
     const brett = document.getElementById("schachbrett");
+
+    brett.innerHTML = "";
+
     for(let i = 0; i < 8; i++){
         const reihe = document.createElement("div");
         reihe.classList.add("reihe");
@@ -293,53 +340,22 @@ function buildBrett(){
             reihe.appendChild(feld);
             feld.addEventListener("click", function(){
                 //wenn das feld die classe valid hat dann bewege die figur
-                if(feld.classList.contains("valid")){
-                    const selected = document.getElementsByClassName("selected")[0];
-                    const selectedFigureId = selected.id;
-                    const oldPos = getLocationOfFigureId(selectedFigureId);
-                    const newPos = [8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97];
-                    playSoundEffekt("sounds/move.mp3")
 
-                    //wenn eine figur geschlagen wurde
-                    if (board[newPos[0]][newPos[1]] !== "") {
-                        setTimeout(() => {
-                            playSoundEffekt("sounds/hit.mp3")
-                        }, 400)
+                if (botDifficulty === null || turn === "white") {
+                    if (feld.classList.contains("valid")) {
+                        move(feld);
+                    } else if (getFigureElementByFigureID(getFigureIDAtField(feld.id)) && getFigureColorOnPosition(8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97) === turn) {
+
+                        //wenn es die gleiche farbe ist
+                        removeSelectedFromAllFields();
+
+                        getFigureElementByFigureID(getFigureIDAtField(feld.id)).classList.toggle("selected");
+                        showMovesOfFigure(getFigureIDAtField(feld.id));
+
+                    } else {
+                        removeSelectedFromAllFields();
+                        hideAllValidFields();
                     }
-
-                    //wenn ein könig geschlagen wurde
-                    if (board[newPos[0]][newPos[1]].toUpperCase().includes("K")) {
-                        setTimeout(() => {
-                            playSoundEffekt("sounds/game-end.mp3")
-                        }, 400)
-                    }
-
-                    hitFigureAtPosition(newPos[0], newPos[1]);
-
-                    board[oldPos[0]][oldPos[1]] = "";
-                    board[newPos[0]][newPos[1]] = selectedFigureId;
-
-                    //wenn es ein bauer ist und an der anderen seite angekommen ist dann
-                    askForTransformation(selectedFigureId);
-
-                    updatePositions();
-
-                    turn = turn === "white" ? "black" : "white";
-
-                    hideAllValidFields()
-                    removeSelectedFromAllFields();
-                }else
-                if (getFigureElementByFigureID(getFigureIDAtField(feld.id)) && getFigureColorOnPosition(8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97) === turn){
-
-                    //wenn es die gleiche farbe ist
-                    removeSelectedFromAllFields();
-
-                    getFigureElementByFigureID(getFigureIDAtField(feld.id)).classList.toggle("selected");
-                    showMovesOfFigure(getFigureIDAtField(feld.id));
-
-                }else {
-                    removeSelectedFromAllFields();
-                    hideAllValidFields();
                 }
             });
 
@@ -400,6 +416,48 @@ function buildBrett(){
     }
 
     updatePositions();
+}
+
+function botPlay(){
+    if (turn === "black" && botDifficulty !== null) {
+        let schwarzeFiguren = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (getFigureColorOnPosition(i, j) === "black") {
+                    schwarzeFiguren.push([i, j]);
+                }
+            }
+        }
+        //shuffle the array
+        schwarzeFiguren.sort(() => Math.random() - 0.5);
+
+        let ofFigures = [];
+        let validMoves = [];
+        for (let i = 0; i < schwarzeFiguren.length; i++) {
+            const validFields = getValidFieldsToMoveOfFigure(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+            if (validFields.length > 0) {
+                validMoves.push([schwarzeFiguren[i], validFields]);
+                ofFigures.push(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+            }
+        }
+
+        if (validMoves.length > 0) {
+            let randomFigure = ofFigures[Math.floor(Math.random() * ofFigures.length)];
+
+            const figureElement = getFigureElementByFigureID(randomFigure);
+            figureElement.classList.add("selected");
+
+            showMovesOfFigure(randomFigure)
+
+            setTimeout(() => {
+
+                let allValidFields = document.querySelectorAll(".valid");
+                let randomValidField = allValidFields[Math.floor(Math.random() * allValidFields.length)];
+                move(randomValidField);
+
+            }, 1000)
+        }
+    }
 }
 
 function updatePositions(){
@@ -519,4 +577,92 @@ function askForTransformation(id) {
     }
 }
 
+function openStartMenu(){
+    const startMenuBackground = document.createElement("div");
+    startMenuBackground.classList.add("startMenuBackground");
+    document.body.appendChild(startMenuBackground);
+
+    const startMenu = document.createElement("div");
+    startMenu.classList.add("startMenu");
+    startMenuBackground.appendChild(startMenu);
+
+    const backHome = document.createElement('button');
+    backHome.classList.add('back-home');
+    backHome.style.position = 'absolute';
+    backHome.style.top = '10px';
+    backHome.style.left = '10px';
+    backHome.innerHTML = '<i class="fas fa-home"></i>';
+    backHome.addEventListener('click', () => {
+        location.href = '../index.html';
+    });
+    startMenu.appendChild(backHome);
+
+    const title = document.createElement("div");
+    title.classList.add("title");
+    title.innerHTML = "Schach";
+    startMenu.appendChild(title);
+
+    const startButtons = document.createElement("div");
+    startButtons.classList.add("startButtons");
+    startMenu.appendChild(startButtons);
+
+    const startButtonPlayer = document.createElement("button");
+    startButtonPlayer.classList.add("startButton");
+    startButtonPlayer.innerHTML = "Start Spieler<i class='fas fa-user'></i>";
+    startButtonPlayer.addEventListener("click", function(){
+        document.body.removeChild(startMenuBackground);
+        buildBrett();
+    });
+
+    const startButtonComputer = document.createElement("button");
+    startButtonComputer.classList.add("startButton");
+    startButtonComputer.innerHTML = "Start Bot<i class='fas fa-robot'></i>";
+    startButtonComputer.addEventListener("click", function(){
+        startMenu.innerHTML = "";
+
+        const schwierigkeit = document.createElement("div");
+        schwierigkeit.classList.add("title");
+        schwierigkeit.innerHTML = "Schwierigkeit";
+        startMenu.appendChild(schwierigkeit);
+
+        const schwierigkeitButtons = document.createElement("div");
+        schwierigkeitButtons.classList.add("startButtons");
+        startMenu.appendChild(schwierigkeitButtons);
+
+        const easyButton = document.createElement("button");
+        easyButton.classList.add("startButton");
+        easyButton.innerHTML = "Leicht";
+        easyButton.addEventListener("click", function(){
+            document.body.removeChild(startMenuBackground);
+            buildBrett();
+            botDifficulty = "easy";
+        });
+
+        const mediumButton = document.createElement("button");
+        mediumButton.classList.add("startButton");
+        mediumButton.innerHTML = "Mittel";
+        mediumButton.addEventListener("click", function(){
+        });
+
+        const hardButton = document.createElement("button");
+        hardButton.classList.add("startButton");
+        hardButton.innerHTML = "Schwer";
+        hardButton.addEventListener("click", function(){
+        });
+
+        schwierigkeitButtons.appendChild(easyButton);
+        schwierigkeitButtons.appendChild(mediumButton);
+        schwierigkeitButtons.appendChild(hardButton);
+
+
+
+    });
+
+    startButtons.appendChild(startButtonPlayer);
+    startButtons.appendChild(startButtonComputer);
+
+}
+
 buildBrett()
+
+openStartMenu()
