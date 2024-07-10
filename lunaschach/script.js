@@ -1,13 +1,28 @@
 let board = [
-    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    ['r-1', 'n-1', 'b-1', 'q-1', 'k-1', 'b-2', 'n-2', 'r-2'],
+    ['p-1', 'p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-7', 'p8'],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
-    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+    ['P-1', 'P-2', 'P-3', 'P-4', 'P-5', 'P-6', 'P-7', 'P-8'],
+    ['R-1', 'N-1', 'B-1', 'Q-1', 'K-1', 'B-2', 'N-2', 'R-2']
 ];
+
+const textures = {
+    'r': 'img/R-Black.png',
+    'n': 'img/N-Black.png',
+    'b': 'img/B-Black.png',
+    'q': 'img/Q-Black.png',
+    'k': 'img/K-Black.png',
+    'p': 'img/P-Black.png',
+    'R': 'img/R-White.png',
+    'N': 'img/N-White.png',
+    'B': 'img/B-White.png',
+    'Q': 'img/Q-White.png',
+    'K': 'img/K-White.png',
+    'P': 'img/P-White.png'
+};
 
 function getPieceAtPosition(row, col) {
     return board[row][col];
@@ -28,9 +43,11 @@ function buildBrett(){
 
             const figur = getPieceAtPosition(i, j);
             if(figur){
-                const img = document.createElement("img");
+                const img = document.createElement("div");
                 img.classList.add("schachfigur");
-                img.src = `https://cdn-icons-png.flaticon.com/512/3411/3411055.png`;
+                img.style.backgroundImage = `url(${textures[figur[0]]})`;
+                img.style.backgroundPosition = "center";
+                img.style.backgroundSize = "cover";
                 feld.appendChild(img);
             }
         }
