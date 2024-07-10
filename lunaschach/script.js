@@ -92,7 +92,7 @@ function removeSelectedFromAllFields(){
     }
 }
 
-function showMovesOfFigure(id){
+function showMovesOfFigure(id, playSound = true){
     hideAllValidFields()
 
     const validFields = getValidFieldsToMoveOfFigure(id);
@@ -103,8 +103,9 @@ function showMovesOfFigure(id){
             field.classList.add("hit");
         }
     }
-
-    playSoundEffekt("sounds/select.mp3")
+    if (playSound) {
+        playSoundEffekt("sounds/select.mp3")
+    }
 }
 
 function getValidFieldsToMoveOfFigure(id){
@@ -428,37 +429,245 @@ function botPlay(){
                 }
             }
         }
-        //shuffle the array
-        schwarzeFiguren.sort(() => Math.random() - 0.5);
 
-        let ofFigures = [];
-        let validMoves = [];
-        for (let i = 0; i < schwarzeFiguren.length; i++) {
-            const validFields = getValidFieldsToMoveOfFigure(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
-            if (validFields.length > 0) {
-                validMoves.push([schwarzeFiguren[i], validFields]);
-                ofFigures.push(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+        if (botDifficulty === "easy") {
+            //shuffle the array
+            schwarzeFiguren.sort(() => Math.random() - 0.5);
+
+            let ofFigures = [];
+            let validMoves = [];
+            for (let i = 0; i < schwarzeFiguren.length; i++) {
+                const validFields = getValidFieldsToMoveOfFigure(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+                if (validFields.length > 0) {
+                    validMoves.push([schwarzeFiguren[i], validFields]);
+                    ofFigures.push(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+                }
             }
-        }
 
-        if (validMoves.length > 0) {
-            let randomFigure = ofFigures[Math.floor(Math.random() * ofFigures.length)];
+            if (validMoves.length > 0) {
+                let randomFigure = ofFigures[Math.floor(Math.random() * ofFigures.length)];
 
-            const figureElement = getFigureElementByFigureID(randomFigure);
-            figureElement.classList.add("selected");
+                const figureElement = getFigureElementByFigureID(randomFigure);
+                figureElement.classList.add("selected");
 
-            showMovesOfFigure(randomFigure)
+                showMovesOfFigure(randomFigure)
 
-            setTimeout(() => {
+                setTimeout(() => {
 
-                let allValidFields = document.querySelectorAll(".valid");
-                let randomValidField = allValidFields[Math.floor(Math.random() * allValidFields.length)];
-                move(randomValidField);
+                    let allValidFields = document.querySelectorAll(".valid");
+                    let randomValidField = allValidFields[Math.floor(Math.random() * allValidFields.length)];
+                    move(randomValidField);
 
-            }, 1000)
+                }, 1000)
+            }
+        }else if(botDifficulty === "medium") {
+            //TODO vermeide das schlagen von eigenen Figuren und priorisiere das schlagen von gegnerischen Figuren
+
+            //shuffle the array
+            schwarzeFiguren.sort(() => Math.random() - 0.5);
+
+            let ofFigures = [];
+            let validMoves = []
+            for (let i = 0; i < schwarzeFiguren.length; i++) {
+                const validFields = getValidFieldsToMoveOfFigure(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+                if (validFields.length > 0) {
+                    ofFigures.push(board[schwarzeFiguren[i][0]][schwarzeFiguren[i][1]]);
+                }
+            }
+
+            if (ofFigures.length > 0) {
+                //check for hit
+                let hitFigures = [];
+                for (let i = 0; i < ofFigures.length; i++) {
+                    showMovesOfFigure(ofFigures[i], false);
+                    let allValidFields = document.querySelectorAll(".valid");
+                    for (let j = 0; j < allValidFields.length; j++) {
+                        if (allValidFields[j].classList.contains("hit")) {
+                            hitFigures.push(ofFigures[i]);
+                        }
+                    }
+                }
+                if (hitFigures.length > 0) {
+                    let randomFigure = hitFigures[Math.floor(Math.random() * hitFigures.length)];
+                    const figureElement = getFigureElementByFigureID(randomFigure);
+                    figureElement.classList.add("selected");
+
+                    showMovesOfFigure(randomFigure)
+
+                    setTimeout(() => {
+
+                        let allValidFields = document.querySelectorAll(".hit");
+                        let randomValidField = allValidFields[Math.floor(Math.random() * allValidFields.length)];
+                        move(randomValidField);
+
+                    }, 1000)
+                } else {
+                    let randomFigure = ofFigures[Math.floor(Math.random() * ofFigures.length)];
+                    const figureElement = getFigureElementByFigureID(randomFigure);
+                    figureElement.classList.add("selected");
+
+                    showMovesOfFigure(randomFigure)
+
+                    setTimeout(() => {
+
+                        let allValidFields = document.querySelectorAll(".valid");
+                        let randomValidField = allValidFields[Math.floor(Math.random() * allValidFields.length)];
+                        move(randomValidField);
+
+                    }, 1000)
+
+                }
+            }
         }
     }
 }
+
+// Add this at the top of your script
+const pieceValues = {
+    'p': 1,
+    'n': 3,
+    'b': 3,
+    'r': 5,
+    'q': 9,
+    'k': 0  // King's value is set to 0 because capturing the king ends the game
+};
+
+// Function to get the value of a piece
+function getValueOfPiece(piece) {
+    return pieceValues[piece.toLowerCase()];
+}
+
+// Function to check if a piece would be in danger after a move
+function isPieceInDangerAfterMove(from, to) {
+    const [fromRow, fromCol] = from;
+    const [toRow, toCol] = to;
+
+    const piece = board[fromRow][fromCol];
+    const pieceColor = getFigureColorOnPosition(fromRow, fromCol);
+
+    // Temporarily move the piece
+    const temp = board[toRow][toCol];
+    board[toRow][toCol] = piece;
+    board[fromRow][fromCol] = "";
+
+    // Check all opponent's moves to see if they can capture the piece
+    let inDanger = false;
+    outerLoop: for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (getFigureColorOnPosition(i, j) !== pieceColor && getFigureColorOnPosition(i, j) !== null) {
+                const opponentMoves = getValidFieldsToMoveOfFigure(board[i][j]);
+                for (const move of opponentMoves) {
+                    if (move[0] === toRow && move[1] === toCol) {
+                        inDanger = true;
+                        break outerLoop;
+                    }
+                }
+            }
+        }
+    }
+
+    // Revert the move
+    board[fromRow][fromCol] = piece;
+    board[toRow][toCol] = temp;
+
+    return inDanger;
+}
+
+// Function to determine if a move would result in a check
+function wouldResultInCheck(from, to) {
+    const [fromRow, fromCol] = from;
+    const [toRow, toCol] = to;
+
+    const piece = board[fromRow][fromCol];
+    const pieceColor = getFigureColorOnPosition(fromRow, fromCol);
+    const opponentColor = pieceColor === "white" ? "black" : "white";
+
+    // Temporarily move the piece
+    const temp = board[toRow][toCol];
+    board[toRow][toCol] = piece;
+    board[fromRow][fromCol] = "";
+
+    // Find the king's position
+    let kingPosition;
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] && board[i][j][0].toLowerCase() === 'k' && getFigureColorOnPosition(i, j) === pieceColor) {
+                kingPosition = [i, j];
+                break;
+            }
+        }
+    }
+
+    // Check all opponent's moves to see if they can capture the king
+    let inCheck = false;
+    outerLoop: for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (getFigureColorOnPosition(i, j) === opponentColor) {
+                const opponentMoves = getValidFieldsToMoveOfFigure(board[i][j]);
+                for (const move of opponentMoves) {
+                    if (move[0] === kingPosition[0] && move[1] === kingPosition[1]) {
+                        inCheck = true;
+                        break outerLoop;
+                    }
+                }
+            }
+        }
+    }
+
+    // Revert the move
+    board[fromRow][fromCol] = piece;
+    board[toRow][toCol] = temp;
+
+    return inCheck;
+}
+
+// Function to determine if a move would result in checkmate
+function wouldResultInCheckmate(from, to) {
+    if (!wouldResultInCheck(from, to)) {
+        return false;
+    }
+
+    const pieceColor = getFigureColorOnPosition(from[0], from[1]);
+    const opponentColor = pieceColor === "white" ? "black" : "white";
+
+    // Temporarily move the piece
+    const temp = board[to[0]][to[1]];
+    board[to[0]][to[1]] = board[from[0]][from[1]];
+    board[from[0]][from[1]] = "";
+
+    // Check if the opponent has any valid moves to get out of check
+    let checkmate = true;
+    outerLoop: for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (getFigureColorOnPosition(i, j) === opponentColor) {
+                const opponentMoves = getValidFieldsToMoveOfFigure(board[i][j]);
+                for (const move of opponentMoves) {
+                    const temp2 = board[move[0]][move[1]];
+                    board[move[0]][move[1]] = board[i][j];
+                    board[i][j] = "";
+                    if (!wouldResultInCheck([move[0], move[1]], move)) {
+                        checkmate = false;
+                    }
+                    board[i][j] = board[move[0]][move[1]];
+                    board[move[0]][move[1]] = temp2;
+                    if (!checkmate) {
+                        break outerLoop;
+                    }
+                }
+            }
+        }
+    }
+
+    // Revert the move
+    board[from[0]][from[1]] = board[to[0]][to[1]];
+    board[to[0]][to[1]] = temp;
+
+    return checkmate;
+}
+
+// Add the methods to the existing botPlay function
+// Check and include these methods in the function that calls them
+
 
 function updatePositions(){
     const figuren = document.getElementsByClassName("schachfigur");
@@ -642,6 +851,9 @@ function openStartMenu(){
         mediumButton.classList.add("startButton");
         mediumButton.innerHTML = "Mittel";
         mediumButton.addEventListener("click", function(){
+            document.body.removeChild(startMenuBackground);
+            buildBrett();
+            botDifficulty = "medium";
         });
 
         const hardButton = document.createElement("button");
