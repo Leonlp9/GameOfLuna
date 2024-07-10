@@ -3,6 +3,7 @@ let shuffles = 100;
 let board = [];
 let moves = 0;
 let started = false;
+let img = new Image();
 
 function getRandomImage() {
     const images = getImagesOfTypes(["object", "skin"])
@@ -39,7 +40,6 @@ function createBoard() {
     }
     board[size - 1][size - 1] = '';
 
-    let img = new Image();
     img.src = "../" + getRandomImage();
     img.onload = function () {
 
@@ -205,6 +205,19 @@ function move(number, ignoreStarted = false) {
         setTimeout(function () {
             const spielfeld = document.getElementById("spielfeld");
             spielfeld.classList.add("solved");
+
+            //das letzte feld unten rechts wo nichts ist wird platziert
+            const feld = document.createElement("div");
+            feld.classList.add("feld");
+            feld.style.width = 100 / size + "%";
+            feld.style.height = 100 / size + "%";
+            feld.style.backgroundImage = `url(${img.src})`;
+            feld.style.backgroundSize = `${size * 100}%`;
+            feld.style.backgroundPosition = `${(size - 1) * (100 / (size - 1))}% ${(size - 1) * (100 / (size - 1))}%`;
+            feld.style.bottom = 0;
+            feld.style.right = 0;
+            spielfeld.appendChild(feld);
+
             setTimeout(function () {
                 openStartMenu()
             }, 1200);

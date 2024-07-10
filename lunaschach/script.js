@@ -80,7 +80,7 @@ function checkIfIsOutsideBoard(row, col){
     return row < 0 || row >= 8 || col < 0 || col >= 8;
 }
 
-function showMovesOfFigure(id){
+function hideAllValidFields(){
     //allen feldern valid entfernen
     const oldValidFields = document.querySelectorAll(".valid");
     for(let i = 0; i < oldValidFields.length; i++){
@@ -89,6 +89,18 @@ function showMovesOfFigure(id){
             oldValidFields[i].classList.remove("hit");
         }
     }
+}
+
+function removeSelectedFromAllFields(){
+    //entferne allen anderen selected
+    const oldSelectedFields = document.getElementsByClassName("selected");
+    for(let i = 0; i < oldSelectedFields.length; i++){
+        oldSelectedFields[i].classList.remove("selected");
+    }
+}
+
+function showMovesOfFigure(id){
+    hideAllValidFields()
 
     const validFields = getValidFieldsToMoveOfFigure(id);
     for(let i = 0; i < validFields.length; i++){
@@ -283,17 +295,17 @@ function buildBrett(){
                     board[oldPos[0]][oldPos[1]] = "";
                     board[newPos[0]][newPos[1]] = selectedFigureId;
                     updatePositions();
-                }
-
+                    hideAllValidFields()
+                    removeSelectedFromAllFields();
+                }else
                 if (getFigureElementByFigureID(getFigureIDAtField(feld.id))){
-                    //entferne allen anderen selected
-                    const oldSelectedFields = document.getElementsByClassName("selected");
-                    for(let i = 0; i < oldSelectedFields.length; i++){
-                        oldSelectedFields[i].classList.remove("selected");
-                    }
+                    removeSelectedFromAllFields();
 
                     getFigureElementByFigureID(getFigureIDAtField(feld.id)).classList.toggle("selected");
                     showMovesOfFigure(getFigureIDAtField(feld.id));
+                }else {
+                    removeSelectedFromAllFields();
+                    hideAllValidFields();
                 }
             });
 
