@@ -26,6 +26,8 @@ const textures = {
     'P': 'img/P-White.png'
 };
 
+let turn = "white";
+
 function getPieceAtPosition(row, col) {
     return board[row][col];
 }
@@ -260,7 +262,6 @@ function getValidFieldsToMoveOfFigure(id){
             }
             break;
     }
-    console.log(validFields);
     return validFields;
 }
 
@@ -295,14 +296,20 @@ function buildBrett(){
                     board[oldPos[0]][oldPos[1]] = "";
                     board[newPos[0]][newPos[1]] = selectedFigureId;
                     updatePositions();
+
+                    turn = turn === "white" ? "black" : "white";
+
                     hideAllValidFields()
                     removeSelectedFromAllFields();
                 }else
-                if (getFigureElementByFigureID(getFigureIDAtField(feld.id))){
+                if (getFigureElementByFigureID(getFigureIDAtField(feld.id)) && getFigureColorOnPosition(8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97) === turn){
+
+                    //wenn es die gleiche farbe ist
                     removeSelectedFromAllFields();
 
                     getFigureElementByFigureID(getFigureIDAtField(feld.id)).classList.toggle("selected");
                     showMovesOfFigure(getFigureIDAtField(feld.id));
+
                 }else {
                     removeSelectedFromAllFields();
                     hideAllValidFields();
@@ -387,7 +394,6 @@ function updatePositions(){
             }
         }
         if(row === -1 || col === -1){
-            console.error("Figur nicht gefunden");
             continue;
         }
         figur.style.left = `${col * 12.5}%`;

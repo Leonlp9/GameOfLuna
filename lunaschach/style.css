@@ -25,14 +25,14 @@ body {
 
 #schachbrett {
     display: grid;
-    grid-template-columns: repeat(8, 65px);
-    grid-template-rows: repeat(8, 65px);
+    grid-template-columns: repeat(8, clamp(10px, calc(100vw / 10), 80px));
+    grid-template-rows: repeat(8, clamp(10px, calc(100vw / 10), 80px));
     position: relative;
 }
 
 .schachfeld {
-    width: 65px;
-    height: 65px;
+    width: clamp(10px, calc(100vw/ 10), 80px);
+    height: clamp(10px, calc(100vw / 10), 80px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,9 +68,9 @@ body {
 
 .schachfigur {
     position: absolute;
-    width: 55px;
-    height: 55px;
-    margin: 5px;
+    width: clamp(10px, calc(100vw / 10 - 6px), 74px);
+    height: clamp(10px, calc(100vw / 10 - 6px), 74px);
+    margin: 3px;
     transition: top 0.8s cubic-bezier(0.77, 0, 0.175, 1), left 0.8s cubic-bezier(0.77, 0, 0.175, 1), filter 0.4s cubic-bezier(0.77, 0, 0.175, 1);
     user-select: none;
     pointer-events: none;
@@ -95,78 +95,6 @@ body {
 
 .reihe .schachfeld {
     border-radius: 5px;
-}
-
-@media (max-width: 300px) {
-    #schachbrett {
-        grid-template-columns: repeat(8, 20px);
-        grid-template-rows: repeat(8, 20px);
-    }
-
-    .schachfeld {
-        width: 20px;
-        height: 20px;
-    }
-
-    .schachfigur {
-        width: 18px;
-        height: 18px;
-        margin: 2px;
-    }
-}
-
-@media (max-width: 400px) {
-    #schachbrett {
-        grid-template-columns: repeat(8, 30px);
-        grid-template-rows: repeat(8, 30px);
-    }
-
-    .schachfeld {
-        width: 30px;
-        height: 30px;
-    }
-
-    .schachfigur {
-        width: 28px;
-        height: 28px;
-        margin: 2px;
-    }
-}
-
-@media (max-width: 800px) {
-    #schachbrett {
-        grid-template-columns: repeat(8, 50px);
-        grid-template-rows: repeat(8, 50px);
-    }
-
-    .schachfeld {
-        width: 50px;
-        height: 50px;
-    }
-
-    .schachfigur {
-        width: 40px;
-        height: 40px;
-        margin: 5px;
-    }
-}
-
-@media (min-width: 1200px) {
-    #schachbrett {
-        grid-template-columns: repeat(8, 75px);
-        grid-template-rows: repeat(8, 75px);
-    }
-
-    .schachfeld {
-        width: 75px;
-        height: 75px;
-    }
-
-    .schachfigur {
-        width: 65px;
-        height: 65px;
-        margin: 5px;
-    }
 }
 
 .description {
