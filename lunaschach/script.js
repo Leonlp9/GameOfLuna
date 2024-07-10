@@ -112,6 +112,8 @@ function showMovesOfFigure(id){
             field.classList.add("hit");
         }
     }
+
+    playSoundEffekt("sounds/select.mp3")
 }
 
 function getValidFieldsToMoveOfFigure(id){
@@ -274,6 +276,11 @@ function hitFigureAtPosition(row, col){
     board[row][col] = "";
 }
 
+function playSoundEffekt(sound) {
+    let audio = new Audio(sound);
+    audio.play().then();
+}
+
 function buildBrett(){
     const brett = document.getElementById("schachbrett");
     for(let i = 0; i < 8; i++){
@@ -289,12 +296,32 @@ function buildBrett(){
                 if(feld.classList.contains("valid")){
                     const selected = document.getElementsByClassName("selected")[0];
                     const selectedFigureId = selected.id;
-                    const selectedFigure = getFigureElementByFigureID(selectedFigureId);
                     const oldPos = getLocationOfFigureId(selectedFigureId);
                     const newPos = [8 - parseInt(feld.id[1]), feld.id.charCodeAt(0) - 97];
+                    playSoundEffekt("sounds/move.mp3")
+
+                    //wenn eine figur geschlagen wurde
+                    if (board[newPos[0]][newPos[1]] !== "") {
+                        setTimeout(() => {
+                            playSoundEffekt("sounds/hit.mp3")
+                        }, 400)
+                    }
+
+                    //wenn ein könig geschlagen wurde
+                    if (board[newPos[0]][newPos[1]].toUpperCase().includes("K")) {
+                        setTimeout(() => {
+                            playSoundEffekt("sounds/game-end.mp3")
+                        }, 400)
+                    }
+
                     hitFigureAtPosition(newPos[0], newPos[1]);
+
                     board[oldPos[0]][oldPos[1]] = "";
                     board[newPos[0]][newPos[1]] = selectedFigureId;
+
+                    //wenn es ein bauer ist und an der anderen seite angekommen ist dann
+                    askForTransformation(selectedFigureId);
+
                     updatePositions();
 
                     turn = turn === "white" ? "black" : "white";
@@ -372,7 +399,6 @@ function buildBrett(){
         }
     }
 
-
     updatePositions();
 }
 
@@ -400,23 +426,97 @@ function updatePositions(){
         figur.style.top = `${row * 12.5}%`;
     }
 
-    setTimeout(() => {
-        let blackIndex = 0;
-        let whiteIndex = 0;
-        for (let i = 0; i < isOut.length; i++) {
-            const figure = isOut[i];
-            const figureElement = getFigureElementByFigureID(figure);
-            if (figure[0] === figure[0].toLowerCase()) {
-                figureElement.style.left = `${(blackIndex - 0.5) * 100 / 16}%`;
-                figureElement.style.top = "-15%";
-                blackIndex++;
-            } else {
-                figureElement.style.left = `${(whiteIndex - 0.5) * 100 / 16}%`;
-                figureElement.style.top = "110%";
-                whiteIndex++;
-            }
+    let blackIndex = 0;
+    let whiteIndex = 0;
+    for (let i = 0; i < isOut.length; i++) {
+        const figure = isOut[i];
+        const figureElement = getFigureElementByFigureID(figure);
+        figureElement.style.transitionDelay = `0.4s`;
+        if (figure[0] === figure[0].toLowerCase()) {
+            figureElement.style.left = `${(blackIndex - 0.5) * 100 / 16}%`;
+            figureElement.style.top = "-15%";
+            blackIndex++;
+        } else {
+            figureElement.style.left = `${(whiteIndex - 0.5) * 100 / 16}%`;
+            figureElement.style.top = "110%";
+            whiteIndex++;
         }
-    }, 400);
+    }
+}
+
+function askForTransformation(id) {
+    const color = getFigureColorOnPosition(getLocationOfFigureId(id)[0], getLocationOfFigureId(id)[1]);
+    const row = getLocationOfFigureId(id)[0];
+    const col = getLocationOfFigureId(id)[1];
+
+    if (id[0].toLowerCase() === 'p' && ((color === 'white' && row === 0) || (color === 'black' && row === 7))) {
+
+        const askBackground = document.createElement("div");
+        askBackground.classList.add("askBackground");
+        document.body.appendChild(askBackground);
+
+        const ask = document.createElement("div");
+        ask.classList.add("ask");
+        askBackground.appendChild(ask);
+
+        const text = document.createElement("div");
+        text.classList.add("text");
+        text.innerHTML = "Wähle eine Figur aus";
+        ask.appendChild(text);
+
+        const figures = document.createElement("div");
+        figures.classList.add("figures");
+        ask.appendChild(figures);
+
+        const queen = document.createElement("div");
+        queen.classList.add("queen");
+        queen.style.backgroundImage = `url(${textures[(color === 'white' ? 'Q' : 'q')]})`;
+        queen.addEventListener("click", function () {
+            board[row][col] = (color === 'white' ? 'Q' : 'q') + "-" + (parseInt(id[2]) + 2);
+            getFigureElementByFigureID(id).style.backgroundImage = `url(${textures[(color === 'white' ? 'Q' : 'q')]})`;
+            getFigureElementByFigureID(id).id = (color === 'white' ? 'Q' : 'q') + "-" + (parseInt(id[2]) + 2);
+            document.body.removeChild(askBackground);
+            updatePositions();
+        });
+        figures.appendChild(queen);
+
+        const rook = document.createElement("div");
+        rook.classList.add("rook");
+        rook.style.backgroundImage = `url(${textures[(color === 'white' ? 'R' : 'r')]})`;
+        rook.addEventListener("click", function () {
+            board[row][col] = (color === 'white' ? 'R' : 'r') + "-" + (parseInt(id[2]) + 2);
+            getFigureElementByFigureID(id).style.backgroundImage = `url(${textures[(color === 'white' ? 'R' : 'r')]})`;
+            getFigureElementByFigureID(id).id = (color === 'white' ? 'R' : 'r') + "-" + (parseInt(id[2]) + 2);
+            document.body.removeChild(askBackground);
+            updatePositions();
+        });
+        figures.appendChild(rook);
+
+        const bishop = document.createElement("div");
+        bishop.classList.add("bishop");
+        bishop.style.backgroundImage = `url(${textures[(color === 'white' ? 'B' : 'b')]})`;
+        bishop.addEventListener("click", function () {
+            board[row][col] = (color === 'white' ? 'B' : 'b') + "-" + (parseInt(id[2]) + 2);
+            getFigureElementByFigureID(id).style.backgroundImage = `url(${textures[(color === 'white' ? 'B' : 'b')]})`;
+            getFigureElementByFigureID(id).id = (color === 'white' ? 'B' : 'b') + "-" + (parseInt(id[2]) + 2);
+            document.body.removeChild(askBackground);
+            updatePositions();
+        });
+        figures.appendChild(bishop);
+
+        const knight = document.createElement("div");
+        knight.classList.add("knight");
+        knight.style.backgroundImage = `url(${textures[(color === 'white' ? 'N' : 'n')]})`;
+        knight.addEventListener("click", function () {
+            board[row][col] = (color === 'white' ? 'N' : 'n') + "-" + (parseInt(id[2]) + 2);
+            getFigureElementByFigureID(id).style.backgroundImage = `url(${textures[(color === 'white' ? 'N' : 'n')]})`;
+            getFigureElementByFigureID(id).id = (color === 'white' ? 'N' : 'n') + "-" + (parseInt(id[2]) + 2);
+            document.body.removeChild(askBackground);
+            updatePositions();
+        });
+        figures.appendChild(knight);
+
+    }
 }
 
 buildBrett()

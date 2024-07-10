@@ -10,7 +10,9 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background: url("../img/backgrounds/bg1.png") center;
+    background-size: 100px;
+    image-rendering: pixelated;
 }
 
 /* Existing styles */
@@ -117,4 +119,44 @@ body {
     height: calc(100% / 8 - 10px);
     width: calc(100% / 26);
     transform: translateX(-200%) translateY(-5px);
+}
+
+.askBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.ask {
+    background: #dcdcdc;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ask .figures {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.ask .figures div {
+    width: 50px;
+    height: 50px;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
 }
