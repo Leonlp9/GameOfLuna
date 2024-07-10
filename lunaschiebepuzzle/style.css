@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400..800&family=Jua&family=Madimi+One&family=Poetsen+One&display=swap');
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Baloo Tamma 2', cursive;
+    user-select: none;
+}
+
 .game {
     display: flex;
     justify-content: center;
