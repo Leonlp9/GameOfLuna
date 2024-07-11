@@ -331,6 +331,19 @@ function buildBrett(){
 
     brett.innerHTML = "";
 
+    const oldExitButton = document.getElementsByClassName("exit-button")[0];
+    if(oldExitButton){
+        document.body.removeChild(oldExitButton);
+    }
+
+    const exitButton = document.createElement("button");
+    exitButton.classList.add("exit-button");
+    exitButton.innerHTML = '<i class="fas fa-times"></i>';
+    exitButton.addEventListener("click", function(){
+        openStartMenu()
+    });
+    document.body.appendChild(exitButton);
+
     for(let i = 0; i < 8; i++){
         const reihe = document.createElement("div");
         reihe.classList.add("reihe");
@@ -787,6 +800,12 @@ function askForTransformation(id) {
 }
 
 function openStartMenu(){
+
+    const oldExitButton = document.getElementsByClassName("exit-button")[0];
+    if(oldExitButton){
+        document.body.removeChild(oldExitButton);
+    }
+
     const startMenuBackground = document.createElement("div");
     startMenuBackground.classList.add("startMenuBackground");
     document.body.appendChild(startMenuBackground);
