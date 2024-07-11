@@ -1,7 +1,7 @@
 let game = {
     mapConfig: {
-        width: 15,
-        height: 15,
+        width: 9,
+        height: 9,
         speed: 250,
         isRunning: true
     },
@@ -306,6 +306,7 @@ function updatePositions() {
             benzinElement.style.width = "calc(100% / " + game.mapConfig.width + ")";
             benzinElement.style.height = "calc(100% / " + game.mapConfig.width + ")";
             benzinElement.style.backgroundColor = "green";
+            benzinElement.style.borderRadius = "50%";
             benzinElement.style.position = "absolute";
             benzinElement.style.transition = "left 0.05s cubic-bezier(0.5, 0.5, 0.5, 0.5), top 0.05s cubic-bezier(0.5, 0.5, 0.5, 0.5)";
             benzinElement.style.transitionDelay = "0.1s";

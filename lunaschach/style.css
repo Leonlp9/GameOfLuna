@@ -27,14 +27,15 @@ body {
 
 #schachbrett {
     display: grid;
-    grid-template-columns: repeat(8, clamp(10px, calc(100vw / 10), 80px));
-    grid-template-rows: repeat(8, clamp(10px, calc(100vw / 10), 80px));
+    width: 80vmin;
+    height: 80vmin;
+    grid-template-columns: repeat(8, 1fr);
     position: relative;
 }
 
 .schachfeld {
-    width: clamp(10px, calc(100vw/ 10), 80px);
-    height: clamp(10px, calc(100vw / 10), 80px);
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,149 +86,11 @@ body {
     drop-shadow(-2px -2px 0 #35a935);
 }
 
-.reihe:nth-child(odd) .schachfeld:nth-child(odd),
-.reihe:nth-child(even) .schachfeld:nth-child(even) {
-    background-color: #f0f0f0;
-}
-
-.reihe:nth-child(odd) .schachfeld:nth-child(even),
-.reihe:nth-child(even) .schachfeld:nth-child(odd) {
-    background-color: #333;
-}
-
-.reihe .schachfeld {
-    border-radius: 5px;
-}
-
-.description {
-    position: absolute;
-    background: rgba(182, 182, 182, 0.5);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.description.letter {
-    width: calc(100% / 8 - 10px);
-    height: calc(100% / 26);
-    transform: translateY(180%) translateX(5px);
-    text-transform: uppercase;
-}
-
-.description.number {
-    height: calc(100% / 8 - 10px);
-    width: calc(100% / 26);
-    transform: translateX(-180%) translateY(-5px);
-}
-
-.askBackground {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.ask {
-    background: #dcdcdc;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.ask .figures {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
+.schachfeld {
     background: #f0f0f0;
-    padding: 10px;
     border-radius: 5px;
 }
 
-.ask .figures div {
-    width: 50px;
-    height: 50px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    cursor: pointer;
-}
-
-.startMenuBackground {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.startMenu {
-    background: #dcdcdc;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.title {
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.startButtons {
-    display: flex;
-    gap: 10px;
-}
-
-.startButton {
-    padding: 10px 20px;
-    background: #f0f0f0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.startButton i {
-    margin-left: 10px;
-}
-
-.startButton:hover {
-    background: #e0e0e0;
-}
-
-.back-home {
-    background: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-}
-
-.exit-button {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #dadada;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    cursor: pointer;
+.schachfeld.black {
+    background: #3a3a3a;
 }
