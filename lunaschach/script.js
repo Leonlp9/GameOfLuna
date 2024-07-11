@@ -380,7 +380,8 @@ function buildBrett(){
                 img.style.backgroundImage = `url(${textures[figur[0]]})`;
                 img.id = figur;
                 img.style.backgroundPosition = "center";
-                img.style.backgroundSize = "cover";
+                img.style.backgroundSize = "contain";
+                img.style.backgroundRepeat = "no-repeat";
                 brett.appendChild(img);
             }
         }
