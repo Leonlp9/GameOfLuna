@@ -101,6 +101,7 @@ document.addEventListener("touchend", function (event) {
     }
 });
 
+
 function getObjectsAtPosition(x, y) {
     let objects = [];
     for (let car of game.cars) {
@@ -343,7 +344,7 @@ function buildGameBackground() {
 
             //in 2 asphalt farben den boden färben in schachbrett muster
             if ((x + y) % 2 === 0) {
-                cell.style.backgroundColor = "rgb(100, 100, 100)";
+                cell.style.backgroundColor = "rgb(112,112,112)";
             } else {
                 cell.style.backgroundColor = "rgb(120, 120, 120)";
             }

@@ -1,10 +1,14 @@
+
+html, body {
+    overscroll-behavior: none;
+    background: #a2a2a2;
+}
+
 #gameGrid {
     position: relative;
-    margin: auto;
-    width: 100vmin;
-    height: 100vmin;
-    max-width: 100vmin;
-    max-height: 100vmin;
+    width: 90vmin;
+    height: 90vmin;
+    margin: 5vmin auto auto;
 }
 
 #gameBackground {
