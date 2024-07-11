@@ -1,0 +1,17 @@
+#gameGrid {
+    position: relative;
+    margin: auto;
+    width: 100vmin;
+    height: 100vmin;
+    max-width: 100vmin;
+    max-height: 100vmin;
+}
+
+#gameBackground {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+}

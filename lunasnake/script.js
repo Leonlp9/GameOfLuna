@@ -1,41 +1,14 @@
 let game = {
     mapConfig: {
-        width: 30,
-        height: 18,
-        speed: 250
+        width: 15,
+        height: 15,
+        speed: 250,
+        isRunning: true
     },
     cars: [
         {
             position: {
                 x: 4,
-                y: 5
-            },
-            orientation: "right"
-        },
-        {
-            position: {
-                x: 3,
-                y: 5
-            },
-            orientation: "right"
-        },
-        {
-            position: {
-                x: 2,
-                y: 5
-            },
-            orientation: "right"
-        },
-        {
-            position: {
-                x: 1,
-                y: 5
-            },
-            orientation: "right"
-        },
-        {
-            position: {
-                x: 0,
                 y: 5
             },
             orientation: "right"
@@ -180,6 +153,13 @@ function placeBenzinAtRandomPosition() {
 }
 
 function moveCars() {
+    if (!game.mapConfig.isRunning) {
+        return;
+    }
+
+    const lastCarOrientation = game.cars[game.cars.length - 1].orientation;
+    const lastCarX = game.cars[game.cars.length - 1].position.x;
+    const lastCarY = game.cars[game.cars.length - 1].position.y;
     //das erste auto bekommt die lastPressedOrientation und die anderen bekommen die orientation des vorherigen autos
     for (let i = game.cars.length; i > 0; i--) {
         let car = game.cars[i];
@@ -208,7 +188,7 @@ function moveCars() {
                 break;
         }
         if (newX < 0 || newX >= game.mapConfig.width || newY < 0 || newY >= game.mapConfig.height) {
-            console.log("Game Over")
+            gameOver();
             continue;
         }
         let objects = getObjectsAtPosition(newX, newY);
@@ -220,6 +200,17 @@ function moveCars() {
                     if (index > -1) {
                         game.benzin.splice(index, 1);
 
+                        setTimeout(function () {
+                            let newCar = {
+                                position: {
+                                    x: lastCarX,
+                                    y: lastCarY
+                                },
+                                orientation: lastCarOrientation
+                            }
+                            game.cars.push(newCar);
+                        },1);
+
                         //neues benzin platzieren
                         placeBenzinAtRandomPosition();
                     }
@@ -228,6 +219,13 @@ function moveCars() {
         }
         car.position.x = newX;
         car.position.y = newY;
+    }
+
+    //wenn das erste auto auf dem gleichen feld wie ein anderes auto ist dann game over
+    for (let i = 1; i < game.cars.length; i++) {
+        if (game.cars[0].position.x === game.cars[i].position.x && game.cars[0].position.y === game.cars[i].position.y) {
+            gameOver();
+        }
     }
 }
 
@@ -245,16 +243,20 @@ function updatePositions() {
         if (carElement === null) {
             carElement = document.createElement("div");
             carElement.id = "car-" + index;
-            carElement.style.width = "50px";
-            carElement.style.height = "50px";
+            carElement.style.width = "calc(100% / " + game.mapConfig.width + ")";
+            carElement.style.height = "calc(100% / " + game.mapConfig.height + ")";
             carElement.style.backgroundColor = "red";
             carElement.style.position = "absolute";
             carElement.style.borderRadius = "25%";
-            carElement.style.transition = "left " + game.mapConfig.speed + "ms cubic-bezier(0.5, 0.5, 0.5, 0.5), top " + game.mapConfig.speed + "ms cubic-bezier(0.5, 0.5, 0.5, 0.5), transform " + game.mapConfig.speed + "ms cubic-bezier(0.5, 0.5, 0.5, 0.5)";
-            document.body.appendChild(carElement);
+
+            carElement.style.transition = "left " + game.mapConfig.speed + "ms linear," +
+                " top " + game.mapConfig.speed + "ms linear," +
+                //smooth rotation not linear
+                " transform " + game.mapConfig.speed + "ms cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            document.getElementById("gameGrid").appendChild(carElement);
         }
-        carElement.style.left = car.position.x * 50 + "px";
-        carElement.style.top = car.position.y * 50 + "px";
+        carElement.style.left = "calc(" + car.position.x + " * 100% / " + game.mapConfig.width + ")";
+        carElement.style.top = "calc(" + car.position.y + " * 100% / " + game.mapConfig.height + ")";
 
         // Initialize rotation state if not already done
         if (carRotations[index] === undefined) {
@@ -300,15 +302,55 @@ function updatePositions() {
         if (benzinElement === null) {
             benzinElement = document.createElement("div");
             benzinElement.id = "benzin-" + index;
-            benzinElement.style.width = "50px";
-            benzinElement.style.height = "50px";
+            benzinElement.style.width = "calc(100% / " + game.mapConfig.width + ")";
+            benzinElement.style.height = "calc(100% / " + game.mapConfig.width + ")";
             benzinElement.style.backgroundColor = "green";
             benzinElement.style.position = "absolute";
             benzinElement.style.transition = "left 0.05s cubic-bezier(0.5, 0.5, 0.5, 0.5), top 0.05s cubic-bezier(0.5, 0.5, 0.5, 0.5)";
             benzinElement.style.transitionDelay = "0.1s";
-            document.body.appendChild(benzinElement);
+            document.getElementById("gameGrid").appendChild(benzinElement);
         }
-        benzinElement.style.left = benzin.position.x * 50 + "px";
-        benzinElement.style.top = benzin.position.y * 50 + "px";
+        benzinElement.style.left = "calc(" + benzin.position.x + " * 100% / " + game.mapConfig.width + ")";
+        benzinElement.style.top = "calc(" + benzin.position.y + " * 100% / " + game.mapConfig.height + ")";
     });
 }
+
+
+function gameOver() {
+    game.mapConfig.isRunning = false;
+    let gameOverElement = document.createElement("div");
+    gameOverElement.style.width = "100%";
+    gameOverElement.style.height = "100%";
+    gameOverElement.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    gameOverElement.style.position = "absolute";
+    gameOverElement.style.top = "0";
+    gameOverElement.style.left = "0";
+    gameOverElement.style.display = "flex";
+    gameOverElement.style.justifyContent = "center";
+    gameOverElement.style.alignItems = "center";
+    gameOverElement.style.zIndex = "1000";
+    gameOverElement.innerHTML = "<h1 style='color: white'>Game Over</h1>";
+    document.body.appendChild(gameOverElement);
+}
+
+function buildGameBackground() {
+    let gameBackground = document.getElementById("gameBackground");
+    for (let y = 0; y < game.mapConfig.height; y++) {
+        for (let x = 0; x < game.mapConfig.width; x++) {
+            let cell = document.createElement("div");
+            cell.style.width = "calc(100% / " + game.mapConfig.width + ")";
+            cell.style.height = "calc(100% / " + game.mapConfig.height + ")";
+
+            //in 2 asphalt farben den boden färben in schachbrett muster
+            if ((x + y) % 2 === 0) {
+                cell.style.backgroundColor = "rgb(100, 100, 100)";
+            } else {
+                cell.style.backgroundColor = "rgb(120, 120, 120)";
+            }
+
+            gameBackground.appendChild(cell);
+        }
+    }
+}
+
+buildGameBackground();
