@@ -71,12 +71,16 @@ body {
 
 .schachfigur {
     position: absolute;
-    width: clamp(10px, calc(100vw / 10 - 6px), 74px);
-    height: clamp(10px, calc(100vw / 10 - 6px), 74px);
     margin: 3px;
     transition: top 0.8s cubic-bezier(0.77, 0, 0.175, 1), left 0.8s cubic-bezier(0.77, 0, 0.175, 1), filter 0.4s cubic-bezier(0.77, 0, 0.175, 1);
     user-select: none;
     pointer-events: none;
+    z-index: 1;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: calc(12.5% - 6px);
+    height: calc(12.5% - 6px);
 }
 
 .schachfigur.selected {

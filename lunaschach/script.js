@@ -19,6 +19,11 @@ const textures = {
 let turn = "white";
 let botDifficulty = null;
 
+function playSoundEffekt(sound) {
+    let audio = new Audio(sound);
+    audio.play().then();
+}
+
 function getPieceAt(row, col){
     return board.find(field => field.row === row && field.col === col && !field.isOut);
 }
@@ -307,12 +312,13 @@ function buildBrett(){
                     movePiece(piece, row, col, field.classList.contains("hit"));
                     unselectAll()
                     hideValidMoves()
+
                 }else {
-                    //const piece = getPieceAt(i, j);
-                    //if(piece && getPeacesColor(piece.piece) === turn){
+                    const piece = getPieceAt(i, j);
+                    if(piece && getPeacesColor(piece.piece) === turn){
                         showValidMoves(getPieceAt(i, j));
                         selectPiece(getPieceAt(i, j));
-                    //}
+                    }
                 }
             });
             brett.appendChild(field);
@@ -323,14 +329,19 @@ function buildBrett(){
 }
 
 function unselectAll(){
-    for(let i = 0; i < board.length; i++){
+    for(let i = 0; i < board.length; i++) {
         board[i].selected = false;
+        let element = document.getElementById(i + "-schachfigur");
+        if(element){
+            element.classList.remove("selected");
+        }
     }
-
 }
 
 function selectPiece(piece){
     unselectAll()
+    let element = document.getElementById(board.indexOf(piece) + "-schachfigur");
+    element.classList.add("selected");
     piece.selected = true;
 }
 
@@ -339,6 +350,7 @@ function getSelectedPiece(){
 }
 
 function updatePositions(){
+    let isOutCounter = 0;
     for (let i = 0; i < board.length; i++) {
         const piece = board[i].piece
         const row = board[i].row
@@ -353,15 +365,8 @@ function updatePositions(){
             img.classList.add("schachfigur");
             img.id = id;
             img.style.backgroundImage = "url(" + textures[piece] + ")";
-            img.style.backgroundSize = "contain";
-            img.style.backgroundPosition = "center";
-            img.style.backgroundRepeat = "no-repeat";
-            img.style.position = "absolute";
-            img.style.width = "calc(12.5% - 6px)"; //2px abstand
-            img.style.height = "calc(12.5% - 6px)";
             img.style.top = (row * 12.5) + "%";
             img.style.left = (col * 12.5) + "%";
-            img.style.zIndex = "1";
             document.getElementById("schachbrett").appendChild(img);
         }
         //wenn element vorhanden ist, aktualisiere es
@@ -374,10 +379,14 @@ function updatePositions(){
                 }else {
                     img.style.top = "-14%";
                 }
+                img.style.left = (isOutCounter * 12.5 / 2) + "%";
             }else {
                 img.style.top = (row * 12.5) + "%";
+                img.style.left = (col * 12.5) + "%";
             }
-            img.style.left = (col * 12.5) + "%";
+        }
+        if (isOut) {
+            isOutCounter++;
         }
     }
 }
@@ -399,6 +408,8 @@ function showValidMoves(pieceObject){
 
     const validMoves = getValidMoves(pieceObject);
 
+    playSoundEffekt('sounds/select.mp3')
+
     for(let i = 0; i < validMoves.length; i++){
         const move = validMoves[i];
         const field = document.querySelector(".schachfeld[data-row='" + move.row + "'][data-col='" + move.col + "']");
@@ -417,11 +428,15 @@ function movePiece(pieceObject, row, col, isCapture){
     if(isCapture){
         const index = board.findIndex(field => field.row === row && field.col === col);
         board[index].isOut = true;
+        const element = document.getElementById(index + "-schachfigur");
+        element.style.transitionDelay = "0.4s";
     }
 
     pieceObject.row = row;
     pieceObject.col = col;
     pieceObject.moved = true;
+
+    playSoundEffekt('sounds/move.mp3');
 
     if(piece.toLowerCase() === "p" && (row === 0 || row === 7)){
         pieceObject.piece = piece === "p" ? "q" : "Q";
