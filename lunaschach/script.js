@@ -1,5 +1,4 @@
 let board = [];
-let isOut = []
 
 const textures = {
     'r': 'img/R-Black.png',
@@ -25,307 +24,16 @@ function playSoundEffekt(sound) {
 }
 
 function getPieceAt(row, col){
-    return board.find(field => field.row === row && field.col === col && !field.isOut);
+    return board.find(field => field.row === row && field.col === col && field.isOut === null);
 }
 
-function buildBrett(){
-    isOut = [];
-    botDifficulty = null;
-    turn = "white";
-    board = [
-        {
-            piece: "r",
-            row: 0,
-            col: 0,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "n",
-            row: 0,
-            col: 1,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "b",
-            row: 0,
-            col: 2,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "q",
-            row: 0,
-            col: 3,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "k",
-            row: 0,
-            col: 4,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "b",
-            row: 0,
-            col: 5,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "n",
-            row: 0,
-            col: 6,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "r",
-            row: 0,
-            col: 7,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 0,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 1,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 2,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 3,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 4,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 5,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 6,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "p",
-            row: 1,
-            col: 7,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "R",
-            row: 7,
-            col: 0,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "N",
-            row: 7,
-            col: 1,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "B",
-            row: 7,
-            col: 2,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "Q",
-            row: 7,
-            col: 3,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "K",
-            row: 7,
-            col: 4,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "B",
-            row: 7,
-            col: 5,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "N",
-            row: 7,
-            col: 6,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "R",
-            row: 7,
-            col: 7,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 0,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 1,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 2,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 3,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 4,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 5,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 6,
-            moved: false,
-            isOut: false,
-            selected: false
-        },
-        {
-            piece: "P",
-            row: 6,
-            col: 7,
-            moved: false,
-            isOut: false,
-            selected: false
-        }
-    ];
+function getIsOutAmount(color){
+    //zähle wie viele figuren der farbe bereits rausgenommen wurden also isOut nicht null ist
+    return board.filter(field => field.isOut !== null && getPeacesColor(field.piece) === color).length;
+}
 
-    const brett = document.getElementById("schachbrett");
-
-    brett.innerHTML = "";
-
-    for(let i = 0; i < 8; i++){
-        for(let j = 0; j < 8; j++){
-            const field = document.createElement("div");
-            field.classList.add("schachfeld");
-            field.setAttribute("data-row", i + "");
-            field.setAttribute("data-col", j + "");
-            if((i + j) % 2 === 0){
-                field.classList.add("black");
-            }
-            field.addEventListener("click", function(){
-                if (field.classList.contains("valid")) {
-                    const piece = getSelectedPiece();
-                    const row = parseInt(field.getAttribute("data-row"));
-                    const col = parseInt(field.getAttribute("data-col"));
-                    movePiece(piece, row, col, field.classList.contains("hit"));
-                    unselectAll()
-                    hideValidMoves()
-
-                }else {
-                    const piece = getPieceAt(i, j);
-                    if(piece && getPeacesColor(piece.piece) === turn){
-                        showValidMoves(getPieceAt(i, j));
-                        selectPiece(getPieceAt(i, j));
-                    }
-                }
-            });
-            brett.appendChild(field);
-        }
-    }
-
-    updatePositions()
+function getPeacesColor(piece){
+    return piece === piece.toUpperCase() ? "white" : "black";
 }
 
 function unselectAll(){
@@ -347,109 +55,6 @@ function selectPiece(piece){
 
 function getSelectedPiece(){
     return board.find(field => field.selected);
-}
-
-function updatePositions(){
-    let isOutCounter = 0;
-    for (let i = 0; i < board.length; i++) {
-        const piece = board[i].piece
-        const row = board[i].row
-        const col = board[i].col
-        const isOut = board[i].isOut
-        const color = getPeacesColor(piece)
-        const id = i + "-schachfigur"
-
-        //wenn kein element vorhanden ist, erstelle es
-        if(!document.getElementById(id)){
-            const img = document.createElement("div");
-            img.classList.add("schachfigur");
-            img.id = id;
-            img.style.backgroundImage = "url(" + textures[piece] + ")";
-            img.style.top = (row * 12.5) + "%";
-            img.style.left = (col * 12.5) + "%";
-            document.getElementById("schachbrett").appendChild(img);
-        }
-        //wenn element vorhanden ist, aktualisiere es
-        else{
-            const img = document.getElementById(id);
-
-            if (isOut) {
-                if (color === "white") {
-                    img.style.top = "100%";
-                }else {
-                    img.style.top = "-14%";
-                }
-                img.style.left = (isOutCounter * 12.5 / 2) + "%";
-            }else {
-                img.style.top = (row * 12.5) + "%";
-                img.style.left = (col * 12.5) + "%";
-            }
-        }
-        if (isOut) {
-            isOutCounter++;
-        }
-    }
-}
-
-function getPeacesColor(piece){
-    return piece === piece.toUpperCase() ? "white" : "black";
-}
-
-function hideValidMoves(){
-    const fields = document.querySelectorAll(".schachfeld");
-    for(let i = 0; i < fields.length; i++){
-        fields[i].classList.remove("valid");
-        fields[i].classList.remove("hit");
-    }
-}
-
-function showValidMoves(pieceObject){
-    hideValidMoves()
-
-    const validMoves = getValidMoves(pieceObject);
-
-    playSoundEffekt('sounds/select.mp3')
-
-    for(let i = 0; i < validMoves.length; i++){
-        const move = validMoves[i];
-        const field = document.querySelector(".schachfeld[data-row='" + move.row + "'][data-col='" + move.col + "']");
-        field.classList.add("valid");
-        if (move.isCapture) {
-            field.classList.add("hit");
-        }
-    }
-}
-
-function movePiece(pieceObject, row, col, isCapture){
-    const piece = pieceObject.piece;
-    const oldRow = pieceObject.row;
-    const oldCol = pieceObject.col;
-
-    if(isCapture){
-        const index = board.findIndex(field => field.row === row && field.col === col);
-        board[index].isOut = true;
-        const element = document.getElementById(index + "-schachfigur");
-        element.style.transitionDelay = "0.4s";
-    }
-
-    pieceObject.row = row;
-    pieceObject.col = col;
-    pieceObject.moved = true;
-
-    playSoundEffekt('sounds/move.mp3');
-
-    if(piece.toLowerCase() === "p" && (row === 0 || row === 7)){
-        pieceObject.piece = piece === "p" ? "q" : "Q";
-    }
-
-    if(turn === "white"){
-        turn = "black";
-    }
-    else{
-        turn = "white";
-    }
-
-    updatePositions();
 }
 
 function getValidMoves(pieceObject) {
@@ -566,6 +171,418 @@ function getValidMoves(pieceObject) {
     }
 
     return validMoves;
+}
+
+function hideValidMoves(){
+    const fields = document.querySelectorAll(".schachfeld");
+    for(let i = 0; i < fields.length; i++){
+        fields[i].classList.remove("valid");
+        fields[i].classList.remove("hit");
+    }
+}
+
+function showValidMoves(pieceObject){
+    hideValidMoves()
+
+    const validMoves = getValidMoves(pieceObject);
+
+    playSoundEffekt('sounds/select.mp3')
+
+    for(let i = 0; i < validMoves.length; i++){
+        const move = validMoves[i];
+        const field = document.querySelector(".schachfeld[data-row='" + move.row + "'][data-col='" + move.col + "']");
+        field.classList.add("valid");
+        if (move.isCapture) {
+            field.classList.add("hit");
+        }
+    }
+}
+
+function buildBrett(){
+    botDifficulty = null;
+    turn = "white";
+    board = [
+        {
+            piece: "r",
+            row: 0,
+            col: 0,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "n",
+            row: 0,
+            col: 1,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "b",
+            row: 0,
+            col: 2,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "q",
+            row: 0,
+            col: 3,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "k",
+            row: 0,
+            col: 4,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "b",
+            row: 0,
+            col: 5,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "n",
+            row: 0,
+            col: 6,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "r",
+            row: 0,
+            col: 7,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 0,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 1,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 2,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 3,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 4,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 5,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 6,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "p",
+            row: 1,
+            col: 7,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "R",
+            row: 7,
+            col: 0,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "N",
+            row: 7,
+            col: 1,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "B",
+            row: 7,
+            col: 2,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "Q",
+            row: 7,
+            col: 3,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "K",
+            row: 7,
+            col: 4,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "B",
+            row: 7,
+            col: 5,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "N",
+            row: 7,
+            col: 6,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "R",
+            row: 7,
+            col: 7,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 0,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 1,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 2,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 3,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 4,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 5,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 6,
+            moved: false,
+            isOut: null,
+            selected: false
+        },
+        {
+            piece: "P",
+            row: 6,
+            col: 7,
+            moved: false,
+            isOut: null,
+            selected: false
+        }
+    ];
+
+    const brett = document.getElementById("schachbrett");
+
+    brett.innerHTML = "";
+
+    for(let i = 0; i < 8; i++){
+        for(let j = 0; j < 8; j++){
+            const field = document.createElement("div");
+            field.classList.add("schachfeld");
+            field.setAttribute("data-row", i + "");
+            field.setAttribute("data-col", j + "");
+            if((i + j) % 2 === 0){
+                field.classList.add("black");
+            }
+            field.addEventListener("click", function(){
+                if (field.classList.contains("valid")) {
+                    const piece = getSelectedPiece();
+                    const row = parseInt(field.getAttribute("data-row"));
+                    const col = parseInt(field.getAttribute("data-col"));
+                    movePiece(piece, row, col, field.classList.contains("hit"));
+                    unselectAll()
+                    hideValidMoves()
+
+                }else {
+                    const piece = getPieceAt(i, j);
+                    if(piece && getPeacesColor(piece.piece) === turn){
+                        showValidMoves(getPieceAt(i, j));
+                        selectPiece(getPieceAt(i, j));
+                    }else {
+                        unselectAll()
+                        hideValidMoves()
+                    }
+                }
+            });
+            brett.appendChild(field);
+
+            //in spalte 0 und reihe 7 jeweils mit buchstaben und zahlen beschriften
+            if(j === 0){
+                const label = document.createElement("div");
+                label.classList.add("label");
+                label.textContent = (8 - i) + "";
+                label.classList.add("number");
+                field.appendChild(label);
+            }
+            if(i === 7){
+                //uppercase A = 65
+                const label = document.createElement("div");
+                label.classList.add("label");
+                label.textContent = String.fromCharCode(65 + j);
+                label.classList.add("letter");
+                field.appendChild(label);
+            }
+        }
+    }
+
+    updatePositions()
+}
+
+function updatePositions(){
+    for (let i = 0; i < board.length; i++) {
+        const piece = board[i].piece
+        const row = board[i].row
+        const col = board[i].col
+        const isOut = board[i].isOut
+        const color = getPeacesColor(piece)
+        const id = i + "-schachfigur"
+
+        //wenn kein element vorhanden ist, erstelle es
+        if(!document.getElementById(id)){
+            const img = document.createElement("div");
+            img.classList.add("schachfigur");
+            img.id = id;
+            img.style.backgroundImage = "url(" + textures[piece] + ")";
+            img.style.top = (row * 12.5) + "%";
+            img.style.left = (col * 12.5) + "%";
+            document.getElementById("schachbrett").appendChild(img);
+        }
+        //wenn element vorhanden ist, aktualisiere es
+        else{
+            const img = document.getElementById(id);
+
+            img.style.top = (row * 12.5) + "%";
+            img.style.left = (col * 12.5) + "%";
+            img.style.zIndex = "33";
+            if(isOut !== null){
+                img.style.transitionDelay = "0.4s";
+                img.style.top = ((isOut - 1) * 12.5 / 2) + "%";
+                img.style.left = (color === "white" ? 100 : -12.5) + "%";
+                img.style.zIndex = isOut;
+            }
+        }
+    }
+}
+
+function movePiece(pieceObject, row, col, isCapture){
+    const piece = pieceObject.piece;
+    const oldRow = pieceObject.row;
+    const oldCol = pieceObject.col;
+
+    if(isCapture){
+        const index = board.findIndex(field => field.row === row && field.col === col && field.isOut === null);
+        board[index].isOut = getIsOutAmount(getPeacesColor(board[index].piece));
+        const element = document.getElementById(index + "-schachfigur");
+        element.style.transitionDelay = "0.4s";
+    }
+
+    pieceObject.row = row;
+    pieceObject.col = col;
+    pieceObject.moved = true;
+
+    playSoundEffekt('sounds/move.mp3');
+
+    if(piece.toLowerCase() === "p" && (row === 0 || row === 7)){
+        pieceObject.piece = piece === "p" ? "q" : "Q";
+    }
+
+    if(turn === "white"){
+        turn = "black";
+    }
+    else{
+        turn = "white";
+    }
+
+    updatePositions();
 }
 
 buildBrett()
