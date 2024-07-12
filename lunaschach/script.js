@@ -211,6 +211,9 @@ function showValidMoves(pieceObject) {
 }
 
 function buildBrett() {
+    hideValidMoves()
+    unselectAll()
+
     botDifficulty = "medium";
     turn = "white";
     board = [
@@ -315,6 +318,7 @@ function buildBrett() {
             const element = document.getElementById(i + "-schachfigur");
             if (element) {
                 element.style.transitionDelay = "0s";
+                element.classList.remove("isOut");
             }
         }
     }
@@ -347,6 +351,7 @@ function updatePositions() {
             img.style.zIndex = "33";
             if (isOut !== null) {
                 img.style.transitionDelay = "0.4s";
+                img.classList.add("isOut");
                 img.style.top = ((isOut - 1) * 12.5 / 2) + "%";
                 img.style.left = (color === "white" ? 100 : -12.5) + "%";
                 img.style.zIndex = isOut;
