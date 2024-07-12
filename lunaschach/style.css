@@ -115,3 +115,95 @@ body {
 .schachfeld > .letter {
     bottom: 1%;
 }
+
+#history {
+    position: absolute;
+    top: -10%;
+    left: 0;
+    width: 100%;
+    height: 7%;
+    display: flex;
+    align-items: center;
+    font-size: 1.5vmin;
+    font-family: 'Baloo Tamma 2', cursive;
+    color: #171717;
+    background-color: rgba(143, 143, 143, 0.44);
+    border-radius: 10px;
+    overflow-x: scroll;
+    white-space: nowrap;
+    overflow-y: hidden;
+
+    scroll-behavior: smooth;
+}
+
+/*markiere den letzten move*/
+#history .move:nth-child(2n) {
+    background-color: rgba(147, 147, 147, 0.78);
+}
+
+#history .move:nth-child(2n):last-child {
+    background-color: rgba(99, 99, 99, 0.94);
+    font-weight: bold;
+}
+
+#history .move:nth-child(2n+1):last-child {
+    background-color: rgba(255, 255, 255, 0.95);
+    font-weight: bold;
+}
+
+/*style scrollbar*/
+#history::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+#history::-webkit-scrollbar-thumb {
+    background-color: #919191;
+    border-radius: 10px;
+}
+
+#history::-webkit-scrollbar-track {
+    background-color: #c3c3c3;
+    border-radius: 0 0 10px 10px;
+}
+
+#history .move {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    height: calc(100% - 10%);
+    background-color: rgba(240, 240, 240, 0.78);
+    border-radius: 10px;
+    margin: 5px 5px 0 5px;
+    position: relative;
+    cursor: pointer;
+}
+
+#history .move:nth-child(2n+1):hover {
+    background-color: #e0e0e0;
+}
+
+#history .move:nth-child(2n):hover {
+    background-color: #979797;
+}
+
+#history .move:last-child:hover {
+    background-color: #636363;
+}
+
+#history .move.capture:after {
+    content: 'x';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#history .move .old:after {
+    content: ' → ';
+}
+
+#history .move .new {
+    margin-left: 5px;
+}
