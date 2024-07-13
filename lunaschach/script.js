@@ -214,8 +214,8 @@ function buildBrett() {
     hideValidMoves()
     unselectAll()
 
-    botDifficulty = "medium";
     turn = "white";
+    history = [];
     board = [
         { piece: "r", row: 0, col: 0, moved: false, isOut: null, selected: false },
         { piece: "n", row: 0, col: 1, moved: false, isOut: null, selected: false },
@@ -322,6 +322,7 @@ function buildBrett() {
             }
         }
     }
+    updateHistory();
 
     updatePositions()
 }
@@ -546,4 +547,96 @@ function botMove() {
     }
 }
 
+function openStartMenu() {
+    const startMenu = document.getElementById("startMenu");
+    if (startMenu) {
+        startMenu.remove();
+    } else {
+        const menu = document.createElement("div");
+        menu.id = "startMenuHintergrund";
+        menu.style.zIndex = "1000";
+
+        const startMenu = document.createElement("div");
+        startMenu.id = "startMenu";
+        menu.appendChild(startMenu);
+
+        const backButton = document.createElement("div");
+        backButton.classList.add("back");
+        backButton.innerHTML = "<i class='fas fa-home'></i>";
+        backButton.addEventListener("click", function () {
+            window.location.href = "../index.html";
+        });
+        startMenu.appendChild(backButton);
+
+
+        const title = document.createElement("h1");
+        title.textContent = "Lunaschach";
+        startMenu.appendChild(title);
+
+        const mitspieler = document.createElement("div");
+        mitspieler.classList.add("option");
+        mitspieler.textContent = "Mitspieler";
+        mitspieler.addEventListener("click", function () {
+            botDifficulty = null;
+            menu.remove();
+            buildBrett();
+        });
+
+        const bot = document.createElement("div");
+        bot.classList.add("option");
+        bot.textContent = "Bot";
+        bot.addEventListener("click", function () {
+            mitspieler.remove();
+            bot.remove();
+
+            const botMenu = document.createElement("div");
+            botMenu.id = "botMenu";
+            startMenu.appendChild(botMenu);
+
+            const easy = document.createElement("div");
+            easy.classList.add("option");
+            easy.textContent = "Leicht";
+            easy.addEventListener("click", function () {
+                menu.remove();
+                botDifficulty = "easy";
+                buildBrett();
+            });
+            botMenu.appendChild(easy);
+
+            const medium = document.createElement("div");
+            medium.classList.add("option");
+            medium.textContent = "Mittel";
+            medium.addEventListener("click", function () {
+                menu.remove();
+                botDifficulty = "medium";
+                buildBrett();
+            });
+            botMenu.appendChild(medium);
+
+            const hard = document.createElement("div");
+            hard.classList.add("option");
+            hard.textContent = "Schwer";
+            hard.addEventListener("click", function () {
+
+            });
+            botMenu.appendChild(hard);
+        });
+
+        startMenu.appendChild(mitspieler);
+        startMenu.appendChild(bot);
+
+        document.body.appendChild(menu);
+
+    }
+}
+
+const endGameButton = document.createElement("endGame");
+endGameButton.id = "endGame";
+endGameButton.innerHTML = "<i class='fas fa-times'></i>";
+endGameButton.addEventListener("click", function () {
+    openStartMenu();
+});
+document.body.appendChild(endGameButton);
+
+openStartMenu();
 buildBrett();
