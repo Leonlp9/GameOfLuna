@@ -147,7 +147,7 @@ function botMove() {
     if (move) {
         setTimeout(() => {
             placeCell(move.x, move.y, currentPlayer);
-        }, 100);
+        }, 200);
     }
 }
 
