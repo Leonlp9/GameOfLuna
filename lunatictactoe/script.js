@@ -46,9 +46,11 @@ function placeCell(x, y, value){
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     if (game.length > 6){
         removeOldestInGame();
+        highlightNextRemovingOldest();
     }
     let winner = checkWinner();
     if (winner){
+        highlightWinner();
         setTimeout(() => {
             alert(`Player ${winner} wins!`);
             buildField();
@@ -57,6 +59,39 @@ function placeCell(x, y, value){
     if (currentPlayer === 'O'){
         botMove();
     }
+}
+
+function highlightWinner(){
+    lines.forEach(line => {
+        let values = line.map(cell => {
+            let gameCell = game.find(c => c.x == cell.x && c.y == cell.y);
+            return gameCell ? gameCell.value : null;
+        });
+
+        if (values.every(value => value === 'X') || values.every(value => value === 'O')){
+            line.forEach(cell => {
+                let gameCell = game.find(c => c.x == cell.x && c.y == cell.y);
+                let cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    if (cell.getAttribute('data-x') == gameCell.x && cell.getAttribute('data-y') == gameCell.y){
+                        cell.classList.add('winner');
+                    }
+                });
+            });
+        }
+    });
+}
+
+function highlightNextRemovingOldest(){
+    let oldest = game[0];
+    let cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        if (cell.getAttribute('data-x') == oldest.x && cell.getAttribute('data-y') == oldest.y){
+            cell.classList.add('highlight');
+        }else{
+            cell.classList.remove('highlight');
+        }
+    });
 }
 
 function removeOldestInGame(){
