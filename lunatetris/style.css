@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #16161b;
+    color: #333;
+    line-height: 1.6;
+}
+
+#tetris {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/*10breit 20hoch*/
+#tetris-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 1px;
+    width: 300px;
+    height: 600px;
+    background: url("img/background.png");
+    background-size: 30px 30px;
+}
+
+#tetris-score {
+    color: #fff;
+    font-size: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
