@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon-artiges Spiel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<div id="joystick">
+    <div id="knob"></div>
+</div>
+
+<script>
+    const joystick = document.getElementById('joystick');
+    const knob = document.getElementById('knob');
+    const maxDistance = 50; // Maximaler Radius, in dem der Knopf bewegt werden kann
+    let joystickCenter = { x: joystick.offsetLeft + joystick.offsetWidth / 2, y: joystick.offsetTop + joystick.offsetHeight / 2 };
+    let isDragging = false;
+
+    window.addEventListener('resize', () => {
+        // Aktualisieren Sie die Position des Joystick-Zentrums, wenn das Fenster neu skaliert wird
+        joystickCenter = { x: joystick.offsetLeft + joystick.offsetWidth / 2, y: joystick.offsetTop + joystick.offsetHeight / 2 };
+    });
+
+    joystick.addEventListener('touchstart', startDrag);
+    joystick.addEventListener('touchmove', drag);
+    joystick.addEventListener('touchend', endDrag);
+
+    // Ergänzen Sie die vorhandenen Touch-Event-Listener
+    joystick.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        updateKnobPosition(e);
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+            updateKnobPosition(e);
+        }
+    });
+    window.addEventListener('mouseup', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+            isDragging = false;
+            endDrag();
+        }
+    });
+
+    function startDrag(e) {
+        e.preventDefault();
+        updateKnobPosition(e.touches[0]);
+    }
+
+    function drag(e) {
+        e.preventDefault();
+        updateKnobPosition(e.touches[0]);
+    }
+
+    function endDrag(e) {
+        if (e)
+        e.preventDefault();
+        // Setzt den Knopf zurück in die Mitte
+        knob.style.left = '25px';
+        knob.style.top = '25px';
+    }
+
+    function updateKnobPosition(touch) {
+        let dx = touch.pageX - joystickCenter.x;
+        let dy = touch.pageY - joystickCenter.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > maxDistance) {
+            let angle = Math.atan2(dy, dx);
+            dx = Math.cos(angle) * maxDistance;
+            dy = Math.sin(angle) * maxDistance;
+        }
+        knob.style.left = `${25 + dx}px`;
+        knob.style.top = `${25 + dy}px`;
+    }
+
+    function getJoystickDirection() {
+        const knobRect = knob.getBoundingClientRect();
+        const joystickRect = joystick.getBoundingClientRect();
+        const centerKnob = {
+            x: knobRect.left + knobRect.width / 2,
+            y: knobRect.top + knobRect.height / 2
+        };
+        const centerJoystick = {
+            x: joystickRect.left + joystickRect.width / 2,
+            y: joystickRect.top + joystickRect.height / 2
+        };
+
+        const dx = centerKnob.x - centerJoystick.x;
+        const dy = centerKnob.y - centerJoystick.y;
+
+        return {
+            x: dx / maxDistance,
+            y: dy / maxDistance
+        };
+    }
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
