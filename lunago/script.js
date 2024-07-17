@@ -63,14 +63,14 @@ let map = {
 let camera = {
     x: map.width / 2 * TILE_SIZE - canvas.width / 2,
     y: -500,
-    smoothSpeed: 0.05
+    smoothSpeed: 4
 }
 
 const player = {
     x: map.width / 2 * TILE_SIZE,
     y: map.height / 2 * TILE_SIZE,
     size: TILE_SIZE / 1.05,
-    speed: 2, // speed in pixels per frame
+    speed: 200, // speed in pixels per frame
     dx: 0,
     dy: 0
 };
@@ -88,12 +88,12 @@ function easeOut(current, target, ease) {
     return current + (target - current) * ease;
 }
 
-function drawMap() {
+function drawMap(deltaTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Update camera position smoothly
-    camera.x = Math.floor(easeOut(camera.x, player.x - canvas.width / 2 + player.size / 2, camera.smoothSpeed));
-    camera.y = Math.floor(easeOut(camera.y, player.y - canvas.height / 2 + player.size / 2, camera.smoothSpeed));
+    camera.x = Math.floor(easeOut(camera.x, player.x - canvas.width / 2 + player.size / 2, camera.smoothSpeed * deltaTime));
+    camera.y = Math.floor(easeOut(camera.y, player.y - canvas.height / 2 + player.size / 2, camera.smoothSpeed * deltaTime));
 
     for (let y = 0; y < map.height; y++) {
         for (let x = 0; x < map.width; x++) {
@@ -111,9 +111,9 @@ function drawMap() {
     ctx.fillRect( Math.floor(player.x - camera.x),  Math.floor(player.y - camera.y), player.size, player.size);
 }
 
-function updatePlayerPosition() {
-    let nextX = player.x + player.dx;
-    let nextY = player.y + player.dy;
+function updatePlayerPosition(deltaTime) {
+    let nextX = player.x + player.dx * deltaTime;
+    let nextY = player.y + player.dy * deltaTime;
 
     let canMoveX = true;
     let canMoveY = true;
@@ -166,7 +166,13 @@ function updatePlayerPosition() {
     }
 }
 
-function gameLoop() {
+let lastTime = 0;
+function gameLoop(timestamp) {
+
+    // Berechne Delta Time in Sekunden
+    const deltaTime = (timestamp - lastTime) / 1000;
+    lastTime = timestamp;
+
     checkGamepadInput();
     switch (inputDevice) {
         case 'keyboard':
@@ -179,8 +185,8 @@ function gameLoop() {
             updateGamepadMovement();
             break;
     }
-    updatePlayerPosition();
-    drawMap();
+    updatePlayerPosition(deltaTime);
+    drawMap(deltaTime);
     requestAnimationFrame(gameLoop);
 }
 
