@@ -64,6 +64,10 @@
     function startDrag(e) {
         e.preventDefault();
         updateKnobPosition(e.touches[0]);
+
+        //requesting full screen
+        const canvas = document.getElementById('gameCanvas');
+        canvas.requestFullscreen();
     }
 
     function drag(e) {
