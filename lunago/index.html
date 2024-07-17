@@ -2,9 +2,21 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0, width=device-width, shrink-to-fit=no">
     <title>Pokémon-artiges Spiel</title>
     <link rel="stylesheet" href="style.css">
+
+    <!--    icons-->
+    <link rel="apple-touch-icon" sizes="120x120" href="../icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="../icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="../icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="../icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
 </head>
 <body>
 <canvas id="gameCanvas"></canvas>
@@ -78,6 +90,7 @@
         }
         knob.style.left = `${25 + dx}px`;
         knob.style.top = `${25 + dy}px`;
+        updateInputDevice('touch');
     }
 
     function getJoystickDirection() {

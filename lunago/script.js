@@ -200,9 +200,11 @@ function updateKeyboardMovement() {
     }
 }
 
+// Modify existing event listeners to switch input device
 addEventListener('keydown', (e) => {
     if (e.code in keys) {
         keys[e.code] = true;
+        updateInputDevice('keyboard'); // Switch to keyboard input
     }
 });
 
@@ -224,16 +226,46 @@ function updateGamepadMovement() {
     if (inputDevice === 'gamepad') {
         const gamepad = navigator.getGamepads()[0];
         if (gamepad) {
-            player.dx = gamepad.axes[0] * player.speed;
-            player.dy = gamepad.axes[1] * player.speed;
+            //gap einbauen
+            if (Math.abs(gamepad.axes[0]) > 0.1) {
+                player.dx = gamepad.axes[0] * player.speed;
+            }else {
+                player.dx = 0;
+            }
+            if (Math.abs(gamepad.axes[1]) > 0.1) {
+                player.dy = gamepad.axes[1] * player.speed;
+            }else {
+                player.dy = 0;
+            }
+        }
+    }
+}
+
+function checkGamepadInput() {
+    const gamepad = navigator.getGamepads()[0]; // Erhalten des ersten Gamepads
+    if (gamepad) {
+        // Überprüfen, ob einer der Sticks bewegt wird oder ein Button gedrückt ist
+        const isMoving = gamepad.axes.some(axis => Math.abs(axis) > 0.1);
+        const isPressingButton = gamepad.buttons.some(button => button.pressed);
+        if (isMoving || isPressingButton) {
+            updateInputDevice('gamepad');
         }
     }
 }
 
 function gameLoop() {
-    updateKeyboardMovement();
-    updateTouchMovement();
-    updateGamepadMovement();
+    checkGamepadInput();
+    switch (inputDevice) {
+        case 'keyboard':
+            updateKeyboardMovement();
+            break;
+        case 'touch':
+            updateTouchMovement();
+            break;
+        case 'gamepad':
+            updateGamepadMovement();
+            break;
+    }
     updatePlayerPosition();
     drawMap();
     requestAnimationFrame(gameLoop);
