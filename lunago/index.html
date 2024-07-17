@@ -125,8 +125,6 @@
     }
 
 
-
-
     function updateInputDevice(device) {
         inputDevice = device;
     }
@@ -157,6 +155,10 @@
         // Anwenden der Bewegung basierend auf der Intensität
         player.dx = horizontalIntensity * player.speed;
         player.dy = verticalIntensity * player.speed;
+
+        // Anzeigen des Joystick-Elements
+        knob.style.left = `${25 + horizontalIntensity * maxDistance}px`;
+        knob.style.top = `${25 + verticalIntensity * maxDistance}px`;
     }
 }
 
@@ -197,6 +199,10 @@
                 }else {
                     player.dy = 0;
                 }
+
+                //joystick element
+                knob.style.left = `${25 + gamepad.axes[0] * maxDistance}px`;
+                knob.style.top = `${25 + gamepad.axes[1] * maxDistance}px`;
             }
         }
     }
