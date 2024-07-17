@@ -13,7 +13,7 @@ addEventListener('resize', () => {
 
 const TILE_SIZE = 48;
 
-let map = maps.lunasZimmer;
+let map = maps.zimmer;
 
 let camera = {
     x: 3 * TILE_SIZE - canvas.width / 2,
@@ -38,6 +38,11 @@ function setUpTextures() {
         tilemaps[tile].defaultTexture.src = `tilemaps/${tile}.png`;
         tilemaps[tile].defaultTexture.imageRendering = 'pixelated';
     }
+
+    for (let object in objects) {
+        objects[object].texture.src = `objects/${object}.png`;
+        objects[object].texture.imageRendering = 'pixelated';
+    }
 }
 setUpTextures();
 
@@ -61,8 +66,50 @@ function drawMap(deltaTime) {
         ctx.drawImage(tile.tile.defaultTexture, x - camera.x, y - camera.y, TILE_SIZE, TILE_SIZE);
     }
 
+    // Draw objects
+    for (let object of map.tiles.objects) {
+        const x = object.position.x * TILE_SIZE;
+        const y = object.position.y * TILE_SIZE;
+
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(object.object.texture, x - camera.x, y - camera.y, object.width * TILE_SIZE, object.height * TILE_SIZE);
+
+        if (object.klickRadius) {
+            //wenn der spieler in der nähe ist wird das objekt hervorgehoben
+            let distance = Math.sqrt(Math.pow(player.x - x, 2) + Math.pow(player.y - y, 2));
+            if (distance < object.klickRadius * TILE_SIZE) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillRect(x - camera.x, y - camera.y, object.width * TILE_SIZE, object.height * TILE_SIZE);
+            }
+        }
+    }
+
     ctx.drawImage(player.texture, player.x - camera.x, player.y - camera.y, player.size, player.size);
 }
+
+function getNearestObjectInRange(){
+    for (let object of map.tiles.objects) {
+        const x = object.position.x * TILE_SIZE;
+        const y = object.position.y * TILE_SIZE;
+
+        let distance = Math.sqrt(Math.pow(player.x - x, 2) + Math.pow(player.y - y, 2));
+        if (distance < object.klickRadius * TILE_SIZE) {
+            return object;
+        }
+    }
+    return null;
+}
+
+addEventListener('keydown', (event) => {
+    //kann nicht bewegen wenn die boxen offen sind
+    if (document.querySelector('.messageBox')) {
+        return;
+    }
+
+    if (event.key === ' ') {
+        getNearestObjectInRange().klick();
+    }
+});
 
 function updatePlayerPosition(deltaTime) {
 
@@ -95,10 +142,13 @@ function updatePlayerPosition(deltaTime) {
         let tileY = Math.floor(corner.y / TILE_SIZE);
 
         //wenn nicht walkable
-        if (!map.tiles.ground[tileY * map.width + tileX].tile.walkable) {
-            canMoveX = false;
-            break;
-        }
+        map.tiles.ground.forEach(tile => {
+            if (tile.position.x === tileX && tile.position.y === tileY) {
+                if (!tile.tile.walkable) {
+                    canMoveX = false;
+                }
+            }
+        });
     }
 
     // Überprüfe jede Ecke auf Kollision für Y
@@ -107,10 +157,13 @@ function updatePlayerPosition(deltaTime) {
         let tileY = Math.floor(corner.y / TILE_SIZE);
 
         //wenn nicht walkable
-        if (!map.tiles.ground[tileY * map.width + tileX].tile.walkable) {
-            canMoveY = false;
-            break;
-        }
+        map.tiles.ground.forEach(tile => {
+            if (tile.position.x === tileX && tile.position.y === tileY) {
+                if (!tile.tile.walkable) {
+                    canMoveY = false;
+                }
+            }
+        });
     }
 
     // Bewege den Spieler nur, wenn er sich in eine Richtung bewegen kann
@@ -201,10 +254,10 @@ function messageBox(message, from = null, image = null, callbackOnRemove = null)
             messageBox.textContent = message;
             interval = null;
         } else {
-            messageBox.remove();
             if (callbackOnRemove) {
                 callbackOnRemove();
             }
+            messageBox.remove();
             removeEventListeners();
         }
     }
@@ -250,13 +303,35 @@ function messageBox(message, from = null, image = null, callbackOnRemove = null)
 
 }
 
-messageBox('Hi, ich bin Luna. Ich bin ein kleines Mädchen und ich habe ein Problem. Ich habe mein Kuscheltier verloren. Kannst du mir helfen es zu finden?', null, null,
-    function () {
-    messageBox('Ich habe es zuletzt in meinem Zimmer gesehen. Es ist ein kleiner Bär mit einem roten Schal.', null, null,
-        function () {
-        messageBox('Ich habe gehört, dass es in einem der Schränke versteckt ist. Kannst du es finden?', null, null,
-            function () {
-            messageBox('Du kannst mich mit den Pfeiltasten oder dem Joystick bewegen.');
-        });
-    });
-});
+function transition(callback) {
+    //bildschirm wird schwarz callback wird ausgeführt und bildschirm wird wieder sichtbar
+    const transition = document.createElement('div');
+    transition.style.position = 'fixed';
+    transition.style.width = '100%';
+    transition.style.height = '100%';
+    transition.style.top = 0;
+    transition.style.left = 0;
+    transition.style.backgroundColor = 'black';
+    transition.style.zIndex = 1000;
+    transition.style.transition = 'opacity 1s cubic-bezier(0.4, 0, 0.2, 1)';
+    transition.style.opacity = 0;
+    document.body.appendChild(transition);
+
+    setTimeout(() => {
+        transition.style.opacity = 1;
+    }, 1);
+
+    setTimeout(() => {
+        callback();
+    }, 1001);
+
+    setTimeout(() => {
+        transition.style.opacity = 0;
+    }, 2002);
+
+    setTimeout(() => {
+        transition.remove();
+    }, 3003);
+}
+
+messageBox('Dieses Feld hier ist ein Testfeld. Es wird verwendet, um Nachrichten anzuzeigen. Drücke die Leertaste, um die Nachricht zu schließen.', 'Testfeld');
