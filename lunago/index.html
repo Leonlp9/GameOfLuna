@@ -66,8 +66,14 @@
         updateKnobPosition(e.touches[0]);
 
         //requesting full screen
-        const canvas = document.getElementById('gameCanvas');
-        canvas.requestFullscreen();
+        const body = document.querySelector('body');
+        if (body.requestFullscreen) {
+            body.requestFullscreen();
+        } else if (body.webkitRequestFullscreen) { /* Safari */
+            body.webkitRequestFullscreen();
+        } else if (body.msRequestFullscreen) { /* IE11 */
+            body.msRequestFullscreen();
+        }
     }
 
     function drag(e) {
