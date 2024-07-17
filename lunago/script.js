@@ -13,518 +13,7 @@ addEventListener('resize', () => {
 
 const TILE_SIZE = 48;
 
-tilemaps = {
-    woodenFloor: {
-        walkable: true,
-        defaultTexture: new Image(),
-        texturesWithNeighbours: {
-            'wall': {
-                'top': new Image(),
-                'right': new Image(),
-                'bottom': new Image(),
-                'left': new Image(),
-                'topRight': new Image(),
-                'topLeft': new Image(),
-                'bottomRight': new Image(),
-                'bottomLeft': new Image()
-            }
-        }
-    },
-    wall: {
-        walkable: false,
-        defaultTexture: new Image(),
-        texturesWithNeighbours: {}
-    }
-}
-
-let map = {
-    tiles: {
-        "ground": [
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 1, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 2, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 3, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 4, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 5, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 6, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 0 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 1 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 1 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 1 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 2 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 2 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 2 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 3 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 3 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 3 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 4 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 4 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 4 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 5 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 5 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 5 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 6 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 6 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 6 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 7 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 7 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 7 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 7 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 4, y: 7 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 7 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 7 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 7 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 8 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 8 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 8 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 9 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 9 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 9 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 10 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 10 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 10 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 11 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 11 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 11 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 12 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 12 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 12 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 1, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 2, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 3, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 4, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 5, y: 13 }
-            },
-            {
-                tile: tilemaps.woodenFloor,
-                position: { x: 6, y: 13 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 13 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 0, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 1, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 2, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 3, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 4, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 5, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 6, y: 14 }
-            },
-            {
-                tile: tilemaps.wall,
-                position: { x: 7, y: 14 }
-            }
-        ]
-    },
-    width: 8,
-    height: 14
-};
+let map = maps.lunasZimmer;
 
 let camera = {
     x: 3 * TILE_SIZE - canvas.width / 2,
@@ -576,6 +65,12 @@ function drawMap(deltaTime) {
 }
 
 function updatePlayerPosition(deltaTime) {
+
+    //kann nicht bewegen wenn die boxen offen sind
+    if (document.querySelector('.messageBox')) {
+        return;
+    }
+
     let nextX = player.x + player.dx * deltaTime;
     let nextY = player.y + player.dy * deltaTime;
 
@@ -657,3 +152,111 @@ function gameLoop(timestamp) {
 }
 
 requestAnimationFrame(gameLoop);
+
+
+function messageBox(message, from = null, image = null, callbackOnRemove = null) {
+    //unten in der mitte vom bildschirm wird eine box erstellt in der der text mit einer animation erscheint
+    const messageBox = document.createElement('div');
+    messageBox.classList.add('messageBox');
+
+    if (callbackOnRemove != null) {
+        messageBox.classList.add('newMessage');
+    }
+
+    document.body.appendChild(messageBox);
+
+
+    //text buchstabe für buchstabe anzeigen
+    let i = 0;
+    let interval = setInterval(() => {
+        // Überprüfe, ob es das Ende der Nachricht erreicht hat
+        if (i < message.length) {
+            messageBox.textContent = messageBox.textContent.slice(0, -1);
+
+            messageBox.textContent += message[i];
+            // Füge das Dreieck-Symbol hinzu, wenn es nicht das Ende der Nachricht ist
+            messageBox.textContent += "_"; // Dreieck-Symbol hinzugefügt
+            // Entferne das Dreieck-Symbol, bevor der nächste Buchstabe hinzugefügt wird
+
+            if (i % 5 === 0){
+                let sound = new Audio('sounds/tiping.wav');
+                sound.volume = 0.4;
+                sound.play();
+            }
+        }
+        i++;
+        if (i >= message.length) {
+            clearInterval(interval);
+            interval = null;
+            messageBox.textContent = messageBox.textContent.slice(0, -1);
+        }
+    }, 20);
+
+
+    let gamepadCheckInterval;
+
+    function handleInteraction() {
+        if (interval) {
+            clearInterval(interval);
+            messageBox.textContent = message;
+            interval = null;
+        } else {
+            messageBox.remove();
+            if (callbackOnRemove) {
+                callbackOnRemove();
+            }
+            removeEventListeners();
+        }
+    }
+
+    function handleClick() {
+        handleInteraction();
+    }
+
+    function handleKeydown(event) {
+        if (event.keyCode === 32) { // Leertaste
+            handleInteraction();
+        }
+    }
+
+    let buttonReleased = true;
+
+    function checkGamepad() {
+        const gamepad = navigator.getGamepads()[0];
+        if (gamepad) {
+            const isButtonPressed = gamepad.buttons[0].pressed || gamepad.buttons[2].pressed;
+
+            if (isButtonPressed && buttonReleased) {
+                handleInteraction();
+            }
+
+            buttonReleased = !isButtonPressed;
+        }
+    }
+
+    function addEventListeners() {
+        document.body.addEventListener('click', handleClick);
+        document.addEventListener('keydown', handleKeydown);
+        gamepadCheckInterval = setInterval(checkGamepad, 100);
+    }
+
+    function removeEventListeners() {
+        document.body.removeEventListener('click', handleClick);
+        document.removeEventListener('keydown', handleKeydown);
+        clearInterval(gamepadCheckInterval);
+    }
+
+    addEventListeners();
+
+}
+
+messageBox('Hi, ich bin Luna. Ich bin ein kleines Mädchen und ich habe ein Problem. Ich habe mein Kuscheltier verloren. Kannst du mir helfen es zu finden?', null, null,
+    function () {
+    messageBox('Ich habe es zuletzt in meinem Zimmer gesehen. Es ist ein kleiner Bär mit einem roten Schal.', null, null,
+        function () {
+        messageBox('Ich habe gehört, dass es in einem der Schränke versteckt ist. Kannst du es finden?', null, null,
+            function () {
+            messageBox('Du kannst mich mit den Pfeiltasten oder dem Joystick bewegen.');
+        });
+    });
+});
