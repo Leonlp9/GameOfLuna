@@ -8,12 +8,27 @@ const originalHeight = 600;
 // Skalierungsfaktor initialisieren
 let scaleFactor = 1;
 
+let fruitsArray = [];
+let score = 0;
+let allTime = localStorage.getItem('lunikaAllTime') || 0;
+
+let newDroppingFruit = null;
+
+
 function resizeCanvas() {
     // Fensterbreite oder einen Maximalwert verwenden, um das Canvas nicht zu groß zu machen
     const maxWidth = Math.min(window.innerWidth - 50, 400);
-    scaleFactor = maxWidth / originalWidth;
+    const maxHeight = window.innerHeight - 150;
+
+    // Skalierungsfaktor berechnen
+    scaleFactor = Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+
     canvas.width = originalWidth * scaleFactor;
     canvas.height = originalHeight * scaleFactor;
+
+    if (newDroppingFruit) {
+        newDroppingFruit.y = 50 * scaleFactor;
+    }
 }
 
 // Event-Listener für Fenstergrößenänderungen
@@ -59,9 +74,6 @@ function preloadImages() {
 }
 preloadImages()
 
-let fruitsArray = [];
-let score = 0;
-let allTime = localStorage.getItem('lunikaAllTime') || 0;
 document.getElementById('AllTimeScore').innerText = allTime;
 let lastX = canvas.width / 2;
 
@@ -116,20 +128,20 @@ class Fruit {
         let nextX = this.x + this.dx * deltaTime;
         let nextY = this.y + this.dy * deltaTime;
 
-        if (nextX - this.size * scaleFactor / 2 < 15) {
+        if (nextX - this.size * scaleFactor / 2 < 15 * scaleFactor) {
             this.dx = Math.abs(this.dx) * 0.25;
-            nextX = this.size * scaleFactor / 2 + 15;
+            nextX = this.size * scaleFactor / 2 + 15 * scaleFactor;
             this.rotationSpeed = Math.abs(this.rotationSpeed);
-        } else if (nextX + this.size * scaleFactor / 2 > canvas.width - 15) {
+        } else if (nextX + this.size * scaleFactor / 2 > canvas.width - 15 * scaleFactor) {
             this.dx = -Math.abs(this.dx) * 0.25;
-            nextX = canvas.width - 15 - this.size * scaleFactor / 2;
+            nextX = canvas.width - 15 * scaleFactor - this.size * scaleFactor / 2;
             this.rotationSpeed = -Math.abs(this.rotationSpeed);
         }
 
-        if (nextY + this.size * scaleFactor / 2 > canvas.height - 15) {
+        if (nextY + this.size * scaleFactor / 2 > canvas.height - 15 * scaleFactor) {
             this.dy = -this.dy * 0.1;
             this.dx *= 0.99;
-            nextY = canvas.height - 15 - this.size * scaleFactor / 2;
+            nextY = canvas.height - 15 * scaleFactor - this.size * scaleFactor / 2;
             this.rotationSpeed = this.dx;
         }
 
@@ -137,7 +149,7 @@ class Fruit {
         this.y = nextY;
 
         if (newDroppingFruit !== this) {
-            if (this.y + this.size * scaleFactor / 2 < 115 && this.dy < 0) {
+            if (this.y + this.size * scaleFactor / 2 < 115  * scaleFactor && this.dy < 0) {
                 fruitsArray = [];
                 spawnFruit();
                 score = 0;
@@ -218,13 +230,10 @@ function checkFruitCollisions() {
         }
     }
 }
-
-let newDroppingFruit = null;
-
 function spawnFruit() {
     const fruitIndex = Math.floor(Math.random() * 3);
     const fruit = fruits[fruitIndex];
-    newDroppingFruit = new Fruit(lastX, 50, fruit, fruit.name);
+    newDroppingFruit = new Fruit(lastX, 50 * scaleFactor, fruit, fruit.name);
 }
 
 //mouse
@@ -280,28 +289,28 @@ function animate(timestamp) {
 
     // Draw the background
     ctx.fillStyle = '#e8d5ad';
-    ctx.fillRect(0, 100, canvas.width, canvas.height - 100);
+    ctx.fillRect(0, 100 * scaleFactor, canvas.width, canvas.height - 100 * scaleFactor);
 
     //Dreieck oben
     ctx.beginPath();
-    ctx.moveTo(0, 100);
-    ctx.lineTo(50, 50);
-    ctx.lineTo(canvas.width - 50, 50);
-    ctx.lineTo(canvas.width, 100);
+    ctx.moveTo(0, 100 * scaleFactor);
+    ctx.lineTo(50 * scaleFactor, 50 * scaleFactor);
+    ctx.lineTo(canvas.width - 50 * scaleFactor, 50 * scaleFactor);
+    ctx.lineTo(canvas.width, 100 * scaleFactor);
     ctx.closePath();
     ctx.fillStyle = '#e8d5ad';
     ctx.fill();
 
     //outline dreieck und background
     ctx.beginPath();
-    ctx.moveTo(5, 110);
-    ctx.lineTo(50, 50);
-    ctx.lineTo(canvas.width - 50, 50);
-    ctx.lineTo(canvas.width - 5, 110);
-    ctx.lineTo(canvas.width - 5, canvas.height - 5);
-    ctx.lineTo(5, canvas.height - 5);
+    ctx.moveTo(5 * scaleFactor, 100 * scaleFactor);
+    ctx.lineTo(50 * scaleFactor, 50 * scaleFactor);
+    ctx.lineTo(canvas.width - 50 * scaleFactor, 50 * scaleFactor);
+    ctx.lineTo(canvas.width - 5 * scaleFactor, 100 * scaleFactor);
+    ctx.lineTo(canvas.width - 5 * scaleFactor, canvas.height - 5);
+    ctx.lineTo(5 * scaleFactor, canvas.height - 5);
     ctx.closePath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 20 * scaleFactor;
     ctx.strokeStyle = '#eed37b';
     ctx.stroke();
 
@@ -314,7 +323,7 @@ function animate(timestamp) {
         ctx.moveTo(lastX, 50);
         ctx.lineTo(lastX, canvas.height / 1.2);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 4 * scaleFactor;
         ctx.stroke();
 
     }
@@ -329,13 +338,13 @@ function animate(timestamp) {
 
     // Draw line between dreieck and background
     ctx.beginPath();
-    ctx.moveTo(0, 100);
-    ctx.lineTo(400, 100);
-    ctx.lineTo(400, 115);
-    ctx.lineTo(0, 115);
+    ctx.moveTo(0, 100 * scaleFactor);
+    ctx.lineTo(400, 100 * scaleFactor);
+    ctx.lineTo(400, 115 * scaleFactor);
+    ctx.lineTo(0, 115 * scaleFactor);
     ctx.closePath();
     //linien breite
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 10 * scaleFactor;
     ctx.fillStyle = '#eed37b';
     ctx.fill();
 
