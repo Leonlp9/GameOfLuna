@@ -33,6 +33,23 @@ let fruits = [
     { name: 'watermelon', score: 22, size: 260, texture: "https://suikagame.com/public/res/raw-assets/50/5035266c-8df3-4236-8d82-a375e97a0d9c.png", img: new Image() }
 ];
 
+function fillFruitsRange() {
+    const range = document.getElementById('fruitsRange');
+    let i = 0;
+    fruits.forEach(fruit => {
+        const img = document.createElement('img');
+        img.src = fruit.texture;
+
+        //responsive size but cherry is smallest and melon is biggest
+        img.style.width = 7 + i / 2.5 + '%';
+
+        range.appendChild(img);
+        i += 1;
+    });
+}
+
+fillFruitsRange();
+
 resizeCanvas();
 
 function preloadImages() {
@@ -301,6 +318,8 @@ function animate(timestamp) {
 
     requestAnimationFrame(animate);
 }
+
+
 
 animate(0);
 spawnFruit();

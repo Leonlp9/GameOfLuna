@@ -1,8 +1,39 @@
+* {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    user-drag: none;
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #c48d52;
+}
+
+#fruitsRange {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background: rgba(230, 211, 172, 0.67);
+    padding: 5px 5px;
+    border-radius: 10px;
+    width: clamp(0px, calc(100vw - 60px), 390px);
+}
+
+#fruitsRange img {
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
