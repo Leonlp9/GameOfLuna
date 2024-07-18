@@ -307,8 +307,8 @@ function animate(timestamp) {
     ctx.lineTo(50 * scaleFactor, 50 * scaleFactor);
     ctx.lineTo(canvas.width - 50 * scaleFactor, 50 * scaleFactor);
     ctx.lineTo(canvas.width - 5 * scaleFactor, 100 * scaleFactor);
-    ctx.lineTo(canvas.width - 5 * scaleFactor, canvas.height - 5);
-    ctx.lineTo(5 * scaleFactor, canvas.height - 5);
+    ctx.lineTo(canvas.width - 5 * scaleFactor, canvas.height - 5 * scaleFactor);
+    ctx.lineTo(5 * scaleFactor, canvas.height - 5 * scaleFactor);
     ctx.closePath();
     ctx.lineWidth = 20 * scaleFactor;
     ctx.strokeStyle = '#eed37b';
