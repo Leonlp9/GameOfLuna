@@ -188,7 +188,7 @@ canvas.addEventListener('click', (event) => {
 
 //touch
 document.addEventListener('touchstart', (event) => {
-    document.querySelector('body').requestFullscreen();
+    document.querySelector('html').requestFullscreen();
 });
 
 canvas.addEventListener('touchmove', (event) => {
