@@ -121,9 +121,9 @@ class Fruit {
 
         if (nextY + this.size * scaleFactor / 2 > canvas.height - 15) {
             this.dy = -this.dy * 0.1;
-            this.dx *= 0.95;
+            this.dx *= 0.98;
             nextY = canvas.height - 15 - this.size * scaleFactor / 2;
-            this.rotationSpeed *= 0.5;
+            this.rotationSpeed = this.dx;
         }
 
         this.x = nextX;
