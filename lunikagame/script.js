@@ -187,6 +187,10 @@ canvas.addEventListener('click', (event) => {
 });
 
 //touch
+document.addEventListener('touchstart', (event) => {
+    document.querySelector('body').requestFullscreen();
+});
+
 canvas.addEventListener('touchmove', (event) => {
     if (newDroppingFruit) {
         newDroppingFruit.x = event.touches[0].clientX - canvas.getBoundingClientRect().left;
