@@ -26,6 +26,7 @@ preloadImages()
 
 let fruitsArray = [];
 let score = 0;
+let lastX = 200;
 
 function addScore(amount) {
     score += amount;
@@ -154,7 +155,7 @@ function checkFruitCollisions() {
 
 let newDroppingFruit = null;
 
-function spawnFruit(lastX = 200) {
+function spawnFruit() {
     const fruitIndex = Math.floor(Math.random() * 3);
     const fruit = fruits[fruitIndex];
     newDroppingFruit = new Fruit(lastX, 50, fruit, fruit.name);
@@ -167,9 +168,11 @@ canvas.addEventListener('mousemove', (event) => {
     }
 });
 
-canvas.addEventListener('click', () => {
+canvas.addEventListener('click', (event) => {
     if (newDroppingFruit) {
+        newDroppingFruit.x = event.clientX - canvas.getBoundingClientRect().left;
         newDroppingFruit.dy = 5;
+        lastX = newDroppingFruit.x;
         newDroppingFruit = null;
         setTimeout(() => spawnFruit(), 250);
     }
@@ -182,9 +185,11 @@ canvas.addEventListener('touchmove', (event) => {
     }
 });
 
-canvas.addEventListener('touchend', () => {
+canvas.addEventListener('touchend', (event) => {
     if (newDroppingFruit) {
+        newDroppingFruit.x = event.changedTouches[0].clientX - canvas.getBoundingClientRect().left;
         newDroppingFruit.dy = 5;
+        lastX = newDroppingFruit.x;
         newDroppingFruit = null;
         setTimeout(() => spawnFruit(), 250);
     }
