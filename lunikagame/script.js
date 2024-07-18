@@ -76,6 +76,12 @@ function addScore(amount) {
     }
 }
 
+function playPlopSound(volume) {
+    const audio = new Audio('plop.mp3');
+    audio.volume = volume;
+    audio.play();
+}
+
 class Fruit {
     constructor(x, y, fruit, type) {
         this.x = x;
@@ -88,6 +94,7 @@ class Fruit {
         this.rotation = Math.random() * 360;
         this.rotationSpeed = 0;
         this.type = type;
+        this.lastMergeTime = 0;
         fruitsArray.push(this);
     }
 
@@ -121,7 +128,7 @@ class Fruit {
 
         if (nextY + this.size * scaleFactor / 2 > canvas.height - 15) {
             this.dy = -this.dy * 0.1;
-            this.dx *= 0.98;
+            this.dx *= 0.99;
             nextY = canvas.height - 15 - this.size * scaleFactor / 2;
             this.rotationSpeed = this.dx;
         }
@@ -143,6 +150,7 @@ class Fruit {
     upgrade() {
         const currentIndex = fruits.findIndex(f => f.name === this.type);
         if (currentIndex < fruits.length - 1) {
+            playPlopSound(this.size / 260);
             const nextFruit = fruits[currentIndex + 1];
             this.type = nextFruit.name;
             this.size = nextFruit.size;
@@ -168,6 +176,13 @@ function checkFruitCollisions() {
 
             if (distance < minDistance) {
                 if (fruitA.type === fruitB.type) {
+                    if (Date.now() - fruitA.lastMergeTime < 100) {
+                        continue;
+                    }
+                    if (Date.now() - fruitB.lastMergeTime < 100) {
+                        continue;
+                    }
+                    fruitA.lastMergeTime = Date.now();
                     fruitA.upgrade();
                     fruitsArray.splice(j, 1);
                 } else {
