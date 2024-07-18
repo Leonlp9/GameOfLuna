@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = 400;
-canvas.height = 700;
+canvas.width = 350;
+canvas.height = 600;
 
 let fruits = [
     { name: 'cherry', score: 2, size: 35, texture: "https://suikagame.com/public/res/raw-assets/ad/ad16ccdc-975e-4393-ae7b-8ac79c3795f2.png", img: new Image() },
