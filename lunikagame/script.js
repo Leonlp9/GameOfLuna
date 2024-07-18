@@ -110,11 +110,11 @@ class Fruit {
         let nextY = this.y + this.dy * deltaTime;
 
         if (nextX - this.size * scaleFactor / 2 < 15) {
-            this.dx = Math.abs(this.dx);
+            this.dx = Math.abs(this.dx) * 0.25;
             nextX = this.size * scaleFactor / 2 + 15;
             this.rotationSpeed = Math.abs(this.rotationSpeed);
         } else if (nextX + this.size * scaleFactor / 2 > canvas.width - 15) {
-            this.dx = -Math.abs(this.dx);
+            this.dx = -Math.abs(this.dx) * 0.25;
             nextX = canvas.width - 15 - this.size * scaleFactor / 2;
             this.rotationSpeed = -Math.abs(this.rotationSpeed);
         }
