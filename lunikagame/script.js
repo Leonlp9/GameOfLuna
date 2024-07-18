@@ -181,7 +181,7 @@ function checkFruitCollisions() {
                     const vxB = fruitB.dx * cos + fruitB.dy * sin;
                     const vyB = fruitB.dy * cos - fruitB.dx * sin;
 
-                    const energyLossFactor = 0.75;
+                    const energyLossFactor = 0.7;
                     const vxAAfter = ((fruitA.size * scaleFactor - fruitB.size * scaleFactor) * vxA + (2 * fruitB.size * scaleFactor) * vxB) / (fruitA.size * scaleFactor + fruitB.size * scaleFactor) * energyLossFactor;
                     const vxBAfter = ((2 * fruitA.size * scaleFactor) * vxA + (fruitB.size * scaleFactor - fruitA.size * scaleFactor) * vxB) / (fruitA.size * scaleFactor + fruitB.size * scaleFactor) * energyLossFactor;
 
