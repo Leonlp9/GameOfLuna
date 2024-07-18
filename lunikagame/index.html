@@ -35,8 +35,19 @@
 
 </head>
 <body>
-<div id="score" style="position: absolute; top: 0; right: 0; padding: 10px; background-color: rgba(0, 0, 0, 0.5); color: white;">
-    0
+<div id="scores">
+    <div id="scoreElement" style="background: #d9ba8d; padding: 5px 10px; width: 80px; text-align: center; border-radius: 10px; font-size: 20px; color: #000000; font-family: 'Arial'; font-weight: bold">
+        <div style="font-size: 12px; font-weight: normal">
+            Score
+        </div>
+        <div id="score">0</div>
+    </div>
+    <div id="AllTimeScoreElement" style="background: #d9ba8d; padding: 5px 10px; width: 80px; text-align: center; border-radius: 10px; font-size: 20px; color: #000000; font-family: 'Arial'; font-weight: bold">
+        <div style="font-size: 12px; font-weight: normal">
+            All Time
+        </div>
+        <div id="AllTimeScore">0</div>
+    </div>
 </div>
 <canvas id="gameCanvas"></canvas>
 <div id="fruitsRange"></div>

@@ -61,11 +61,19 @@ preloadImages()
 
 let fruitsArray = [];
 let score = 0;
+let allTime = localStorage.getItem('lunikaAllTime') || 0;
+document.getElementById('AllTimeScore').innerText = allTime;
 let lastX = canvas.width / 2;
 
 function addScore(amount) {
     score += amount;
     document.getElementById('score').innerText = score;
+
+    if (score > allTime) {
+        allTime = score;
+        document.getElementById('AllTimeScore').innerText = allTime;
+        localStorage.setItem('lunikaAllTime', allTime);
+    }
 }
 
 class Fruit {

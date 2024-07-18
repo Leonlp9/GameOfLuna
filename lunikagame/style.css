@@ -18,6 +18,10 @@ body {
     background-color: #c48d52;
 }
 
+#gameCanvas {
+    border-radius: 10px;
+}
+
 #fruitsRange {
     margin-top: 10px;
     display: flex;
@@ -26,7 +30,7 @@ body {
     background: rgba(230, 211, 172, 0.67);
     padding: 5px 5px;
     border-radius: 10px;
-    width: clamp(0px, calc(100vw - 60px), 390px);
+    width: clamp(0px, calc(100vw - 50px), 400px);
 }
 
 #fruitsRange img {
@@ -36,4 +40,35 @@ body {
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+#scores {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px
+}
+
+/*wenn bildschirm breit genug*/
+@media (min-width: 900px) {
+    body {
+        flex-direction: row;
+    }
+
+    #scores {
+        flex-direction: column;
+        margin-right: 10px;
+    }
+
+    #fruitsRange {
+        margin-top: 0;
+        flex-direction: column;
+        height: 500px;
+        width: 50px;
+        margin-left: 10px;
+    }
+
+    #fruitsRange img {
+        width: 40px !important;
+        height: 40px;
+    }
 }
