@@ -101,20 +101,20 @@ class Fruit {
         let nextX = this.x + this.dx * deltaTime;
         let nextY = this.y + this.dy * deltaTime;
 
-        if (nextX - this.size / 2 < 15) {
+        if (nextX - this.size * scaleFactor / 2 < 15) {
             this.dx = Math.abs(this.dx);
-            nextX = this.size / 2 + 15;
+            nextX = this.size * scaleFactor / 2 + 15;
             this.rotationSpeed = Math.abs(this.rotationSpeed);
-        } else if (nextX + this.size / 2 > canvas.width - 15) {
+        } else if (nextX + this.size * scaleFactor / 2 > canvas.width - 15) {
             this.dx = -Math.abs(this.dx);
-            nextX = canvas.width - 15 - this.size / 2;
+            nextX = canvas.width - 15 - this.size * scaleFactor / 2;
             this.rotationSpeed = -Math.abs(this.rotationSpeed);
         }
 
-        if (nextY + this.size / 2 > canvas.height - 15) {
+        if (nextY + this.size * scaleFactor / 2 > canvas.height - 15) {
             this.dy = -this.dy * 0.1;
             this.dx *= 0.95;
-            nextY = canvas.height - 15 - this.size / 2;
+            nextY = canvas.height - 15 - this.size * scaleFactor / 2;
             this.rotationSpeed *= 0.5;
         }
 
@@ -122,7 +122,7 @@ class Fruit {
         this.y = nextY;
 
         if (newDroppingFruit !== this) {
-            if (this.y + this.size / 2 < 115 && this.dy < 0) {
+            if (this.y + this.size * scaleFactor / 2 < 115 && this.dy < 0) {
                 fruitsArray = [];
                 spawnFruit();
                 score = 0;
