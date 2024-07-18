@@ -1,7 +1,23 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = 350;
-canvas.height = 600;
+
+// Ursprüngliche Canvas-Größe
+const originalWidth = 350;
+const originalHeight = 600;
+
+// Skalierungsfaktor initialisieren
+let scaleFactor = 1;
+
+function resizeCanvas() {
+    // Fensterbreite oder einen Maximalwert verwenden, um das Canvas nicht zu groß zu machen
+    const maxWidth = Math.min(window.innerWidth - 50, 400);
+    scaleFactor = maxWidth / originalWidth;
+    canvas.width = originalWidth * scaleFactor;
+    canvas.height = originalHeight * scaleFactor;
+}
+
+// Event-Listener für Fenstergrößenänderungen
+window.addEventListener('resize', resizeCanvas);
 
 let fruits = [
     { name: 'cherry', score: 2, size: 35, texture: "https://suikagame.com/public/res/raw-assets/ad/ad16ccdc-975e-4393-ae7b-8ac79c3795f2.png", img: new Image() },
@@ -16,6 +32,8 @@ let fruits = [
     { name: 'melon', score: 20, size: 230, texture: "https://suikagame.com/public/res/raw-assets/56/564ba620-6a55-4cbe-a5a6-6fa3edd80151.png", img: new Image() },
     { name: 'watermelon', score: 22, size: 260, texture: "https://suikagame.com/public/res/raw-assets/50/5035266c-8df3-4236-8d82-a375e97a0d9c.png", img: new Image() }
 ];
+
+resizeCanvas();
 
 function preloadImages() {
     fruits.forEach(fruit => {
@@ -52,7 +70,7 @@ class Fruit {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation * Math.PI / 180);
-        ctx.drawImage(this.image, -this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.drawImage(this.image, -this.size * scaleFactor / 2, -this.size * scaleFactor / 2, this.size * scaleFactor, this.size * scaleFactor);
         ctx.restore();
     }
 
@@ -89,6 +107,8 @@ class Fruit {
         if (newDroppingFruit !== this) {
             if (this.y + this.size / 2 < 115 && this.dy < 0) {
                 fruitsArray = [];
+                spawnFruit();
+                score = 0;
             }
         }
 
@@ -119,7 +139,7 @@ function checkFruitCollisions() {
             const dx = fruitA.x - fruitB.x;
             const dy = fruitA.y - fruitB.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const minDistance = (fruitA.size / 2 + fruitB.size / 2);
+            const minDistance = (fruitA.size * scaleFactor / 2 + fruitB.size * scaleFactor / 2);
 
             if (distance < minDistance) {
                 if (fruitA.type === fruitB.type) {
@@ -136,9 +156,9 @@ function checkFruitCollisions() {
                     const vxB = fruitB.dx * cos + fruitB.dy * sin;
                     const vyB = fruitB.dy * cos - fruitB.dx * sin;
 
-                    const energyLossFactor = 0.7;
-                    const vxAAfter = ((fruitA.size - fruitB.size) * vxA + (2 * fruitB.size) * vxB) / (fruitA.size + fruitB.size) * energyLossFactor;
-                    const vxBAfter = ((2 * fruitA.size) * vxA + (fruitB.size - fruitA.size) * vxB) / (fruitA.size + fruitB.size) * energyLossFactor;
+                    const energyLossFactor = 0.75;
+                    const vxAAfter = ((fruitA.size * scaleFactor - fruitB.size * scaleFactor) * vxA + (2 * fruitB.size * scaleFactor) * vxB) / (fruitA.size * scaleFactor + fruitB.size * scaleFactor) * energyLossFactor;
+                    const vxBAfter = ((2 * fruitA.size * scaleFactor) * vxA + (fruitB.size * scaleFactor - fruitA.size * scaleFactor) * vxB) / (fruitA.size * scaleFactor + fruitB.size * scaleFactor) * energyLossFactor;
 
                     const overlap = (minDistance - distance) / 2;
                     fruitA.x += Math.cos(angle) * overlap;
