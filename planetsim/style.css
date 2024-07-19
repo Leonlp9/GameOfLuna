@@ -1,0 +1,36 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', mon;
+    overflow: hidden;
+}
+
+#settings {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 0 0 0 10px;
+}
+
+#settings div {
+    margin-bottom: 10px;
+}
+
+#settings label {
+    display: block;
+}
+
+#settings input {
+    width: 100%;
+}
+
+#stats {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
