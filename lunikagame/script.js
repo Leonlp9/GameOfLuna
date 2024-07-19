@@ -39,13 +39,13 @@ let fruits = [
     { name: 'strawberry', score: 4, size: 50, texture: "https://suikagame.com/public/res/raw-assets/0c/0cbb3dbb-2a85-42a5-be21-9839611e5af7.png", img: new Image() },
     { name: 'grape', score: 6, size: 65, texture: "https://suikagame.com/public/res/raw-assets/d0/d0c676e4-0956-4a03-90af-fee028cfabe4.png", img: new Image() },
     { name: 'dekopon', score: 8, size: 80, texture: "https://suikagame.com/public/res/raw-assets/74/74237057-2880-4e1f-8a78-6d8ef00a1f5f.png", img: new Image() },
-    { name: 'orange', score: 10, size: 110, texture: "https://suikagame.com/public/res/raw-assets/13/132ded82-3e39-4e2e-bc34-fc934870f84c.png", img: new Image() },
-    { name: 'apple', score: 12, size: 130, texture: "https://suikagame.com/public/res/raw-assets/03/03c33f55-5932-4ff7-896b-814ba3a8edb8.png", img: new Image() },
-    { name: 'pear', score: 14, size: 150, texture: "https://suikagame.com/public/res/raw-assets/66/665a0ec9-6c43-4858-974c-025514f2a0e7.png", img: new Image() },
-    { name: 'peach', score: 16, size: 180, texture: "https://suikagame.com/public/res/raw-assets/84/84bc9d40-83d0-480c-b46a-3ef59e603e14.png", img: new Image() },
-    { name: 'pineapple', score: 18, size: 200, texture: "https://suikagame.com/public/res/raw-assets/5f/5fa0264d-acbf-4a7b-8923-c106ec3b9215.png", img: new Image() },
-    { name: 'melon', score: 20, size: 230, texture: "https://suikagame.com/public/res/raw-assets/56/564ba620-6a55-4cbe-a5a6-6fa3edd80151.png", img: new Image() },
-    { name: 'watermelon', score: 22, size: 260, texture: "https://suikagame.com/public/res/raw-assets/50/5035266c-8df3-4236-8d82-a375e97a0d9c.png", img: new Image() }
+    { name: 'orange', score: 10, size: 95, texture: "https://suikagame.com/public/res/raw-assets/13/132ded82-3e39-4e2e-bc34-fc934870f84c.png", img: new Image() },
+    { name: 'apple', score: 12, size: 110, texture: "https://suikagame.com/public/res/raw-assets/03/03c33f55-5932-4ff7-896b-814ba3a8edb8.png", img: new Image() },
+    { name: 'pear', score: 14, size: 120, texture: "https://suikagame.com/public/res/raw-assets/66/665a0ec9-6c43-4858-974c-025514f2a0e7.png", img: new Image() },
+    { name: 'peach', score: 16, size: 140, texture: "https://suikagame.com/public/res/raw-assets/84/84bc9d40-83d0-480c-b46a-3ef59e603e14.png", img: new Image() },
+    { name: 'pineapple', score: 18, size: 160, texture: "https://suikagame.com/public/res/raw-assets/5f/5fa0264d-acbf-4a7b-8923-c106ec3b9215.png", img: new Image() },
+    { name: 'melon', score: 20, size: 190, texture: "https://suikagame.com/public/res/raw-assets/56/564ba620-6a55-4cbe-a5a6-6fa3edd80151.png", img: new Image() },
+    { name: 'watermelon', score: 22, size: 220, texture: "https://suikagame.com/public/res/raw-assets/50/5035266c-8df3-4236-8d82-a375e97a0d9c.png", img: new Image() }
 ];
 
 function fillFruitsRange() {
@@ -162,7 +162,7 @@ class Fruit {
     upgrade() {
         const currentIndex = fruits.findIndex(f => f.name === this.type);
         if (currentIndex < fruits.length - 1) {
-            playPlopSound(this.size / 260);
+            playPlopSound(this.size / 220);
             const nextFruit = fruits[currentIndex + 1];
             this.type = nextFruit.name;
             this.size = nextFruit.size;
